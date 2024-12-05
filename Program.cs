@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using FocusLearn.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,29 @@ builder.Services.AddAuthentication(options =>
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+    googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+    googleOptions.Events.OnCreatingTicket = (context) =>
+    {
+        var pictureClaim = context.User.TryGetProperty("picture", out var pictureJson)
+            ? pictureJson.GetString()
+            : "default_photo_url";
+
+        if (!string.IsNullOrEmpty(pictureClaim))
+        {
+            context.Identity.AddClaim(new Claim("picture", pictureClaim));
+        }
+
+        var localeClaim = context.User.TryGetProperty("locale", out var localeJson)
+            ? localeJson.GetString()
+            : "en";
+        if (!string.IsNullOrEmpty(localeClaim))
+        {
+            context.Identity.AddClaim(new Claim("locale", localeClaim));
+        }
+
+        return Task.CompletedTask;
+    };
 })
 .AddFacebook(facebookOptions =>
 {

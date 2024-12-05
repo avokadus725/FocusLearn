@@ -37,7 +37,7 @@ namespace FocusLearn.Controllers
             var name = result.Principal.FindFirstValue(ClaimTypes.Name);
             var providerId = result.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
             var photoUrl = result.Principal.FindFirstValue("picture") ?? "default_photo_url";
-            var language = result.Principal.FindFirstValue("locale");
+            var language = result.Principal.FindFirstValue("locale") ?? "en";
 
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.ProviderId == providerId && u.AuthProvider == "Google");
