@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using FocusLearn.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace FocusLearn.Controllers
 {
@@ -19,6 +20,7 @@ namespace FocusLearn.Controllers
             _context = context;
         }
 
+        // Google
         [HttpGet("login-google")]
         public IActionResult LoginGoogle()
         {
@@ -63,5 +65,52 @@ namespace FocusLearn.Controllers
 
             return Ok(new { message = "Logged in successfully.", user });
         }
+
+        // Facebook
+        [HttpGet("login-facebook")]
+        public IActionResult LoginFacebook()
+        {
+            var redirectUrl = Url.Action("FacebookResponse", "Auth");
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, FacebookDefaults.AuthenticationScheme);
+        }
+
+        [HttpGet("facebook-response")]
+        public async Task<IActionResult> FacebookResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (result?.Principal == null)
+                return Unauthorized("Authentication failed.");
+
+            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
+            var name = result.Principal.FindFirstValue(ClaimTypes.Name);
+            var providerId = result.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var photoUrl = result.Principal.FindFirstValue("picture") ?? "default_photo_url";
+            var language = result.Principal.FindFirstValue("locale") ?? "en";
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.ProviderId == providerId && u.AuthProvider == "Facebook");
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = name,
+                    Email = email,
+                    Role = "Student",
+                    ProfilePhoto = photoUrl,
+                    Language = language,
+                    ProfileStatus = "Active",
+                    AuthProvider = "Facebook",
+                    ProviderId = providerId,
+                    RegistrationDate = DateTime.UtcNow,
+                };
+
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new { message = "Logged in successfully.", user });
+        }
+
     }
 }

@@ -53,6 +53,36 @@ builder.Services.AddAuthentication(options =>
 {
     facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
     facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+    facebookOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    facebookOptions.Fields.Add("picture");
+    facebookOptions.Fields.Add("locale");
+    facebookOptions.Events.OnCreatingTicket = (context) =>
+    {
+        // Отримання URL фото профілю
+        var picture = context.User.TryGetProperty("picture", out var pictureJson) &&
+                      pictureJson.TryGetProperty("data", out var dataJson) &&
+                      dataJson.TryGetProperty("url", out var urlJson)
+            ? urlJson.GetString()
+            : "default_photo_url";
+
+        if (!string.IsNullOrEmpty(picture))
+        {
+            context.Identity.AddClaim(new Claim("picture", picture));
+        }
+
+        // Отримання мови
+        var locale = context.User.TryGetProperty("locale", out var localeJson)
+            ? localeJson.GetString()
+            : "en";
+
+        if (!string.IsNullOrEmpty(locale))
+        {
+            context.Identity.AddClaim(new Claim("locale", locale));
+        }
+
+        return Task.CompletedTask;
+    };
+
 });
 
 // Add database context
