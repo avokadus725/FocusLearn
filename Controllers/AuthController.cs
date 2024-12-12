@@ -6,6 +6,7 @@ using FocusLearn.Models;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using FocusLearn.Repositories.Abstract;
 
 namespace FocusLearn.Controllers
 {
@@ -13,18 +14,18 @@ namespace FocusLearn.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly FocusLearnDbContext _context;
+        private readonly IAuthService _authService;
 
-        public AuthController(FocusLearnDbContext context)
+        public AuthController(IAuthService authService)
         {
-            _context = context;
+            _authService = authService;
         }
 
         // Google
         [HttpGet("login-google")]
         public IActionResult LoginGoogle()
         {
-            var redirectUrl = Url.Action("GoogleResponse", "Auth");
+            var redirectUrl = Url.Action(nameof(GoogleResponse), "Auth");
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, GoogleDefaults.AuthenticationScheme);
         }
 
@@ -33,44 +34,17 @@ namespace FocusLearn.Controllers
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (result?.Principal == null)
-                return Unauthorized("Authentication failed.");
+                return Unauthorized("Google authentication failed.");
 
-            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
-            var name = result.Principal.FindFirstValue(ClaimTypes.Name);
-            var providerId = result.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var photoUrl = result.Principal.FindFirstValue("picture") ?? "default_photo_url";
-            var language = result.Principal.FindFirstValue("locale") ?? "en";
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.ProviderId == providerId && u.AuthProvider == "Google");
-
-            if (user == null)
-            {
-                user = new User
-                {
-                    UserName = name,
-                    Email = email,
-                    Role = "Student",
-                    ProfilePhoto = photoUrl,
-                    Language = language,
-                    ProfileStatus = "Active",
-                    AuthProvider = "Google",
-                    ProviderId = providerId,
-                    RegistrationDate = DateTime.UtcNow,
-                };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok(new { message = "Logged in successfully.", user });
+            var token = await _authService.AuthenticateGoogleUserAsync(result.Principal);
+            return Ok(new { message = "Logged in successfully.", token });
         }
 
         // Facebook
         [HttpGet("login-facebook")]
         public IActionResult LoginFacebook()
         {
-            var redirectUrl = Url.Action("FacebookResponse", "Auth");
+            var redirectUrl = Url.Action(nameof(FacebookResponse), "Auth");
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, FacebookDefaults.AuthenticationScheme);
         }
 
@@ -81,36 +55,8 @@ namespace FocusLearn.Controllers
             if (result?.Principal == null)
                 return Unauthorized("Authentication failed.");
 
-            var email = result.Principal.FindFirstValue(ClaimTypes.Email);
-            var name = result.Principal.FindFirstValue(ClaimTypes.Name);
-            var providerId = result.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-            var photoUrl = result.Principal.FindFirstValue("picture") ?? "default_photo_url";
-            var language = result.Principal.FindFirstValue("locale") ?? "en";
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.ProviderId == providerId && u.AuthProvider == "Facebook");
-
-            if (user == null)
-            {
-                user = new User
-                {
-                    UserName = name,
-                    Email = email,
-                    Role = "Student",
-                    ProfilePhoto = photoUrl,
-                    Language = language,
-                    ProfileStatus = "Active",
-                    AuthProvider = "Facebook",
-                    ProviderId = providerId,
-                    RegistrationDate = DateTime.UtcNow,
-                };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-
-            return Ok(new { message = "Logged in successfully.", user });
+            var token = await _authService.AuthenticateFacebookUserAsync(result.Principal);
+            return Ok(new { message = "Logged in successfully.", token });
         }
-
     }
 }
