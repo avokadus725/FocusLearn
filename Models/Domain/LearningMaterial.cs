@@ -18,4 +18,7 @@ public partial class LearningMaterial
     public DateTime? AddedAt { get; set; }
 
     public virtual User Creator { get; set; } = null!;
+
+    public virtual ICollection<Assignment> AssignmentLearningMaterials { get; } = new List<Assignment>();
+
 }
