@@ -43,6 +43,7 @@ public partial class FocusLearnDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.DueDate).HasColumnType("datetime");
+            entity.Property(e => e.Rating).HasColumnType("tinyint");
             entity.Property(e => e.Status).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(100);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
@@ -55,6 +56,10 @@ public partial class FocusLearnDbContext : DbContext
                 .HasForeignKey(d => d.TutorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Assignmen__Tutor__70DDC3D8");
+
+            entity.HasOne(d => d.Task).WithMany(p => p.AssignmentLearningMaterials)
+               .HasForeignKey(d => d.TaskId)
+               .HasConstraintName("FK__Assignmen__TaskI__14270015");
         });
 
         modelBuilder.Entity<ConcentrationMethod>(entity =>

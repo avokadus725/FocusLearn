@@ -9,5 +9,7 @@ namespace FocusLearn.Models.DTO
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public string? FileLink { get; set; }
+        public int CreatorId { get; set; }
+
     }
 }
