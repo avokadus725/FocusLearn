@@ -22,6 +22,44 @@ namespace FocusLearn.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Отримати користувача за ідентифікатором
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _service.GetUserByIdAsync(id);
+
+            if (user == null)
+                return NotFound("User with inserted ID not found.");
+
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Отримати всіх користувачів (доступно лише адміністраторам)
+        /// </summary>
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _service.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        /// <summary>
+        /// Отримати всіх користувачів з роллю репетитора
+        /// </summary>
+        [HttpGet("tutors")]
+        public async Task<IActionResult> GetAllTutors()
+        {
+            var users = await _service.GetAllTutorsAsync();
+            return Ok(users);
+        }
+
+        /// <summary>
+        /// Отримати інформацію з особистого профілю
+        /// </summary>
         [HttpGet("my-profile")]
         public async Task<IActionResult> GetMyProfile()
         {
@@ -44,6 +82,9 @@ namespace FocusLearn.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Редагувати інформацію особистого профілю
+        /// </summary>
         [HttpPut("my-profile")]
         public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateProfileDTO updateUserDto)
         {
@@ -67,6 +108,9 @@ namespace FocusLearn.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Видалити особистий профіль
+        /// </summary>
         [HttpDelete("my-profile")]
         public async Task<IActionResult> DeleteMyProfile()
         {
@@ -87,32 +131,6 @@ namespace FocusLearn.Controllers
                 return NotFound("User not found.");
 
             return NoContent();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            var user = await _service.GetUserByIdAsync(id);
-
-            if (user == null)
-                return NotFound("User with inserted ID not found.");
-
-            return Ok(user);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var users = await _service.GetAllUsersAsync();
-            return Ok(users);
-        }
-
-        [HttpGet("tutors")]
-        public async Task<IActionResult> GetAllTutors()
-        {
-            var users = await _service.GetAllTutorsAsync();
-            return Ok(users);
         }
 
     }

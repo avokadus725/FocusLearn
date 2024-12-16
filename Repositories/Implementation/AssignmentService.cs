@@ -14,7 +14,7 @@ namespace FocusLearn.Repositories.Implementation
             _context = context;
         }
 
-         /// <summary>
+        /// <summary>
         /// Отримати всі завдання
         /// </summary>
         public async Task<IEnumerable<AssignmentDTO>> GetAllAssignmentsAsync()
@@ -37,6 +37,9 @@ namespace FocusLearn.Repositories.Implementation
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримати завдання за ID
+        /// </summary>
         public async Task<AssignmentDTO?> GetAssignmentByIdAsync(int id)
         {
             return await _context.Assignments
@@ -57,6 +60,9 @@ namespace FocusLearn.Repositories.Implementation
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Додати завдання
+        /// </summary>
         public async Task AddAssignmentAsync(int tutorId, AssignmentDTO assignmentDto)
         {
             var assignment = new Assignment
@@ -77,6 +83,9 @@ namespace FocusLearn.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Редагувати завдання
+        /// </summary>
         public async Task<bool> UpdateAssignmentAsync(int id, AssignmentDTO assignmentDto)
         {
             var assignment = await _context.Assignments.FindAsync(id);
@@ -96,6 +105,9 @@ namespace FocusLearn.Repositories.Implementation
             return true;
         }
 
+        /// <summary>
+        /// Видалити завдання
+        /// </summary>
         public async Task<bool> DeleteAssignmentAsync(int id)
         {
             var assignment = await _context.Assignments.FindAsync(id);

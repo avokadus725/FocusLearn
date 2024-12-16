@@ -14,6 +14,9 @@ namespace FocusLearn.Repositories.Implementation
             _context = context;
         }
 
+        /// <summary>
+        /// Отримати усі навчальні матеріали
+        /// </summary>
         public async Task<IEnumerable<LearningMaterialDTO>> GetAllMaterialsAsync()
         {
             return await _context.LearningMaterials
@@ -27,6 +30,9 @@ namespace FocusLearn.Repositories.Implementation
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Отримати матеріал за ID
+        /// </summary>
         public async Task<LearningMaterialDTO?> GetMaterialByIdAsync(int materialId)
         {
             return await _context.LearningMaterials
@@ -41,6 +47,9 @@ namespace FocusLearn.Repositories.Implementation
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Додати навчальний матеріал
+        /// </summary>
         public async Task AddMaterialAsync(int creatorId, LearningMaterialDTO materialDto)
         {
             var newMaterial = new LearningMaterial
@@ -55,6 +64,9 @@ namespace FocusLearn.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Редагувати навчальний матеріал
+        /// </summary>
         public async Task<bool> UpdateMaterialAsync(int id, LearningMaterialDTO materialDto)
         {
             var material = await _context.LearningMaterials.FindAsync(id);
@@ -70,6 +82,9 @@ namespace FocusLearn.Repositories.Implementation
             return true;
         }
 
+        /// <summary>
+        /// Видалити навчальний матеріал
+        /// </summary>
         public async Task<bool> DeleteMaterialAsync(int id)
         {
             var material = await _context.LearningMaterials.FindAsync(id);

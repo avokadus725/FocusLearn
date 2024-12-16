@@ -21,7 +21,9 @@ namespace FocusLearn.Controllers
             _authService = authService;
         }
 
-        // Google
+        /// <summary>
+        /// Авторизація за допомогою Google
+        /// </summary>
         [HttpGet("login-google")]
         public IActionResult LoginGoogle()
         {
@@ -40,7 +42,9 @@ namespace FocusLearn.Controllers
             return Ok(new { message = "Logged in successfully.", token });
         }
 
-        // Facebook
+        /// <summary>
+        /// Авторизація за допомогою Facebook
+        /// </summary>
         [HttpGet("login-facebook")]
         public IActionResult LoginFacebook()
         {

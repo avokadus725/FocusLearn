@@ -14,16 +14,25 @@ namespace FocusLearn.Repositories.Implementation
             _context = context;
         }
 
+        /// <summary>
+        /// Отримати всі методики
+        /// </summary>
         public async Task<IEnumerable<ConcentrationMethod>> GetAllMethodsAsync()
         {
             return await _context.ConcentrationMethods.ToListAsync();
         }
 
+        /// <summary>
+        /// Отримати методику за ID
+        /// </summary>
         public async Task<ConcentrationMethod?> GetMethodByIdAsync(int id)
         {
             return await _context.ConcentrationMethods.FindAsync(id);
         }
 
+        /// <summary>
+        /// Додати методику
+        /// </summary>
         public async Task AddMethodAsync(ConcentrationMethodDTO methodDto)
         {
             var newMethod = new ConcentrationMethod
@@ -38,6 +47,9 @@ namespace FocusLearn.Repositories.Implementation
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Редагувати методику
+        /// </summary>
         public async Task<bool> UpdateMethodAsync(int id, ConcentrationMethodDTO methodDto)
         {
             var existingMethod = await _context.ConcentrationMethods.FindAsync(id);
@@ -54,6 +66,9 @@ namespace FocusLearn.Repositories.Implementation
             return true;
         }
 
+        /// <summary>
+        /// Видалити методику
+        /// </summary>
         public async Task<bool> DeleteMethodAsync(int id)
         {
             var method = await _context.ConcentrationMethods.FindAsync(id);

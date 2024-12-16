@@ -18,17 +18,26 @@ namespace FocusLearn.Repositories.Implementation
             _userService = userService;
             _configuration = configuration;
         }
-
+        
+        /// <summary>
+        /// Автентифікація з Google
+        /// </summary>
         public async Task<string> AuthenticateGoogleUserAsync(ClaimsPrincipal principal)
         {
             return await AuthenticateExternalUserAsync(principal, "Google");
         }
 
+        /// <summary>
+        /// Автентифікація з Facebook
+        /// </summary>
         public async Task<string> AuthenticateFacebookUserAsync(ClaimsPrincipal principal)
         {
             return await AuthenticateExternalUserAsync(principal, "Facebook");
         }
 
+        /// <summary>
+        /// Автентифікація з зовнішнім API
+        /// </summary>
         private async Task<string> AuthenticateExternalUserAsync(ClaimsPrincipal principal, string provider)
         {
             var email = principal.FindFirstValue(ClaimTypes.Email);
@@ -70,6 +79,9 @@ namespace FocusLearn.Repositories.Implementation
             return GenerateJwtToken(user);
         }
 
+        /// <summary>
+        /// Генерування токену
+        /// </summary>
         private string GenerateJwtToken(User user)
         {
             var claims = new[]

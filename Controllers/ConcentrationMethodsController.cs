@@ -17,6 +17,9 @@ namespace FocusLearn.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Отримати всі методики концентрації
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAllMethods()
         {
@@ -24,6 +27,9 @@ namespace FocusLearn.Controllers
             return Ok(methods);
         }
 
+        /// <summary>
+        /// Отримати методику за ідентифікатором
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMethodById(int id)
         {
@@ -35,6 +41,9 @@ namespace FocusLearn.Controllers
             return Ok(method);
         }
 
+        /// <summary>
+        /// Додати методику (доступно тільки адміністраторам)
+        /// </summary>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddMethod([FromBody] ConcentrationMethodDTO methodDto)
@@ -43,6 +52,9 @@ namespace FocusLearn.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
+        /// <summary>
+        /// Редагувати методику (доступно тільки адміністраторам)
+        /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMethod(int id, [FromBody] ConcentrationMethodDTO methodDto)
@@ -55,6 +67,9 @@ namespace FocusLearn.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Видалити методику (доступно тільки адміністраторам)
+        /// </summary>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMethod(int id)

@@ -18,12 +18,16 @@ namespace FocusLearn.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Отримати всі матеріали навчальні матеріали
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAllMaterials()
         {
             var materials = await _service.GetAllMaterialsAsync();
             return Ok(materials);
         }
+
         /// <summary>
         /// Отримати всі матеріали поточного користувача
         /// </summary>
@@ -56,6 +60,9 @@ namespace FocusLearn.Controllers
             return Ok(userMaterials);
         }
 
+        /// <summary>
+        /// Отримати навчальний матеріал за ідентифікатором
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMaterialById(int id)
         {
@@ -67,6 +74,9 @@ namespace FocusLearn.Controllers
             return Ok(material);
         }
 
+        /// <summary>
+        /// Додати матеріал (доступно репетиторам та адміністраторам)
+        /// </summary>
         [HttpPost]
         [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> AddMaterial([FromBody] LearningMaterialDTO materialDto)
@@ -88,6 +98,9 @@ namespace FocusLearn.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
+        /// <summary>
+        /// Редагувати матеріал (доступно репетиторам та адміністраторам)
+        /// </summary>
         [HttpPut("{id}")]
         [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> UpdateMaterial(int id, [FromBody] LearningMaterialDTO materialDto)
@@ -100,6 +113,9 @@ namespace FocusLearn.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Видалити матеріал (доступно репетиторам та адміністраторам)
+        /// </summary>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> DeleteMaterial(int id)
