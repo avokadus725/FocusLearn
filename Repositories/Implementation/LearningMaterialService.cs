@@ -14,18 +14,31 @@ namespace FocusLearn.Repositories.Implementation
             _context = context;
         }
 
-        public async Task<IEnumerable<LearningMaterial>> GetAllMaterialsAsync()
+        public async Task<IEnumerable<LearningMaterialDTO>> GetAllMaterialsAsync()
         {
             return await _context.LearningMaterials
-                .Include(m => m.Creator)
+                .Select(l => new LearningMaterialDTO
+                {
+                    Title = l.Title,
+                    Description = l.Description,
+                    FileLink = l.FileLink,
+                    CreatorId = l.CreatorId
+                })
                 .ToListAsync();
         }
 
-        public async Task<LearningMaterial?> GetMaterialByIdAsync(int id)
+        public async Task<LearningMaterialDTO?> GetMaterialByIdAsync(int materialId)
         {
             return await _context.LearningMaterials
-                .Include(m => m.Creator)
-                .FirstOrDefaultAsync(m => m.MaterialId == id);
+                .Where(l => l.MaterialId == materialId)
+                .Select(l => new LearningMaterialDTO
+                {
+                    Title = l.Title,
+                    Description = l.Description,
+                    FileLink = l.FileLink,
+                    CreatorId = l.CreatorId
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task AddMaterialAsync(int creatorId, LearningMaterialDTO materialDto)
@@ -44,14 +57,14 @@ namespace FocusLearn.Repositories.Implementation
 
         public async Task<bool> UpdateMaterialAsync(int id, LearningMaterialDTO materialDto)
         {
-            var existingMaterial = await _context.LearningMaterials.FindAsync(id);
+            var material = await _context.LearningMaterials.FindAsync(id);
 
-            if (existingMaterial == null)
+            if (material == null)
                 return false;
 
-            existingMaterial.Title = materialDto.Title;
-            existingMaterial.Description = materialDto.Description;
-            existingMaterial.FileLink = materialDto.FileLink;
+            material.Title = materialDto.Title;
+            material.Description = materialDto.Description;
+            material.FileLink = materialDto.FileLink;
 
             await _context.SaveChangesAsync();
             return true;

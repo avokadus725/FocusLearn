@@ -14,16 +14,19 @@ namespace FocusLearn.Repositories.Implementation
             _context = context;
         }
 
+        public async Task AddUserAsync(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+        }
         public async Task<User?> GetUserByProviderAsync(string providerId, string authProvider)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.ProviderId == providerId && u.AuthProvider == authProvider);
         }
-
-        public async Task AddUserAsync(User user)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<UserDTO?> GetUserByIdAsync(int userId)
@@ -42,7 +45,6 @@ namespace FocusLearn.Repositories.Implementation
                 })
                 .FirstOrDefaultAsync();
         }
-
         public async Task<bool> UpdateUserAsync(int userId, UpdateProfileDTO updateUserDto)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -57,7 +59,6 @@ namespace FocusLearn.Repositories.Implementation
             await _context.SaveChangesAsync();
             return true;
         }
-
         public async Task<bool> DeleteUserAsync(int userId)
         {
             var user = await _context.Users.FindAsync(userId);
@@ -85,10 +86,21 @@ namespace FocusLearn.Repositories.Implementation
                 })
                 .ToListAsync();
         }
-
-        public async Task<User?> GetUserByEmailAsync(string email)
+        public async Task<IEnumerable<UserDTO>> GetAllTutorsAsync()
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .Where(u => u.Role == "Tutor")
+                .Select(u => new UserDTO
+                {
+                    UserId = u.UserId,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    ProfilePhoto = u.ProfilePhoto,
+                    Language = u.Language,
+                    Role = u.Role,
+                    ProfileStatus = u.ProfileStatus
+                })
+                .ToListAsync();
         }
 
     }
