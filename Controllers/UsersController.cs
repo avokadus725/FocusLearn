@@ -16,14 +16,14 @@ namespace FocusLearn.Controllers
     [Authorize] // Доступ лише для авторизованих користувачів
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        private readonly IUserService _service;
+        public UsersController(IUserService service)
         {
-            _userService = userService;
+            _service = service;
         }
 
         [HttpGet("my-profile")]
-        public async Task<IActionResult> GetCurrentUser()
+        public async Task<IActionResult> GetMyProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
                       User.FindFirst("sub") ??
@@ -36,7 +36,7 @@ namespace FocusLearn.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            var user = await _userService.GetUserByIdAsync(userId);
+            var user = await _service.GetUserByIdAsync(userId);
 
             if (user == null)
                 return NotFound("User not found.");
@@ -45,7 +45,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpPut("my-profile")]
-        public async Task<IActionResult> UpdateCurrentUser([FromBody] UpdateProfileDTO updateUserDto)
+        public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateProfileDTO updateUserDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
                                   User.FindFirst("sub") ??
@@ -59,7 +59,7 @@ namespace FocusLearn.Controllers
 
             var userId = int.Parse(userIdClaim.Value);
 
-            var result = await _userService.UpdateUserAsync(userId, updateUserDto);
+            var result = await _service.UpdateUserAsync(userId, updateUserDto);
 
             if (!result)
                 return NotFound("User not found.");
@@ -68,7 +68,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpDelete("my-profile")]
-        public async Task<IActionResult> DeleteCurrentUser()
+        public async Task<IActionResult> DeleteMyProfile()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
                       User.FindFirst("sub") ??
@@ -81,7 +81,7 @@ namespace FocusLearn.Controllers
             var userId = int.Parse(userIdClaim.Value);
 
 
-            var result = await _userService.DeleteUserAsync(userId);
+            var result = await _service.DeleteUserAsync(userId);
 
             if (!result)
                 return NotFound("User not found.");
@@ -89,13 +89,32 @@ namespace FocusLearn.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _service.GetUserByIdAsync(id);
+
+            if (user == null)
+                return NotFound("User with inserted ID not found.");
+
+            return Ok(user);
+        }
+
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await _service.GetAllUsersAsync();
             return Ok(users);
         }
+
+        [HttpGet("tutors")]
+        public async Task<IActionResult> GetAllTutors()
+        {
+            var users = await _service.GetAllTutorsAsync();
+            return Ok(users);
+        }
+
     }
 }
 

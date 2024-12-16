@@ -8,7 +8,6 @@ namespace FocusLearn.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
     public class ConcentrationMethodsController : ControllerBase
     {
         private readonly IConcentrationMethodService _service;
@@ -37,6 +36,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddMethod([FromBody] ConcentrationMethodDTO methodDto)
         {
             await _service.AddMethodAsync(methodDto);
@@ -44,6 +44,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateMethod(int id, [FromBody] ConcentrationMethodDTO methodDto)
         {
             var result = await _service.UpdateMethodAsync(id, methodDto);
@@ -55,6 +56,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteMethod(int id)
         {
             var result = await _service.DeleteMethodAsync(id);

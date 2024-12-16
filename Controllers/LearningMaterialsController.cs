@@ -1,13 +1,14 @@
 ﻿using FocusLearn.Models.DTO;
 using FocusLearn.Repositories.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FocusLearn.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Autorize]
     public class LearningMaterialsController : ControllerBase
     {
         private readonly ILearningMaterialService _service;
@@ -23,6 +24,37 @@ namespace FocusLearn.Controllers
             var materials = await _service.GetAllMaterialsAsync();
             return Ok(materials);
         }
+        /// <summary>
+        /// Отримати всі матеріали поточного користувача
+        /// </summary>
+        [HttpGet("my-materials")]
+        public async Task<IActionResult> GetMyMaterials()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
+                      User.FindFirst("sub") ??
+                      User.FindFirst("UserId");
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            var allMaterials = await _service.GetAllMaterialsAsync();
+
+            // Фільтруємо матеріали за ідентифікатором користувача
+            var userMaterials = allMaterials
+                .Where(a => a.CreatorId == userId)
+                .ToList();
+
+            if (userMaterials == null || !userMaterials.Any())
+            {
+                return NotFound("You don't have any materials.");
+            }
+
+            return Ok(userMaterials);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMaterialById(int id)
@@ -36,18 +68,28 @@ namespace FocusLearn.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> AddMaterial([FromBody] LearningMaterialDTO materialDto)
         {
-            var creatorId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
+                      User.FindFirst("sub") ??
+                      User.FindFirst("UserId");
 
-            if (creatorId == 0)
-                return Unauthorized("User ID not found in token.");
 
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User ID not found in token");
+            }
+
+            var creatorId = int.Parse(userIdClaim.Value);
+
+            
             await _service.AddMaterialAsync(creatorId, materialDto);
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> UpdateMaterial(int id, [FromBody] LearningMaterialDTO materialDto)
         {
             var result = await _service.UpdateMaterialAsync(id, materialDto);
@@ -59,6 +101,7 @@ namespace FocusLearn.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Tutor, Admin")]
         public async Task<IActionResult> DeleteMaterial(int id)
         {
             var result = await _service.DeleteMaterialAsync(id);
