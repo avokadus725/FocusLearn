@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FocusLearn.Models.Domain;
 
@@ -26,13 +27,14 @@ public partial class User
 
     public DateTime? RegistrationDate { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Assignment> AssignmentStudents { get; } = new List<Assignment>();
-
+    [JsonIgnore]
     public virtual ICollection<Assignment> AssignmentTutors { get; } = new List<Assignment>();
-
-    public virtual ICollection<IoTsession> IoTsessions { get; } = new List<IoTsession>();
-
+    [JsonIgnore]
+    public virtual ICollection<IoTSession> IoTSessions { get; } = new List<IoTSession>();
+    [JsonIgnore]
     public virtual ICollection<LearningMaterial> LearningMaterials { get; } = new List<LearningMaterial>();
-
-    public virtual ICollection<UserMethodStatistic> UserMethodStatistics { get; } = new List<UserMethodStatistic>();
+    [JsonIgnore]
+    public virtual ICollection<UserMethodStatistics> UserMethodStatistics { get; } = new List<UserMethodStatistics>();
 }

@@ -14,11 +14,11 @@ namespace FocusLearn.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthService _service;
 
         public AuthController(IAuthService authService)
         {
-            _authService = authService;
+            _service = authService;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace FocusLearn.Controllers
             if (result?.Principal == null)
                 return Unauthorized("Google authentication failed.");
 
-            var token = await _authService.AuthenticateGoogleUserAsync(result.Principal);
+            var token = await _service.AuthenticateGoogleUserAsync(result.Principal);
             return Ok(new { message = "Logged in successfully.", token });
         }
 
@@ -59,7 +59,7 @@ namespace FocusLearn.Controllers
             if (result?.Principal == null)
                 return Unauthorized("Authentication failed.");
 
-            var token = await _authService.AuthenticateFacebookUserAsync(result.Principal);
+            var token = await _service.AuthenticateFacebookUserAsync(result.Principal);
             return Ok(new { message = "Logged in successfully.", token });
         }
     }

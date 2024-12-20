@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FocusLearn.Models.Domain;
 
-public partial class IoTsession
+public partial class IoTSession
 {
     public int SessionId { get; set; }
 

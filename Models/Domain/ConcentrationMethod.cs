@@ -17,7 +17,7 @@ public partial class ConcentrationMethod
 
     public DateTime? CreatedAt { get; set; }
 
-    public virtual ICollection<IoTsession> IoTsessions { get; } = new List<IoTsession>();
+    public virtual ICollection<IoTSession> IoTSessions { get; } = new List<IoTSession>();
 
-    public virtual ICollection<UserMethodStatistic> UserMethodStatistics { get; } = new List<UserMethodStatistic>();
+    public virtual ICollection<UserMethodStatistics> UserMethodStatistics { get; } = new List<UserMethodStatistics>();
 }

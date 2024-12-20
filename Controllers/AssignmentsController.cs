@@ -10,6 +10,8 @@ namespace FocusLearn.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize] // Доступ лише для авторизованих користувачів
+    [ServiceFilter(typeof(UserStatusFilter))]
+
     public class AssignmentsController : ControllerBase
     {
         private readonly IAssignmentService _service;
