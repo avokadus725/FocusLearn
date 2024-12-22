@@ -5,5 +5,6 @@ namespace FocusLearn.Repositories.Abstract
     {
         Task<bool> AddIoTSessionAsync(IoTSessionDTO sessionDto);
         Task<IEnumerable<IoTSessionDTO>> GetIoTSessionsByUserIdAsync(int userId);
+        Task<bool> SaveIoTSessionAsync(IoTSessionDTO sessionDto);
     }
 }

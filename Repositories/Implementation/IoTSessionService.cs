@@ -49,6 +49,22 @@ namespace FocusLearn.Repositories.Implementation
                 })
                 .ToListAsync();
         }
+
+        public async Task<bool> SaveIoTSessionAsync(IoTSessionDTO sessionDto)
+        {
+            var session = new IoTSession
+            {
+                UserId = sessionDto.UserId,
+                MethodId = sessionDto.MethodId,
+                SessionType = sessionDto.SessionType,
+                StartTime = sessionDto.StartTime,
+                EndTime = sessionDto.EndTime
+            };
+
+            _context.IoTSessions.Add(session);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
     }
 }
 

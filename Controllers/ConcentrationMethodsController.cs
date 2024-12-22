@@ -1,8 +1,13 @@
 ﻿using FocusLearn.Models.DTO;
 using FocusLearn.Repositories.Abstract;
+using FocusLearn.Repositories.Implementation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MQTTnet;
+using MQTTnet.Client;
+using FocusLearn.Repositories.Implementation;
+using System.Text.Json;
 
 namespace FocusLearn.Controllers
 {
@@ -11,12 +16,10 @@ namespace FocusLearn.Controllers
     public class ConcentrationMethodsController : ControllerBase
     {
         private readonly IConcentrationMethodService _service;
-
-        public ConcentrationMethodsController(IConcentrationMethodService service)
-        {
-            _service = service;
+        public ConcentrationMethodsController(IConcentrationMethodService service) 
+        { 
+            _service = service; 
         }
-
         /// <summary>
         /// Отримати всі методики концентрації
         /// </summary>
@@ -81,5 +84,6 @@ namespace FocusLearn.Controllers
 
             return NoContent();
         }
+
     }
 }
