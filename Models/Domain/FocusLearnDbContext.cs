@@ -19,13 +19,13 @@ public partial class FocusLearnDbContext : DbContext
 
     public virtual DbSet<ConcentrationMethod> ConcentrationMethods { get; set; }
 
-    public virtual DbSet<IoTsession> IoTsessions { get; set; }
+    public virtual DbSet<IoTSession> IoTSessions { get; set; }
 
     public virtual DbSet<LearningMaterial> LearningMaterials { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserMethodStatistic> UserMethodStatistics { get; set; }
+    public virtual DbSet<UserMethodStatistics> UserMethodStatistics { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -74,7 +74,7 @@ public partial class FocusLearnDbContext : DbContext
             entity.Property(e => e.Title).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<IoTsession>(entity =>
+        modelBuilder.Entity<IoTSession>(entity =>
         {
             entity.HasKey(e => e.SessionId).HasName("PK__IoTSessi__C9F492900013076F");
 
@@ -85,12 +85,12 @@ public partial class FocusLearnDbContext : DbContext
             entity.Property(e => e.SessionType).HasMaxLength(20);
             entity.Property(e => e.StartTime).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Method).WithMany(p => p.IoTsessions)
+            entity.HasOne(d => d.Method).WithMany(p => p.IoTSessions)
                 .HasForeignKey(d => d.MethodId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__IoTSessio__Metho__7B5B524B");
 
-            entity.HasOne(d => d.User).WithMany(p => p.IoTsessions)
+            entity.HasOne(d => d.User).WithMany(p => p.IoTSessions)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__IoTSessio__UserI__7A672E12");
@@ -133,7 +133,7 @@ public partial class FocusLearnDbContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<UserMethodStatistic>(entity =>
+        modelBuilder.Entity<UserMethodStatistics>(entity =>
         {
             entity.HasKey(e => e.StatisticId).HasName("PK__UserMeth__367DEB177AC97C1A");
 

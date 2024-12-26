@@ -1,23 +1,69 @@
 using Microsoft.EntityFrameworkCore;
-using FocusLearn.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.Extensions.Options;
 using System.Security.Claims;
-
+using FocusLearn.Repositories.Abstract;
+using FocusLearn.Repositories.Implementation;
+using FocusLearn.Models.Domain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using MQTTnet.Client;
+using MQTTnet;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "FocusLearn API", Version = "v1" });
 
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 // Configure Authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
+    };
 })
 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddGoogle(googleOptions =>
@@ -99,7 +145,36 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+    
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IConcentrationMethodService, ConcentrationMethodService>();
+builder.Services.AddScoped<ILearningMaterialService, LearningMaterialService>();
+builder.Services.AddScoped<IAssignmentService, AssignmentService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IBusinessLogicService, BusinessLogicService>();
+builder.Services.AddScoped<IIoTSessionService, IoTSessionService>();
+builder.Services.AddScoped<IUserMethodStatisticsService, UserMethodStatisticsService>();
+builder.Services.AddScoped<UserStatusFilter>();
+builder.Services.AddSingleton<IMqttClient>(sp =>
+{
+    var factory = new MqttFactory();
+    return factory.CreateMqttClient();
+});
+builder.Services.AddSingleton<MqttClientService>();
+
 var app = builder.Build();
+
+var mqttService = app.Services.GetRequiredService<MqttClientService>();
+try
+{
+    await mqttService.ConnectAsync();
+}
+catch (Exception ex)
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "Failed to connect to MQTT broker during startup");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -111,9 +186,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseSession();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
