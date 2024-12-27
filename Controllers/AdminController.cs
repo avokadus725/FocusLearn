@@ -7,7 +7,6 @@ namespace FocusLearn.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")] //Дії доступні тільки адміністратору
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _service;
@@ -21,6 +20,7 @@ namespace FocusLearn.Controllers
         /// Змінити статус користувача
         /// </summary>
         [HttpPost("change-user-status")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserStatus([FromQuery] int userId, [FromQuery] string status)
         {
             if (status != "Active" && status != "Inactive")
@@ -34,19 +34,43 @@ namespace FocusLearn.Controllers
         }
 
         /// <summary>
-        /// Зробити бекап БД
+        /// Експорт схеми БД та даних
         /// </summary>
+        /// <returns></returns>
         [HttpPost("backup-database")]
-        public async Task<IActionResult> BackupDatabase()
+        public async Task<IActionResult> ExportDatabase()
         {
             try
             {
-                var backupPath = await _service.BackupDatabaseAsync();
-                return Ok($"Backup created successfully: {backupPath}");
+                var exportFilePath = await _service.BackupDatabaseAsync();
+                return Ok(new { Message = "Експорт бази даних успішний", FilePath = exportFilePath });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, new { Message = "Помилка експорту бази даних", Details = ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// Відновлення БД
+        /// </summary>
+        /// <param name="customPath"></param>
+        /// <returns></returns>
+        [HttpPost("restore-database")]
+        public async Task<IActionResult> RestoreDatabase([FromQuery] string customPath = null)
+        {
+            try
+            {
+                var success = await _service.RestoreDatabaseAsync(customPath);
+                if (success)
+                    return Ok("База даних успішно відновлена.");
+                else
+                    return StatusCode(500, "Не вдалося відновити базу даних.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Помилка відновлення бази даних.", Details = ex.Message });
             }
         }
 

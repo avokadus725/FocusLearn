@@ -60,6 +60,60 @@ namespace FocusLearn.Repositories.Implementation
         }
 
         /// <summary>
+        /// Відновити базу даних з бекапу
+        /// </summary>
+        /// <param name="customPath">Шлях до SQL-файлу (опційно)</param>
+        /// <returns>Чи успішно відновлено базу даних</returns>
+        public async Task<bool> RestoreDatabaseAsync(string customPath = null)
+        {
+            try
+            {
+                string sqlFilePath;
+
+                // Перевіряємо, чи є файли у стандартній папці Backups
+                var defaultBackupPath = Path.Combine(Environment.CurrentDirectory, "Backups");
+                if (!Directory.Exists(defaultBackupPath))
+                {
+                    Directory.CreateDirectory(defaultBackupPath);
+                }
+
+                var backupFiles = Directory.GetFiles(defaultBackupPath, "*.bak");
+
+                if (backupFiles.Any())
+                {
+                    // Використовуємо останній бекап із папки
+                    sqlFilePath = backupFiles.OrderByDescending(File.GetCreationTime).First();
+                    Console.WriteLine($"Використовується останній бекап із папки Backups: {sqlFilePath}");
+                }
+                else if (!string.IsNullOrWhiteSpace(customPath) && File.Exists(customPath))
+                {
+                    // Використовуємо вказаний шлях
+                    sqlFilePath = customPath;
+                    Console.WriteLine($"Використовується бекап із вказаного шляху: {sqlFilePath}");
+                }
+                else
+                {
+                    throw new FileNotFoundException("Бекапи відсутні. Вкажіть шлях до бекапу.");
+                }
+
+                // Виконуємо відновлення бази даних
+                var sql = $"RESTORE DATABASE FocusLearnDB FROM DISK = '{sqlFilePath}' WITH REPLACE";
+
+                await using var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                await connection.OpenAsync();
+
+                using var command = new SqlCommand(sql, connection);
+                await command.ExecuteNonQueryAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Помилка відновлення бази даних: {ex.Message}");
+            }
+        }
+
+        /// <summary>
         /// Експорт даних у форматі JSON
         /// </summary>
         public async Task<IEnumerable<string>> ExportDataAsync(IEnumerable<string> tableNames)
