@@ -11,11 +11,23 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using MQTTnet.Client;
 using MQTTnet;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using FocusLearn.Resources;
+using FocusLearn.Filters;
+using FocusLearn.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddLocalization(options => options.ResourcesPath = "");
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<LocalizationFilter>();
+})
+    .AddDataAnnotationsLocalization()
+    .AddMvcLocalization(); ;
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -45,6 +57,27 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new CultureInfo("uk"),
+        new CultureInfo("en")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("uk");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider(),
+        new AcceptLanguageHeaderRequestCultureProvider()
+    };
+});
+
 // Configure Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -145,7 +178,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-    
+builder.Services.AddScoped<ILocalizationService, LocalizationService>();
+builder.Services.AddScoped<LocalizationFilter>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IConcentrationMethodService, ConcentrationMethodService>();
@@ -164,7 +198,11 @@ builder.Services.AddSingleton<IMqttClient>(sp =>
 builder.Services.AddSingleton<MqttClientService>();
 
 var app = builder.Build();
-
+var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+if (localizationOptions != null)
+{
+    app.UseRequestLocalization(localizationOptions.Value);
+}
 var mqttService = app.Services.GetRequiredService<MqttClientService>();
 try
 {
@@ -189,7 +227,8 @@ app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseRequestLocalization(localizationOptions.Value);
+app.UseUserLanguage();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

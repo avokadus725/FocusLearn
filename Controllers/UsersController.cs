@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using FocusLearn.Repositories.Abstract;
 using FocusLearn.Repositories.Implementation;
 using System.Security.Claims;
-
+using Microsoft.Extensions.Localization;
+using FocusLearn.Resources;
 
 namespace FocusLearn.Controllers
 {
@@ -17,9 +18,11 @@ namespace FocusLearn.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
-        public UsersController(IUserService service)
+        private readonly IStringLocalizer<SharedResources> _localizer;
+        public UsersController(IUserService service, IStringLocalizer<SharedResources> localizer)
         {
             _service = service;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -77,9 +80,13 @@ namespace FocusLearn.Controllers
             var user = await _service.GetUserByIdAsync(userId);
 
             if (user == null)
-                return NotFound("User not found.");
+                return NotFound(_localizer["UserNotFound"]);
 
-            return Ok(user);
+            return Ok(new
+            {
+                User = user,
+                WelcomeMessage = _localizer["WelcomeMessage"]
+            });
         }
 
         /// <summary>
@@ -103,7 +110,7 @@ namespace FocusLearn.Controllers
             var result = await _service.UpdateUserAsync(userId, updateUserDto);
 
             if (!result)
-                return NotFound("User not found.");
+                return NotFound(_localizer["UserNotFound"]);
 
             return NoContent();
         }
@@ -128,7 +135,7 @@ namespace FocusLearn.Controllers
             var result = await _service.DeleteUserAsync(userId);
 
             if (!result)
-                return NotFound("User not found.");
+                return NotFound(_localizer["UserNotFound"]);
 
             return NoContent();
         }

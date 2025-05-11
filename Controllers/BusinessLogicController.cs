@@ -105,6 +105,103 @@ namespace FocusLearn.Controllers
                 return StatusCode(500, new { Message = "An error occurred while determining the most effective method.", Details = ex.Message });
             }
         }
+
+
+        /// <summary>
+        /// Отримати коефіцієнт продуктивності користувача
+        /// </summary>
+        [HttpGet("productivity-coefficient")]
+        public async Task<IActionResult> GetProductivityCoefficient(
+            [FromQuery] DateTime periodStartDate,
+            [FromQuery] string periodType)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
+                      User.FindFirst("sub") ??
+                      User.FindFirst("UserId");
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var userId = int.Parse(userIdClaim.Value);
+
+                var coefficient = await _service.CalculateProductivityCoefficientAsync(
+                    userId,
+                    periodStartDate,
+                    periodType);
+
+                return Ok(new { ProductivityCoefficient = coefficient });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while calculating productivity coefficient.", Details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Спрогнозувати потенційне покращення продуктивності
+        /// </summary>
+        [HttpGet("predict-productivity")]
+        public async Task<IActionResult> PredictProductivityImprovement(
+            [FromQuery] DateTime periodStartDate,
+            [FromQuery] string periodType)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
+                      User.FindFirst("sub") ??
+                      User.FindFirst("UserId");
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var userId = int.Parse(userIdClaim.Value);
+
+                var prediction = await _service.PredictProductivityImprovementAsync(
+                    userId,
+                    periodStartDate,
+                    periodType);
+
+                return Ok(prediction);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while predicting productivity improvement.", Details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Аналіз тренду продуктивності
+        /// </summary>
+        [HttpGet("productivity-trend")]
+        public async Task<IActionResult> AnalyzeProductivityTrend([FromQuery] int daysToAnalyze = 30)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier) ??
+                      User.FindFirst("sub") ??
+                      User.FindFirst("UserId");
+
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User ID not found in token");
+                }
+
+                var userId = int.Parse(userIdClaim.Value);
+
+                var trend = await _service.AnalyzeProductivityTrendAsync(userId, daysToAnalyze);
+                return Ok(trend);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while analyzing productivity trend.", Details = ex.Message });
+            }
+        }
     }
 }
 
