@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /Controllers/WeatherForecastController.cs
 /Exports
 *.json
+/Backups/FocusLearnDB_20241227_175654.bak
+/Notes.txt

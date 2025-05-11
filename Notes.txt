@@ -1,8 +1,0 @@
-﻿Для автоматичного створення моделей відповідно до підключеної БД:
-
-встановити додатково пакет dotnet tool install --global dotnet-ef --version 7.0.0 (бути уважним, щоб версії співпадали з проєктом)
-* для перевірки версії dotnet --version
-
-dotnet ef dbcontext scaffold "Server=YOUR_SERVER;Database=YOUR_DATABASE;Trusted_Connection=True;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer -o Models
-
-також можуть виникнути проблеми з DbContext, спробувати створити порожній вручну та додати builder у Program.cs (потім контекст створиться автоматично при успішному виконанні команди, видалити попередній)
