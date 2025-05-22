@@ -9,6 +9,8 @@ import './i18n';
 // Імпорт компонентів сторінок
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+
 
 // Імпорт стилів
 import './styles/global.css';
@@ -41,6 +43,7 @@ const AppRoutes = () => {
       
       {/* Захищені маршрути */}
       <Route path="/" element={<PrivateRouteElement element={<HomePage />} />} />
+      <Route path="/profile" element={<PrivateRouteElement element={<ProfilePage />} />} />
       
       {/* Перенаправлення на login для невідомих маршрутів */}
       <Route path="*" element={<Navigate to="/login" />} />
