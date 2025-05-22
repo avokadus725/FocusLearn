@@ -1,0 +1,14 @@
+.layout {
+  min-height: 100vh;
+  background-color: var(--secondary-light);
+}
+
+.layout-main {
+  min-height: calc(100vh - 64px);
+}
+
+@media (max-width: 768px) {
+  .layout-main {
+    min-height: calc(100vh - 56px);
+  }
+}
