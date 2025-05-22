@@ -67,13 +67,20 @@ getCurrentUser: async () => {
 
   try {   
     const response = await axios.get(`${API_URL}/Users/my-profile`);
+    console.log('API Response:', response.data);
+    
+    if (response.data && response.data.data) {
+      return response.data.data; 
+    }
+    
     return response.data;
   } catch (error) {
+    console.error('Error fetching user:', error);
     if (error.response && error.response.status === 401) {
       console.log('Token invalid, logging out');
       authService.logout();
     }
-    return null;
+    throw error;
   }
 },
 

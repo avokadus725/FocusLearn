@@ -42,15 +42,21 @@ const loadUser = async () => {
   try {
     if (authService.isAuthenticated()) {
       const userData = await authService.getCurrentUser();
-
-      const user = userData?.data?.user;
       
-      setUser(user || null);
-      setIsAuth(!!user);
+      const userInfo = userData || null;
+      
+      console.log('Processed user:', userInfo);
+      
+      setUser(userInfo);
+      setIsAuth(!!userInfo);
     }
   } catch (error) {
+    console.error('Error loading user:', error);
     setError(error.message);
     setIsAuth(false);
+    if (error.response && error.response.status === 401) {
+      authService.logout();
+    }
   } finally {
     setLoading(false);
   }

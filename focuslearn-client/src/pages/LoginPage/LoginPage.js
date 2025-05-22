@@ -6,18 +6,37 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // Fix: Get isAuthenticated from the auth context
-  const { loginWithGoogle, loginWithFacebook, error: authError, isAuthenticated } = useAuth();
+  const { loginWithGoogle, loginWithFacebook, error: authError, isAuthenticated, loading: authLoading } = useAuth();
   const { currentLanguage } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
  
-  // Check if user is already authenticated and redirect if needed
   useEffect(() => {
-    if (isAuthenticated) {
+    console.log('LoginPage: isAuthenticated =', isAuthenticated, 'authLoading =', authLoading);
+    
+    if (!authLoading && isAuthenticated) {
+      console.log('User is authenticated, redirecting to home...');
       navigate('/');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
+
+  if (authLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Перевірка авторизації...</p>
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Перенаправлення...</p>
+      </div>
+    );
+  }
 
   // Стандартні тексти для сторінки входу
   const [texts] = useState({
@@ -38,7 +57,6 @@ const LoginPage = () => {
       setLoading(true);
       setError(null);
       await loginWithGoogle();
-      // The page will redirect, code below won't run
     } catch (err) {
       setError('Failed to login with Google. Please try again later.');
       console.error('Google login error:', err);

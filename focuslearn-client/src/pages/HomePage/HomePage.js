@@ -123,8 +123,8 @@ const HomePage = () => {
               <div className="user-profile-section">
                 <div className="user-info-text">
                   <p>{t('welcome.greeting', { name: user.userName })}</p>
-                  {/* <p>{t('welcome.role', { role: user.role })}</p>
-                  <p>Email: <strong>{user.email}</strong></p> */}
+                  <p>{t('welcome.role', { role: user.role })}</p>
+                   {/*<p>Email: <strong>{user.email}</strong></p> */}
                 </div>
               </div>
             </div>
