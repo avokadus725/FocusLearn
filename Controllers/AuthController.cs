@@ -15,10 +15,12 @@ namespace FocusLearn.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _service;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IConfiguration configuration)
         {
             _service = authService;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -39,7 +41,15 @@ namespace FocusLearn.Controllers
                 return Unauthorized("Google authentication failed.");
 
             var token = await _service.AuthenticateGoogleUserAsync(result.Principal);
-            return Ok(new { message = "Logged in successfully.", token });
+            // Отримуємо налаштування клієнтського URL з конфігурації
+            var clientUrl = _configuration["ClientUrl"];
+            if (string.IsNullOrEmpty(clientUrl))
+            {
+                clientUrl = "http://localhost:3000"; // Значення за замовчуванням
+            }
+
+            // Перенаправляємо на сторінку обробки авторизації з токеном
+            return Redirect($"{clientUrl}/auth-callback.html?token={token}");
         }
 
         /// <summary>
@@ -60,7 +70,14 @@ namespace FocusLearn.Controllers
                 return Unauthorized("Authentication failed.");
 
             var token = await _service.AuthenticateFacebookUserAsync(result.Principal);
-            return Ok(new { message = "Logged in successfully.", token });
+            var clientUrl = _configuration["ClientUrl"];
+            if (string.IsNullOrEmpty(clientUrl))
+            {
+                clientUrl = "http://localhost:3000"; // Значення за замовчуванням
+            }
+
+            // Перенаправляємо на сторінку обробки авторизації з токеном
+            return Redirect($"{clientUrl}/auth-callback.html?token={token}");
         }
     }
 }

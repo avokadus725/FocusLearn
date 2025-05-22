@@ -36,4 +36,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="focuslearn-client\src\api\" />
+  </ItemGroup>
+
 </Project>

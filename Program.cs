@@ -19,6 +19,18 @@ using FocusLearn.Filters;
 using FocusLearn.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+var clientUrl = builder.Configuration["ClientUrl"] ?? "http://localhost:3000";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder
+            .WithOrigins(clientUrl)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
 
 // Add services to the container.
 builder.Services.AddLocalization(options => options.ResourcesPath = "");
@@ -137,7 +149,7 @@ builder.Services.AddAuthentication(options =>
     facebookOptions.Fields.Add("locale");
     facebookOptions.Events.OnCreatingTicket = (context) =>
     {
-        // Отримання URL фото профілю
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ URL пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var picture = context.User.TryGetProperty("picture", out var pictureJson) &&
                       pictureJson.TryGetProperty("data", out var dataJson) &&
                       dataJson.TryGetProperty("url", out var urlJson)
@@ -149,7 +161,7 @@ builder.Services.AddAuthentication(options =>
             context.Identity.AddClaim(new Claim("picture", picture));
         }
 
-        // Отримання мови
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         var locale = context.User.TryGetProperty("locale", out var localeJson)
             ? localeJson.GetString()
             : "en";
@@ -226,6 +238,7 @@ app.UseHttpsRedirection();
 app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 app.UseRequestLocalization(localizationOptions.Value);
 app.UseUserLanguage();

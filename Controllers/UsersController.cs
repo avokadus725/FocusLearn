@@ -82,11 +82,9 @@ namespace FocusLearn.Controllers
             if (user == null)
                 return NotFound(_localizer["UserNotFound"]);
 
-            return Ok(new
-            {
-                User = user,
-                WelcomeMessage = _localizer["WelcomeMessage"]
-            });
+            Console.WriteLine($"Returning user: {System.Text.Json.JsonSerializer.Serialize(user)}");
+
+            return Ok(user);
         }
 
         /// <summary>
