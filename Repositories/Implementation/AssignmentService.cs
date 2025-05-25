@@ -31,7 +31,9 @@ private readonly FocusLearnDbContext _context;
                 DueDate = a.DueDate,
                 CreatedAt = a.CreatedAt,
                 UpdatedAt = a.UpdatedAt,
-                Rating = a.Rating
+                Rating = a.Rating,
+
+                TutorName = a.Tutor.UserName
             })
             .ToListAsync();
     }
@@ -56,7 +58,9 @@ private readonly FocusLearnDbContext _context;
                 DueDate = a.DueDate,
                 CreatedAt = a.CreatedAt,
                 UpdatedAt = a.UpdatedAt,
-                Rating = a.Rating
+                Rating = a.Rating,
+
+                TutorName = a.Tutor.UserName
             })
             .ToListAsync();
     }
@@ -82,7 +86,9 @@ private readonly FocusLearnDbContext _context;
                     DueDate = a.DueDate,
                     CreatedAt = a.CreatedAt,
                     UpdatedAt = a.UpdatedAt,
-                    Rating = a.Rating
+                    Rating = a.Rating,
+
+                    TutorName = a.Tutor.UserName
                 })
                 .FirstOrDefaultAsync();
         }

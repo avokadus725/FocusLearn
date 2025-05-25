@@ -26,7 +26,10 @@ namespace FocusLearn.Repositories.Implementation
                     Title = l.Title,
                     Description = l.Description,
                     FileLink = l.FileLink,
-                    CreatorId = l.CreatorId
+                    CreatorId = l.CreatorId,
+                    AddedAt = l.AddedAt,
+
+                    TutorName = l.Creator.UserName
                 })
                 .ToListAsync();
         }
@@ -44,7 +47,10 @@ namespace FocusLearn.Repositories.Implementation
                     Title = l.Title,
                     Description = l.Description,
                     FileLink = l.FileLink,
-                    CreatorId = l.CreatorId
+                    CreatorId = l.CreatorId,
+                    AddedAt = l.AddedAt,
+
+                    TutorName = l.Creator.UserName
                 })
                 .FirstOrDefaultAsync();
         }
@@ -60,7 +66,8 @@ namespace FocusLearn.Repositories.Implementation
                 CreatorId = creatorId,
                 Title = materialDto.Title,
                 Description = materialDto.Description,
-                FileLink = materialDto.FileLink
+                FileLink = materialDto.FileLink,
+                AddedAt = DateTime.UtcNow
             };
 
             _context.LearningMaterials.Add(newMaterial);
@@ -81,6 +88,7 @@ namespace FocusLearn.Repositories.Implementation
             material.Title = materialDto.Title;
             material.Description = materialDto.Description;
             material.FileLink = materialDto.FileLink;
+            material.AddedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
             return true;

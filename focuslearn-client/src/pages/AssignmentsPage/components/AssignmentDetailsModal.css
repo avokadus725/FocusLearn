@@ -405,4 +405,102 @@
   .section-title {
     font-size: 1rem;
   }
+  /* Додати ці стилі до AssignmentDetailsModal.css */
+
+/* ========================= ПОСИЛАННЯ НА НАВЧАЛЬНИЙ МАТЕРІАЛ ========================= */
+.learning-material-link {
+  margin-top: var(--spacing-sm);
+}
+
+.material-link-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--secondary-light);
+  border: 1px solid var(--secondary);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.material-link-button:hover {
+  background: var(--secondary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: inherit;
+}
+
+.material-link-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.material-link-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.material-link-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.material-link-title {
+  font-weight: 600;
+  color: var(--gray-800);
+  font-size: 0.9rem;
+}
+
+.material-link-subtitle {
+  color: var(--gray-600);
+  font-size: 0.8rem;
+}
+
+.material-link-arrow {
+  color: var(--primary);
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.material-link-button:hover .material-link-arrow {
+  transform: translateX(4px);
+}
+
+/* Адаптивність */
+@media (max-width: 480px) {
+  .material-link-content {
+    gap: var(--spacing-sm);
+  }
+  
+  .material-link-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+  
+  .material-link-title {
+    font-size: 0.85rem;
+  }
+  
+  .material-link-subtitle {
+    font-size: 0.75rem;
+  }
+}
 }

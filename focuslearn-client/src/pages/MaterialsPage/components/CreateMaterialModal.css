@@ -1,0 +1,63 @@
+/* Імпортуємо базові стилі з CreateAssignmentModal */
+/* Цей файл розширює стилі CreateAssignmentModal.css */
+
+/* Специфічні зміни для матеріалів */
+.create-modal-title::before {
+  content: '📚';
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+/* Поле URL з моноширинним шрифтом */
+.create-form-input[type="url"] {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+/* Покращена підказка для посилань */
+.create-form-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #4CAF50;
+}
+
+.create-form-hint::before {
+  content: '💡';
+  font-size: 14px;
+}
+
+/* Валідація URL */
+.create-form-input[type="url"]:valid {
+  border-color: #4CAF50;
+}
+
+.create-form-input[type="url"]:invalid:not(:placeholder-shown) {
+  border-color: #f44336;
+}
+
+/* Показуємо іконку для валідного URL */
+.create-form-group {
+  position: relative;
+}
+
+.create-form-input[type="url"]:valid + .url-valid-icon {
+  display: block;
+}
+
+.url-valid-icon {
+  display: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4CAF50;
+  font-size: 14px;
+}

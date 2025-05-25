@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import  { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import materialService from '../../../api/materialService';
 import './AssignmentDetailsModal.css';
@@ -349,15 +350,8 @@ const AssignmentDetailsModal = ({
               
               <div className="detail-item">
                 <label className="detail-label">{t('assignments.fields.tutor')}:</label>
-                <span className="detail-value">ID: {assignment.tutorId}</span>
+                <span className="detail-value">{assignment.tutorName}</span>
               </div>
-
-              {assignment.studentId && (
-                <div className="detail-item">
-                  <label className="detail-label">{t('assignments.fields.student')}:</label>
-                  <span className="detail-value">ID: {assignment.studentId}</span>
-                </div>
-              )}
               
               {assignment.dueDate && (
                 <div className="detail-item">
@@ -372,7 +366,33 @@ const AssignmentDetailsModal = ({
                 <label className="detail-label">{t('assignments.fields.createdAt')}:</label>
                 <span className="detail-value">{formatDate(assignment.createdAt)}</span>
               </div>
-              
+              {assignment.taskId && (
+                <div className="detail-item">
+                  <label className="detail-label">{t('assignments.fields.learningMaterial')}:</label>
+                  <div className="learning-material-link">
+                    <Link 
+                      to={`/materials/${assignment.taskId}`} 
+                      className="material-link-button"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className="material-link-content">
+                        <div className="material-link-icon">
+                          <i className="fas fa-book"></i>
+                        </div>
+                        <div className="material-link-text">
+                          <span className="material-link-title">
+                            {t('assignments.viewLearningMaterial')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="material-link-arrow">
+                        <i className="fas fa-external-link-alt"></i>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              )}
               {assignment.rating && (
                 <div className="detail-item">
                   <label className="detail-label">{t('assignments.fields.rating')}:</label>

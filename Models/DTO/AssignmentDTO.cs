@@ -14,5 +14,7 @@
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public byte? Rating { get; set; }
+
+        public string? TutorName { get; set; }
     }
 }

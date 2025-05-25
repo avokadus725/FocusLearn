@@ -139,7 +139,7 @@ const AssignmentsList = ({
                     </div>
                     <div className="meta-item">
                       <i className="fas fa-calendar-plus"></i>
-                      <span>Створено: {formatDate(assignment.createdAt)}</span>
+                      <span>{t('common.createdAt')}: {formatDate(assignment.createdAt)}</span>
                     </div>
                   </div>
                 </div>

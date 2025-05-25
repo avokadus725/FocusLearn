@@ -1,0 +1,462 @@
+/* ========================= ОСНОВНИЙ КОНТЕЙНЕР ========================= */
+.materials-page {
+  min-height: 100vh;
+  background-color: var(--secondary-light);
+}
+
+.materials-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/* ========================= ЗАГОЛОВОК СТОРІНКИ ========================= */
+.materials-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-lg);
+}
+
+.materials-title-section {
+  flex: 1;
+}
+
+.materials-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: -0.025em;
+}
+
+.materials-subtitle {
+  font-size: 1.125rem;
+  color: var(--gray-600);
+  margin: 0;
+  font-weight: 400;
+}
+
+.materials-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+/* ========================= СОРТУВАННЯ ========================= */
+.materials-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.sort-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+}
+
+.sort-select {
+  border: none;
+  background: none;
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+}
+
+.sort-select:focus {
+  outline: none;
+  background: var(--gray-100);
+}
+
+/* ========================= КНОПКА СТВОРЕННЯ ========================= */
+.materials-create-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: 0 4px 15px rgba(84, 140, 84, 0.3);
+  white-space: nowrap;
+}
+
+.materials-create-btn:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #2a633a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(84, 140, 84, 0.4);
+}
+
+.materials-create-btn i {
+  font-size: 0.875rem;
+}
+
+/* ========================= ПОВІДОМЛЕННЯ ТА АЛЕРТИ ========================= */
+.materials-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.materials-alert-success {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.materials-alert-error {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.materials-retry-btn {
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.materials-retry-btn:hover {
+  background: currentColor;
+  color: white;
+}
+
+/* ========================= ОСНОВНИЙ КОНТЕНТ ========================= */
+.materials-content {
+  flex: 1;
+}
+
+/* ========================= СПИСОК МАТЕРІАЛІВ ========================= */
+.materials-list-header {
+  background: white;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  border: 1px solid var(--gray-200);
+  border-bottom: none;
+}
+
+.materials-count {
+  background: var(--secondary);
+  color: var(--primary-dark);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ========================= РЯДКИ МАТЕРІАЛІВ ========================= */
+.materials-rows {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.material-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+  transition: all 0.3s ease;
+}
+
+.material-row:last-child {
+  border-bottom: none;
+}
+
+.material-row:hover {
+  background: var(--gray-50);
+}
+
+/* Основна інформація рядка */
+.material-row-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.material-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.material-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.material-description {
+  color: var(--gray-600);
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+/* Мета інформація */
+.material-meta {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--gray-500);
+  font-size: 0.875rem;
+}
+
+.meta-item i {
+  color: var(--primary);
+  width: 14px;
+  text-align: center;
+}
+
+/* ========================= ДІЇ РЯДКА ========================= */
+.material-row-actions {
+  margin-left: var(--spacing-lg);
+  flex-shrink: 0;
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn-view-material {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.btn-view-material:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: white;
+}
+
+.btn-delete-material {
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.btn-delete-material:hover {
+  background: #B91C1C;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-view-material i,
+.btn-delete-material i {
+  font-size: 0.875rem;
+}
+
+/* ========================= ПУСТИЙ СТАН ========================= */
+.materials-empty-state {
+  background: white;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--gray-500);
+}
+
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+}
+
+.empty-state-icon i {
+  font-size: 1.5rem;
+  color: var(--gray-400);
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.empty-state-description {
+  color: var(--gray-500);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ========================= ЗАВАНТАЖЕННЯ ========================= */
+.materials-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--gray-600);
+}
+
+.materials-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+@media (max-width: 1024px) {
+  .materials-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+  
+  .materials-header-actions {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .materials-container {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .materials-title {
+    font-size: 1.875rem;
+  }
+  
+  .materials-subtitle {
+    font-size: 1rem;
+  }
+  
+  .material-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .material-row-actions {
+    margin-left: 0;
+    align-self: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .btn-view-material,
+  .btn-delete-material {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .material-meta {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .materials-header-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .materials-sort {
+    order: 1;
+    align-self: stretch;
+    justify-content: space-between;
+  }
+  
+  .materials-create-btn {
+    order: 2;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .material-title {
+    font-size: 1rem;
+  }
+  
+  .material-description {
+    font-size: 0.875rem;
+  }
+  
+  .meta-item {
+    font-size: 0.8rem;
+  }
+  
+  .btn-view-material,
+  .btn-delete-material {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}

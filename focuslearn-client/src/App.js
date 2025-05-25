@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
 
-// Імпорт i18n конфігурації (ВАЖЛИВО: перед всіма компонентами)
 import './i18n';
 
 // Імпорт компонентів сторінок
@@ -11,7 +10,8 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import AssignmentsPage from './pages/AssignmentsPage/AssignmentsPage'
-import AssignmentDetailsPage from './pages/AssignmentDetailsPage/AssignmentDetailsPage'
+import MaterialsPage from './pages/MaterialsPage/MaterialsPage';
+import MaterialDetailsPage from './pages/MaterialsPage/components/MaterialDetailsPage/MaterialDetailsPage';
 
 // Імпорт стилів
 import './styles/global.css';
@@ -46,7 +46,8 @@ const AppRoutes = () => {
       <Route path="/" element={<PrivateRouteElement element={<HomePage />} />} />
       <Route path="/profile" element={<PrivateRouteElement element={<ProfilePage />} />} />
       <Route path="/assignments" element={<PrivateRouteElement element={<AssignmentsPage />} />} />
-      {/* <Route path="/assignments" element={<PrivateRouteElement element={<AssignmentDetailsPage />} />} /> */}
+      <Route path="/materials" element={<PrivateRouteElement element={<MaterialsPage />} />} />
+      <Route path="/materials/:id" element={<PrivateRouteElement element={<MaterialDetailsPage />} />} />
 
       {/* Перенаправлення на login для невідомих маршрутів */}
       <Route path="*" element={<Navigate to="/login" />} />

@@ -405,7 +405,7 @@ const MyAssignmentsTabs = ({
 
                     <div className="info-item">
                       <i className="fas fa-calendar-plus"></i>
-                      <span>{t('assignments.fields.createdAt')}: {formatDate(assignment.createdAt)}</span>
+                      <span>{t('common.createdAt')}: {formatDate(assignment.createdAt)}</span>
                     </div>
                   </div>
 

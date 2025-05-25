@@ -11,6 +11,8 @@ namespace FocusLearn.Models.DTO
         public string? Description { get; set; }
         public string? FileLink { get; set; }
         public int CreatorId { get; set; }
+        public DateTime? AddedAt { get; set; }
 
+        public string? TutorName { get; set; }
     }
 }
