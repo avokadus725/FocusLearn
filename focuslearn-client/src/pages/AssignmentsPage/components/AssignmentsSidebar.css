@@ -1,0 +1,364 @@
+/* ========================= БІЧНА ПАНЕЛЬ ЗАВДАНЬ ========================= */
+.assignments-sidebar {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  height: fit-content;
+  position: sticky;
+  top: var(--spacing-lg);
+}
+
+/* Заголовок бічної панелі */
+.sidebar-header {
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.sidebar-title i {
+  font-size: 1.125rem;
+  opacity: 0.9;
+}
+
+.sidebar-role {
+  margin-top: var(--spacing-md);
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-student {
+  background: rgba(33, 150, 243, 0.2);
+}
+
+.role-tutor {
+  background: rgba(156, 39, 176, 0.2);
+}
+
+/* Навігація */
+.sidebar-nav {
+  padding: var(--spacing-md) 0;
+}
+
+.sidebar-tab {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--gray-700);
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.sidebar-tab:hover {
+  background: var(--gray-50);
+  color: var(--gray-800);
+  border-left-color: var(--gray-300);
+}
+
+.sidebar-tab-active {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-left-color: var(--primary);
+  font-weight: 600;
+}
+
+.sidebar-tab-active:hover {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+/* Іконка вкладки */
+.tab-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.sidebar-tab:hover .tab-icon {
+  background: var(--gray-200);
+}
+
+.sidebar-tab-active .tab-icon {
+  background: var(--primary);
+  color: white;
+}
+
+.tab-icon i {
+  font-size: 1rem;
+  color: var(--gray-600);
+}
+
+.sidebar-tab-active .tab-icon i {
+  color: white;
+}
+
+/* Контент вкладки */
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.tab-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Стрілка */
+.tab-arrow {
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--gray-400);
+}
+
+.sidebar-tab:hover .tab-arrow {
+  opacity: 0.7;
+}
+
+.sidebar-tab-active .tab-arrow {
+  opacity: 1;
+  color: var(--primary);
+}
+
+/* Додаткова інформація */
+.sidebar-info {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+
+/* Інформаційна картка */
+.info-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.info-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-icon i {
+  color: var(--primary);
+  font-size: 0.875rem;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.info-text {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Швидкі дії */
+.sidebar-actions {
+  margin-top: var(--spacing-md);
+}
+
+.sidebar-action-btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.sidebar-action-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.sidebar-action-btn i {
+  font-size: 0.875rem;
+}
+
+/* Адаптивний дизайн */
+@media (max-width: 1024px) {
+  .assignments-sidebar {
+    position: static;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .sidebar-header {
+    padding: var(--spacing-lg);
+  }
+  
+  .sidebar-nav {
+    display: flex;
+    overflow-x: auto;
+    padding: var(--spacing-sm) 0;
+  }
+  
+  .sidebar-tab {
+    flex: 1;
+    min-width: 140px;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    text-align: center;
+  }
+  
+  .sidebar-tab:hover,
+  .sidebar-tab-active {
+    border-left: none;
+    border-bottom-color: var(--primary);
+  }
+  
+  .tab-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .tab-icon i {
+    font-size: 0.875rem;
+  }
+  
+  .tab-label {
+    font-size: 0.8rem;
+  }
+  
+  .tab-arrow {
+    display: none;
+  }
+  
+  .sidebar-info {
+    padding: var(--spacing-md);
+  }
+  
+  .info-card {
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-header {
+    padding: var(--spacing-md);
+  }
+  
+  .sidebar-title {
+    font-size: 1.125rem;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+  }
+  
+  .sidebar-tab {
+    flex-direction: row;
+    text-align: left;
+    min-width: auto;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+  }
+  
+  .sidebar-tab:hover,
+  .sidebar-tab-active {
+    border-bottom: none;
+    border-left-color: var(--primary);
+  }
+  
+  .tab-arrow {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-header {
+    padding: var(--spacing-sm);
+  }
+  
+  .sidebar-title {
+    font-size: 1rem;
+  }
+  
+  .sidebar-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .tab-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .tab-label {
+    font-size: 0.875rem;
+  }
+  
+  .info-title {
+    font-size: 0.8rem;
+  }
+  
+  .info-text {
+    font-size: 0.75rem;
+  }
+}

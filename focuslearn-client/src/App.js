@@ -10,7 +10,8 @@ import './i18n';
 import LoginPage from './pages/LoginPage/LoginPage';
 import HomePage from './pages/HomePage/HomePage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
-
+import AssignmentsPage from './pages/AssignmentsPage/AssignmentsPage'
+import AssignmentDetailsPage from './pages/AssignmentDetailsPage/AssignmentDetailsPage'
 
 // Імпорт стилів
 import './styles/global.css';
@@ -44,7 +45,9 @@ const AppRoutes = () => {
       {/* Захищені маршрути */}
       <Route path="/" element={<PrivateRouteElement element={<HomePage />} />} />
       <Route path="/profile" element={<PrivateRouteElement element={<ProfilePage />} />} />
-      
+      <Route path="/assignments" element={<PrivateRouteElement element={<AssignmentsPage />} />} />
+      {/* <Route path="/assignments" element={<PrivateRouteElement element={<AssignmentDetailsPage />} />} /> */}
+
       {/* Перенаправлення на login для невідомих маршрутів */}
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

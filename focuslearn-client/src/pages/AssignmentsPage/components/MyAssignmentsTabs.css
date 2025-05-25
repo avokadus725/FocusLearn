@@ -1,0 +1,374 @@
+/* ========================= МОЇ ЗАВДАННЯ З ПІД-ВКЛАДКАМИ ========================= */
+.my-assignments-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Заголовок */
+.my-assignments-header {
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+}
+
+.my-assignments-header .list-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.my-assignments-header .list-title i {
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.my-assignments-header .list-description {
+  color: var(--gray-600);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Під-вкладки навігація */
+.sub-tabs-nav {
+  display: flex;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+
+.sub-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--gray-600);
+  border-right: 1px solid var(--gray-200);
+  position: relative;
+}
+
+.sub-tab:last-child {
+  border-right: none;
+}
+
+.sub-tab:hover {
+  background: var(--gray-50);
+  color: var(--gray-800);
+}
+
+.sub-tab-active {
+  background: var(--primary);
+  color: white;
+}
+
+.sub-tab-active:hover {
+  background: var(--primary-dark);
+}
+
+.sub-tab i {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.sub-tab-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.sub-tab-count {
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sub-tab-active .sub-tab-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.sub-tab:not(.sub-tab-active) .sub-tab-count {
+  background: var(--gray-200);
+  color: var(--gray-600);
+}
+
+/* Контент під-вкладки */
+.sub-tab-content {
+  flex: 1;
+  min-height: 400px;
+}
+
+/* Картки завдань */
+.assignments-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.assignment-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.assignment-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Заголовок картки */
+.assignment-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.assignment-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.assignment-status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Статуси */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-inprogress {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.status-pending {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.status-completed {
+  background: #E8F5E9;
+  color: #388E3C;
+}
+
+.overdue-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: #FFEBEE;
+  color: #D32F2F;
+  border-radius: var(--border-radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Опис завдання */
+.assignment-description {
+  color: var(--gray-600);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.assignment-description p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+/* Інформація про завдання */
+.assignment-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--gray-200);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--gray-600);
+  font-size: 0.875rem;
+}
+
+.info-item i {
+  color: var(--primary);
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Дії картки */
+.assignment-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--gray-200);
+}
+
+.assignment-actions button {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 40px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--gray-200);
+  color: var(--gray-700);
+}
+
+.btn-secondary:hover {
+  background: var(--gray-300);
+  color: var(--gray-800);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #B91C1C;
+  transform: translateY(-1px);
+}
+
+/* Завантаження */
+.assignments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--gray-600);
+  background: white;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--gray-200);
+}
+
+.assignments-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Адаптивний дизайн */
+@media (max-width: 768px) {
+  .sub-tabs-nav {
+    flex-direction: column;
+  }
+  
+  .sub-tab {
+    flex-direction: row;
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  
+  .sub-tab:last-child {
+    border-bottom: none;
+  }
+  
+  .sub-tab i {
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+  
+  .assignments-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .assignment-actions {
+    flex-direction: column;
+  }
+  
+  .my-assignments-header {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .sub-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .sub-tab-label {
+    font-size: 0.8rem;
+  }
+  
+  .assignment-card {
+    padding: var(--spacing-md);
+  }
+  
+  .assignment-title {
+    font-size: 1rem;
+  }
+}

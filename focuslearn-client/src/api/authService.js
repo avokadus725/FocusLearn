@@ -20,6 +20,7 @@ const setAuthToken = (token) => {
 const initializeToken = () => {
   const token = localStorage.getItem('token');
   if (token) {
+    console.log(token);
     setAuthToken(token);
   }
 };

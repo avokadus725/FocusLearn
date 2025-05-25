@@ -1,0 +1,156 @@
+/* ========================= ОСНОВНИЙ КОНТЕЙНЕР ========================= */
+.assignments-page {
+  min-height: 100vh;
+  background-color: var(--secondary-light);
+}
+
+.assignments-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+/* ========================= ЗАГОЛОВОК СТОРІНКИ ========================= */
+.assignments-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.assignments-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: -0.025em;
+}
+
+.assignments-subtitle {
+  font-size: 1.125rem;
+  color: var(--gray-600);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ========================= ПОВІДОМЛЕННЯ ТА АЛЕРТИ ========================= */
+.assignments-alert {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-lg);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.assignments-alert-success {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.assignments-alert-error {
+  background: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.assignments-retry-btn {
+  background: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.assignments-retry-btn:hover {
+  background: currentColor;
+  color: white;
+}
+
+/* ========================= ОСНОВНИЙ КОНТЕНТ ========================= */
+.assignments-content {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-xl);
+  min-height: 600px;
+}
+
+/* ========================= СТАНИ ЗАВАНТАЖЕННЯ ========================= */
+.assignments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--gray-600);
+}
+
+.assignments-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+@media (max-width: 1024px) {
+  .assignments-content {
+    grid-template-columns: 240px 1fr;
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .assignments-container {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  
+  .assignments-title {
+    font-size: 1.875rem;
+  }
+  
+  .assignments-subtitle {
+    font-size: 1rem;
+  }
+  
+  .assignments-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .assignments-container {
+    padding: var(--spacing-md);
+  }
+  
+  .assignments-title {
+    font-size: 1.5rem;
+  }
+  
+  .assignments-alert {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+    text-align: left;
+  }
+  
+  .assignments-retry-btn {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+}

@@ -1,0 +1,289 @@
+/* ========================= ДОСТУПНІ ЗАВДАННЯ ========================= */
+.available-assignments-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Заголовок */
+.available-assignments-header {
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+}
+
+.available-assignments-header .list-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.available-assignments-header .list-title i {
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.available-assignments-header .list-description {
+  color: var(--gray-600);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.5;
+}
+
+.assignments-count {
+  background: var(--secondary);
+  color: var(--primary-dark);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Контент */
+.available-assignments-content {
+  flex: 1;
+}
+
+/* Рядки завдань */
+.assignments-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.assignment-row {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.assignment-row:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Основна інформація рядка */
+.assignment-row-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.assignment-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.assignment-row-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.assignment-row-description {
+  color: var(--gray-600);
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+/* Мета інформація */
+.assignment-row-meta {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--gray-500);
+  font-size: 0.875rem;
+}
+
+.meta-item i {
+  color: var(--primary);
+  width: 14px;
+  text-align: center;
+}
+
+/* Дії рядка */
+.assignment-row-actions {
+  margin-left: var(--spacing-lg);
+  flex-shrink: 0;
+}
+
+.btn-take-assignment,
+.btn-grade-assignment {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 120px;
+  justify-content: center;
+}
+
+.btn-grade-assignment {
+  background: var(--warning);
+  color: var(--gray-800);
+}
+
+.btn-take-assignment:hover,
+.btn-grade-assignment:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-take-assignment:hover {
+  background: var(--primary-dark);
+}
+
+.btn-grade-assignment:hover {
+  background: #F57F17;
+}
+
+.btn-take-assignment:disabled,
+.btn-grade-assignment:disabled {
+  background: var(--gray-400);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-take-assignment i {
+  font-size: 0.875rem;
+}
+
+/* Пустий стан */
+.assignments-empty-state {
+  background: white;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--gray-500);
+}
+
+.empty-state-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+}
+
+.empty-state-icon i {
+  font-size: 1.5rem;
+  color: var(--gray-400);
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.empty-state-description {
+  color: var(--gray-500);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Завантаження */
+.available-assignments-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--gray-600);
+}
+
+.available-assignments-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Адаптивний дизайн */
+@media (max-width: 768px) {
+  .assignment-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .assignment-row-actions {
+    margin-left: 0;
+    align-self: center;
+  }
+  
+  .assignment-row-meta {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .btn-take-assignment {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .available-assignments-header {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .assignment-row-title {
+    font-size: 1rem;
+  }
+  
+  .assignment-row-description {
+    font-size: 0.875rem;
+  }
+  
+  .meta-item {
+    font-size: 0.8rem;
+  }
+}

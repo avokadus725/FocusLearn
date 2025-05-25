@@ -22,6 +22,7 @@ namespace FocusLearn.Repositories.Implementation
             return await _context.Assignments
                 .Select(a => new AssignmentDTO
                 {
+                    AssignmentId = a.AssignmentId,
                     Title = a.Title,
                     Description = a.Description,
                     FileLink = a.FileLink,
@@ -46,6 +47,7 @@ namespace FocusLearn.Repositories.Implementation
                 .Where(a => a.AssignmentId == id)
                 .Select(a => new AssignmentDTO
                 {
+                    AssignmentId = a.AssignmentId,
                     Title = a.Title,
                     Description = a.Description,
                     FileLink = a.FileLink,
@@ -67,6 +69,7 @@ namespace FocusLearn.Repositories.Implementation
         {
             var assignment = new Assignment
             {
+                AssignmentId = assignmentDto.AssignmentId,
                 Title = assignmentDto.Title,
                 Description = assignmentDto.Description,
                 FileLink = assignmentDto.FileLink,
@@ -91,6 +94,7 @@ namespace FocusLearn.Repositories.Implementation
             var assignment = await _context.Assignments.FindAsync(id);
             if (assignment == null) return false;
 
+            assignment.AssignmentId = assignmentDto.AssignmentId ?? assignment.AssignmentId;
             assignment.Title = assignmentDto.Title ?? assignment.Title;
             assignment.Description = assignmentDto.Description ?? assignment.Description;
             assignment.FileLink = assignmentDto.FileLink ?? assignment.FileLink;
