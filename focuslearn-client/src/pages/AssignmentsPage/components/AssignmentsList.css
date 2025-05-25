@@ -194,6 +194,8 @@
   padding: var(--spacing-2xl);
   text-align: center;
   color: var(--gray-500);
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .empty-state-icon {

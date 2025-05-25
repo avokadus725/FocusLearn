@@ -77,15 +77,7 @@ const AssignmentsSidebar = ({
 
         {/* Швидкі дії */}
         {userRole === 'Tutor' && (
-        <div className="assignments-create-section">
-          <div className="assignments-help-card">
-            <div className="help-icon">
-              <i className="fas fa-lightbulb"></i>
-            </div>
-            <h4>{t('assignments.help.title')}</h4>
-            <p>{t('assignments.help.description')}</p>
-          </div>
-          
+        <div className="assignments-create-section">          
           <button 
             className="assignments-create-btn"
             onClick={handleCreateClick}

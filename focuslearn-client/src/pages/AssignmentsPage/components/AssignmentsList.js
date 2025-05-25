@@ -100,6 +100,7 @@ const AssignmentsList = ({
       {/* Список завдань */}
       <div className="available-assignments-content">
         {assignments.length === 0 ? (
+          userRole === 'Student' && (
           <div className="assignments-empty-state">
             <div className="empty-state-icon">
               <i className="fas fa-search"></i>
@@ -111,6 +112,7 @@ const AssignmentsList = ({
               {t('assignments.empty.availableAssignments.description')}
             </p>
           </div>
+          )
         ) : (
           <div className="assignments-rows">
             {assignments.map((assignment) => (

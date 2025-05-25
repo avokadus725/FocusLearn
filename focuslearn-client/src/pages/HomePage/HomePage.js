@@ -74,7 +74,7 @@ const HomePage = () => {
         </section>
 
         {/* Огляд функцій */}
-        <section className="features-section">
+        {/* <section className="features-section">
           <h2 className="section-title">{t('home.featuresOverview')}</h2>
           <div className="features-grid">
             <div className="feature-card">
@@ -109,7 +109,7 @@ const HomePage = () => {
               <p>{t('features.achievements.description')}</p>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </Layout>
   );
