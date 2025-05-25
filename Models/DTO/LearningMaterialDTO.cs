@@ -6,6 +6,7 @@ namespace FocusLearn.Models.DTO
 {
     public class LearningMaterialDTO
     {
+        public int MaterialId { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public string? FileLink { get; set; }

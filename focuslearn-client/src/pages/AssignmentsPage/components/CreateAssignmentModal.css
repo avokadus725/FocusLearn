@@ -1,0 +1,453 @@
+/* CreateAssignmentModal.css */
+
+/* Модальне вікно */
+.create-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(2px);
+}
+
+.create-modal-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 650px;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: createModalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+@keyframes createModalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Заголовок модального вікна */
+.create-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  position: relative;
+}
+
+.create-modal-header::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A, #4CAF50);
+}
+
+.create-modal-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.create-modal-title::before {
+  content: '📝';
+  font-size: 24px;
+}
+
+.create-modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Контент модального вікна */
+.create-modal-body {
+  padding: 32px;
+  overflow-y: auto;
+  max-height: calc(90vh - 160px);
+}
+
+/* Форма створення завдання */
+.create-assignment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.create-form-section {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 4px solid #4CAF50;
+}
+
+.create-form-section-title {
+  margin: 0 0 16px 0;
+  color: #2e7d32;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Групи полів форми */
+.create-form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.create-form-group:last-child {
+  margin-bottom: 0;
+}
+
+.create-form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+  position: relative;
+}
+
+.create-form-label.required::after {
+  content: '*';
+  color: #e74c3c;
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+.create-form-input,
+.create-form-select,
+.create-form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.create-form-input:focus,
+.create-form-select:focus,
+.create-form-textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
+}
+
+.create-form-input.error,
+.create-form-select.error,
+.create-form-textarea.error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.create-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.create-form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  appearance: none;
+}
+
+/* Рядок з полями */
+.create-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .create-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Повідомлення про помилки */
+.create-error-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.create-error-message::before {
+  content: '⚠️';
+  font-size: 14px;
+}
+
+/* Індикатор складності */
+.difficulty-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.difficulty-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.difficulty-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  transition: background 0.3s ease;
+}
+
+.difficulty-dot.active {
+  background: #4CAF50;
+}
+
+.difficulty-dot.medium {
+  background: #ff9800;
+}
+
+.difficulty-dot.hard {
+  background: #f44336;
+}
+
+.difficulty-text {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Лічильник символів */
+.character-counter {
+  text-align: right;
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.character-counter.warning {
+  color: #ff9800;
+}
+
+.character-counter.error {
+  color: #f44336;
+}
+
+/* Кнопки дій */
+.create-modal-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.create-btn {
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.create-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.create-btn:hover::before {
+  left: 100%;
+}
+
+.create-btn-primary {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.create-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049, #388e3c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.create-btn-primary:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.create-btn-secondary {
+  background: white;
+  color: #666;
+  border: 2px solid #e1e5e9;
+}
+
+.create-btn-secondary:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #4CAF50;
+  color: #4CAF50;
+  transform: translateY(-1px);
+}
+
+/* Анімація завантаження */
+.create-loading-spinner {
+  animation: createSpin 1s linear infinite;
+}
+
+@keyframes createSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Підказки */
+.create-form-hint {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.create-form-hint::before {
+  content: '💡';
+  font-size: 14px;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .create-modal-overlay {
+    padding: 10px;
+  }
+  
+  .create-modal-content {
+    max-width: 100%;
+  }
+  
+  .create-modal-header {
+    padding: 20px 24px;
+  }
+  
+  .create-modal-title {
+    font-size: 22px;
+  }
+  
+  .create-modal-body {
+    padding: 24px 20px;
+  }
+  
+  .create-modal-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .create-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-modal-header {
+    padding: 16px 20px;
+  }
+  
+  .create-modal-title {
+    font-size: 20px;
+  }
+  
+  .create-modal-body {
+    padding: 20px 16px;
+  }
+  
+  .create-form-section {
+    padding: 16px;
+  }
+}
+
+/* Темна тема (опціонально) */
+@media (prefers-color-scheme: dark) {
+  .create-modal-content {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .create-form-section {
+    background: #4a5568;
+  }
+  
+  .create-form-input,
+  .create-form-select,
+  .create-form-textarea {
+    background: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
+  }
+  
+  .create-form-label {
+    color: #e2e8f0;
+  }
+}

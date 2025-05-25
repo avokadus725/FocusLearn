@@ -22,6 +22,7 @@ namespace FocusLearn.Repositories.Implementation
             return await _context.LearningMaterials
                 .Select(l => new LearningMaterialDTO
                 {
+                    MaterialId = l.MaterialId,
                     Title = l.Title,
                     Description = l.Description,
                     FileLink = l.FileLink,
@@ -39,6 +40,7 @@ namespace FocusLearn.Repositories.Implementation
                 .Where(l => l.MaterialId == materialId)
                 .Select(l => new LearningMaterialDTO
                 {
+                    MaterialId = l.MaterialId,
                     Title = l.Title,
                     Description = l.Description,
                     FileLink = l.FileLink,
@@ -54,6 +56,7 @@ namespace FocusLearn.Repositories.Implementation
         {
             var newMaterial = new LearningMaterial
             {
+                MaterialId = materialDto.MaterialId,
                 CreatorId = creatorId,
                 Title = materialDto.Title,
                 Description = materialDto.Description,
@@ -74,6 +77,7 @@ namespace FocusLearn.Repositories.Implementation
             if (material == null)
                 return false;
 
+            material.MaterialId = materialDto.MaterialId;
             material.Title = materialDto.Title;
             material.Description = materialDto.Description;
             material.FileLink = materialDto.FileLink;

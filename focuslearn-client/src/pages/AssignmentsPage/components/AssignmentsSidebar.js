@@ -6,9 +6,19 @@ const AssignmentsSidebar = ({
   tabs, 
   activeTab, 
   onTabChange, 
-  userRole 
+  userRole,
+  onCreateAssignment 
 }) => {
   const { t } = useTranslation();
+  const handleCreateClick = () => {
+    console.log('Create button clicked, userRole:', userRole);
+    
+    if (typeof onCreateAssignment === 'function') {
+      onCreateAssignment();
+    } else {
+      console.error('onCreateAssignment is not a function:', onCreateAssignment);
+    }
+  };
 
   return (
     <div className="assignments-sidebar">
@@ -67,13 +77,25 @@ const AssignmentsSidebar = ({
 
         {/* Швидкі дії */}
         {userRole === 'Tutor' && (
-          <div className="sidebar-actions">
-            <button className="sidebar-action-btn">
-              <i className="fas fa-plus"></i>
-              {t('assignments.sidebar.createNew')}
-            </button>
+        <div className="assignments-create-section">
+          <div className="assignments-help-card">
+            <div className="help-icon">
+              <i className="fas fa-lightbulb"></i>
+            </div>
+            <h4>{t('assignments.help.title')}</h4>
+            <p>{t('assignments.help.description')}</p>
           </div>
-        )}
+          
+          <button 
+            className="assignments-create-btn"
+            onClick={handleCreateClick}
+            type="button"
+          >
+            <i className="fas fa-plus"></i>
+            {t('assignments.createNew.button')}
+          </button>
+        </div>
+      )}
       </div>
 
       {/* Статистика (можна додати пізніше) */}

@@ -31,6 +31,16 @@ namespace FocusLearn.Controllers
             var assignments = await _service.GetAllAssignmentsAsync();
             return Ok(assignments);
         }
+        /// <summary>
+        /// Отримати доступні завдання
+        /// </summary>
+        [HttpGet("all")]
+        [Authorize]
+        public async Task<IActionResult> GetAvailableAssignments()
+        {
+            var assignments = await _service.GetAvailableAssignmentsAsync();
+            return Ok(assignments);
+        }
 
         /// <summary>
         /// Отримати всі завдання поточного користувача
