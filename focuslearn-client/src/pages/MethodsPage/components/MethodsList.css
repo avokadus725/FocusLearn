@@ -1,0 +1,406 @@
+/* ========================= СПИСОК МЕТОДИК ========================= */
+.methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* ========================= ЗАГОЛОВОК СПИСКУ ========================= */
+.methods-list-header {
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  text-align: center;
+}
+
+.methods-list-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.methods-list-title i {
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.methods-list-description {
+  color: var(--gray-600);
+  margin: 0 0 var(--spacing-md) 0;
+  line-height: 1.5;
+}
+
+.methods-count {
+  background: var(--secondary);
+  color: var(--primary-dark);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ========================= СІТКА МЕТОДИК ========================= */
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* ========================= КАРТКА МЕТОДИКИ ========================= */
+.method-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+.method-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--primary-light);
+}
+
+/* Заголовок картки */
+.method-card-header {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.method-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md) auto;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.method-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Опис методики */
+.method-description {
+  padding: var(--spacing-lg);
+  flex-grow: 1;
+}
+
+.method-description p {
+  margin: 0;
+  color: var(--gray-600);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+/* Параметри методики */
+.method-params {
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.method-param {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  background: var(--gray-50);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+}
+
+.param-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.work-icon {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.break-icon {
+  background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+}
+
+.param-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.param-label {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.param-value {
+  font-size: 1rem;
+  color: var(--gray-800);
+  font-weight: 600;
+}
+
+/* Дії картки */
+.method-card-actions {
+  padding: var(--spacing-lg);
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+
+.method-start-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-shadow: 0 4px 15px rgba(84, 140, 84, 0.3);
+}
+
+.method-start-btn:hover {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #2a633a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(84, 140, 84, 0.4);
+}
+
+.method-start-btn i {
+  font-size: 0.875rem;
+}
+
+/* Підвал картки */
+.method-card-footer {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-top: 1px solid var(--gray-200);
+  background: white;
+}
+
+.method-cycle-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--gray-500);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.method-cycle-info i {
+  color: var(--primary);
+  font-size: 0.75rem;
+}
+
+/* ========================= ІНФОРМАЦІЙНА СЕКЦІЯ ========================= */
+.methods-info-section {
+  margin-top: var(--spacing-lg);
+}
+
+.methods-info-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: var(--spacing-xl);
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+}
+
+.info-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.info-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  color: var(--gray-600);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.info-list li::before {
+  content: '✓';
+  color: var(--success);
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ========================= ПУСТИЙ СТАН ========================= */
+.methods-empty-state {
+  background: white;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-2xl);
+  text-align: center;
+  color: var(--gray-500);
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  background: var(--gray-100);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+}
+
+.empty-state-icon i {
+  font-size: 2rem;
+  color: var(--gray-400);
+}
+
+.empty-state-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.empty-state-description {
+  color: var(--gray-500);
+  margin: 0;
+  line-height: 1.5;
+  font-size: 1.1rem;
+}
+
+/* ========================= ЗАВАНТАЖЕННЯ ========================= */
+.methods-list-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--gray-600);
+  min-height: 50vh;
+}
+
+.methods-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gray-200);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+@media (max-width: 768px) {
+  .methods-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .method-card {
+    min-height: auto;
+  }
+  
+  .methods-info-card {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--spacing-lg);
+  }
+  
+  .info-icon {
+    margin: 0 auto;
+  }
+  
+  .methods-list-header {
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .method-card-header {
+    padding: var(--spacing-md);
+  }
+  
+  .method-title {
+    font-size: 1.125rem;
+  }
+  
+  .method-description,
+  .method-params,
+  .method-card-actions {
+    padding: var(--spacing-md);
+  }
+  
+  .method-param {
+    padding: var(--spacing-xs);
+  }
+  
+  .param-icon {
+    width: 32px;
+    height: 32px;
+  }
+}

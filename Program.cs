@@ -195,6 +195,7 @@ builder.Services.AddScoped<LocalizationFilter>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IConcentrationMethodService, ConcentrationMethodService>();
+builder.Services.AddScoped<ITimerService, TimerService>();
 builder.Services.AddScoped<ILearningMaterialService, LearningMaterialService>();
 builder.Services.AddScoped<IAssignmentService, AssignmentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
