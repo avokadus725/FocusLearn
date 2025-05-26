@@ -1,0 +1,210 @@
+/* StatisticsCards.css */
+.statistics-cards {
+  margin-bottom: 2rem;
+}
+
+.statistics-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--card-accent-color);
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Кольорові варіанти карток */
+.stats-card-primary {
+  --card-accent-color: #10b981;
+}
+
+.stats-card-success {
+  --card-accent-color: #059669;
+}
+
+.stats-card-warning {
+  --card-accent-color: #f59e0b;
+}
+
+.stats-card-info {
+  --card-accent-color: #3b82f6;
+}
+
+.stats-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stats-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: white;
+  background: var(--card-accent-color);
+  flex-shrink: 0;
+}
+
+.stats-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stats-card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.4;
+}
+
+.stats-card-description {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.stats-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.stats-card-extra {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stats-extra-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.stats-extra-item i {
+  color: var(--card-accent-color);
+}
+
+.stats-extra-item.missed {
+  color: #dc2626;
+}
+
+.stats-extra-item.missed i {
+  color: #dc2626;
+}
+
+/* Рекомендації */
+.stats-card-recommendations {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.stats-recommendations-toggle {
+  background: none;
+  border: none;
+  color: var(--card-accent-color);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.stats-recommendations-toggle:hover {
+  color: #059669;
+}
+
+.stats-recommendations-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-top: 0.75rem;
+}
+
+.stats-recommendations-content.show {
+  max-height: 200px;
+}
+
+.stats-recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.stats-recommendation-item i {
+  color: var(--card-accent-color);
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .statistics-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stats-card {
+    padding: 1.25rem;
+  }
+  
+  .stats-card-header {
+    gap: 0.75rem;
+  }
+  
+  .stats-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.125rem;
+  }
+  
+  .stats-card-value {
+    font-size: 1.75rem;
+  }
+  
+  .stats-card-extra {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

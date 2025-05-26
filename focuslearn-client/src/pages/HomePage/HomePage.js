@@ -72,44 +72,6 @@ const HomePage = () => {
             </Link>
           </div>
         </section>
-
-        {/* Огляд функцій */}
-        {/* <section className="features-section">
-          <h2 className="section-title">{t('home.featuresOverview')}</h2>
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-brain"></i>
-              </div>
-              <h3>{t('features.focus.title')}</h3>
-              <p>{t('features.focus.description')}</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-chart-bar"></i>
-              </div>
-              <h3>{t('features.analytics.title')}</h3>
-              <p>{t('features.analytics.description')}</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-target"></i>
-              </div>
-              <h3>{t('features.goals.title')}</h3>
-              <p>{t('features.goals.description')}</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">
-                <i className="fas fa-trophy"></i>
-              </div>
-              <h3>{t('features.achievements.title')}</h3>
-              <p>{t('features.achievements.description')}</p>
-            </div>
-          </div>
-        </section> */}
       </div>
     </Layout>
   );

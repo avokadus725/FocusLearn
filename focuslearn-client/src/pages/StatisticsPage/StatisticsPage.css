@@ -1,0 +1,97 @@
+/* StatisticsPage.css */
+.statistics-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding: 2rem 0;
+}
+
+.statistics-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Заголовок */
+.statistics-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.statistics-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.statistics-title i {
+  color: #10b981;
+}
+
+.statistics-subtitle {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Завантаження та помилки */
+.statistics-loading,
+.statistics-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.statistics-error {
+  color: #dc2626;
+}
+
+.statistics-error i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.statistics-retry-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.statistics-retry-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .statistics-page {
+    padding: 1rem 0;
+  }
+  
+  .statistics-container {
+    padding: 0 0.5rem;
+  }
+  
+  .statistics-title {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .statistics-subtitle {
+    font-size: 1rem;
+  }
+}

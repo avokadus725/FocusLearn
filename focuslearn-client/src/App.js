@@ -13,6 +13,7 @@ import AssignmentsPage from './pages/AssignmentsPage/AssignmentsPage'
 import MaterialsPage from './pages/MaterialsPage/MaterialsPage';
 import MaterialDetailsPage from './pages/MaterialsPage/components/MaterialDetailsPage/MaterialDetailsPage';
 import MethodsPage from './pages/MethodsPage/MethodsPage';
+import StatisticsPage from './pages/StatisticsPage/StatisticsPage';
 
 // Імпорт стилів
 import './styles/global.css';
@@ -50,6 +51,7 @@ const AppRoutes = () => {
       <Route path="/materials" element={<PrivateRouteElement element={<MaterialsPage />} />} />
       <Route path="/materials/:id" element={<PrivateRouteElement element={<MaterialDetailsPage />} />} />
       <Route path="/methods" element={<PrivateRouteElement element={<MethodsPage />} />} />
+      <Route path="/statistics" element={<PrivateRouteElement element={<StatisticsPage />} />} />
 
       {/* Перенаправлення на login для невідомих маршрутів */}
       <Route path="*" element={<Navigate to="/login" />} />
