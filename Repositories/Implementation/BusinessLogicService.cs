@@ -25,15 +25,14 @@ namespace FocusLearn.Repositories.Implementation
         {
             var periodEndDate = GetPeriodEndDate(periodStartDate, periodType);
 
-            // Перевірка: чи пройшов достатній період
-            if (DateTime.UtcNow < periodEndDate)
-            {
-                throw new InvalidOperationException("Недостатньо даних для обраного періоду.");
-            }
+            // ВИПРАВЛЕНО: Перевіряємо чи є дані за період (не чекаємо завершення періоду)
+            var now = DateTime.UtcNow;
+            var actualEndDate = periodEndDate > now ? now : periodEndDate;
 
             var sessions = await _context.IoTSessions
                 .Where(s => s.UserId == userId &&
                             s.StartTime >= periodStartDate &&
+                            s.StartTime < actualEndDate &&
                             s.SessionType == "Concentration")
                 .ToListAsync();
 
@@ -41,6 +40,7 @@ namespace FocusLearn.Repositories.Implementation
             var breakCount = await _context.IoTSessions
                 .CountAsync(s => s.UserId == userId &&
                                  s.StartTime >= periodStartDate &&
+                                 s.StartTime < actualEndDate &&
                                  s.SessionType == "Break");
 
             var missedBreaks = CalculateMissedBreaks(sessions, breakCount);
@@ -59,13 +59,15 @@ namespace FocusLearn.Repositories.Implementation
         public async Task UpdateMethodStatisticsAsync(int userId, int methodId, DateTime periodStartDate, string periodType)
         {
             var periodEndDate = GetPeriodEndDate(periodStartDate, periodType);
+            var now = DateTime.UtcNow;
+            var actualEndDate = periodEndDate > now ? now : periodEndDate;
 
             // Отримуємо сесії для заданого користувача, методики та періоду
             var sessions = await _context.IoTSessions
                 .Where(s => s.UserId == userId &&
                             s.MethodId == methodId &&
                             s.StartTime >= periodStartDate &&
-                            s.StartTime < periodEndDate)
+                            s.StartTime < actualEndDate)
                 .ToListAsync();
 
             if (!sessions.Any()) return;
@@ -116,68 +118,70 @@ namespace FocusLearn.Repositories.Implementation
         public async Task<string> GetMostEffectiveMethodAsync(int userId, DateTime periodStartDate, string periodType)
         {
             var periodEndDate = GetPeriodEndDate(periodStartDate, periodType);
+            var now = DateTime.UtcNow;
+            var actualEndDate = periodEndDate > now ? now : periodEndDate;
 
-            // Отримуємо записи статистики для конкретного користувача та періоду
+            // ВИПРАВЛЕНО: Шукаємо статистику за більш гнучкими критеріями
             var statistics = await _context.UserMethodStatistics
                 .Where(s => s.UserId == userId &&
-                            s.PeriodStartDate >= periodStartDate &&
-                            s.PeriodStartDate < periodEndDate)
+                            s.PeriodType.ToLower() == periodType.ToLower() &&
+                            s.PeriodStartDate >= periodStartDate.AddDays(-30) && // Розширюємо пошук
+                            s.PeriodStartDate <= actualEndDate)
                 .Include(s => s.Method)
                 .ToListAsync();
 
             if (!statistics.Any())
-                return "Немає достатньо даних для визначення найефективнішої методики.";
+            {
+                // Якщо немає готової статистики, рахуємо з IoT сесій
+                var sessions = await _context.IoTSessions
+                    .Where(s => s.UserId == userId &&
+                               s.StartTime >= periodStartDate &&
+                               s.StartTime < actualEndDate &&
+                               s.SessionType == "Concentration")
+                    .Include(s => s.Method)
+                    .ToListAsync();
 
-            // Визначаємо найефективнішу методику
+                if (!sessions.Any())
+                    return "Немає достатньо даних для визначення найефективнішої методики.";
+
+                var bestSession = sessions
+                    .GroupBy(s => s.MethodId)
+                    .OrderByDescending(g => g.Sum(s => s.Duration ?? 0))
+                    .FirstOrDefault();
+
+                if (bestSession != null)
+                {
+                    var methodName = bestSession.First().Method?.Title ?? "Невідома методика";
+                    return $"У період з {periodStartDate:yyyy-MM-dd} до {actualEndDate:yyyy-MM-dd} найефективнішою методикою концентрації була '{methodName}'.";
+                }
+            }
+
+            // Визначаємо найефективнішу методику зі статистики
             var mostEffectiveMethod = statistics
-                .OrderByDescending(s => s.TotalConcentrationTime)
-                .ThenBy(s => s.MissedBreaks) // Менша кількість пропущених перерв
+                .GroupBy(s => s.MethodId)
+                .Select(g => new {
+                    MethodId = g.Key,
+                    TotalTime = g.Sum(s => s.TotalConcentrationTime),
+                    TotalMissedBreaks = g.Sum(s => s.MissedBreaks),
+                    Method = g.First().Method
+                })
+                .OrderByDescending(s => s.TotalTime)
+                .ThenBy(s => s.TotalMissedBreaks)
                 .FirstOrDefault();
 
             return mostEffectiveMethod != null
-                ? $"У період з {periodStartDate:yyyy-MM-dd} до {periodEndDate:yyyy-MM-dd} найефективнішою методикою концентрації була '{mostEffectiveMethod.Method?.Title}'."
+                ? $"У період з {periodStartDate:yyyy-MM-dd} до {actualEndDate:yyyy-MM-dd} найефективнішою методикою концентрації була '{mostEffectiveMethod.Method?.Title}'."
                 : "Не вдалося визначити найефективнішу методику.";
         }
 
-
-        /// <summary>
-        /// Розрахунок очікуваних перерв
-        /// </summary>
-        private int CalculateExpectedBreaks(IEnumerable<IoTSession> sessions)
-        {
-            return sessions.Count(s => s.SessionType == "Concentration") / 2;
-        }
-        /// <summary>
-        /// Розрахунок пропущених перерв
-        /// </summary>
-        private int CalculateMissedBreaks(IEnumerable<IoTSession> sessions, int actualBreakCount)
-        {
-            var expectedBreakCount = CalculateExpectedBreaks(sessions);
-            return Math.Max(0, expectedBreakCount - actualBreakCount);
-        }
-
-        /// <summary>
-        /// Обчислення кінцевої дати періоду
-        /// </summary>
-        private DateTime GetPeriodEndDate(DateTime periodStartDate, string periodType)
-        {
-            return periodType.ToLower() switch
-            {
-                "day" => periodStartDate.AddDays(1),
-                "week" => periodStartDate.AddDays(7),
-                "month" => periodStartDate.AddMonths(1),
-                _ => throw new ArgumentException("Невірний тип періоду. Допустимі значення: 'Day', 'Week', 'Month'.")
-            };
-        }
-
-       
-        
         /// <summary>
         /// Розрахунок коефіцієнта продуктивності користувача
         /// </summary>
         public async Task<double> CalculateProductivityCoefficientAsync(int userId, DateTime periodStartDate, string periodType)
         {
             var periodEndDate = GetPeriodEndDate(periodStartDate, periodType);
+            var now = DateTime.UtcNow;
+            var actualEndDate = periodEndDate > now ? now : periodEndDate;
 
             // Отримати статистику користувача
             var userStats = await CalculateUserStatisticsAsync(userId, periodStartDate, periodType);
@@ -187,13 +191,13 @@ namespace FocusLearn.Repositories.Implementation
                 .CountAsync(a => a.StudentId == userId &&
                                 a.Status == "Completed" &&
                                 a.CreatedAt >= periodStartDate &&
-                                a.CreatedAt <= periodEndDate);
+                                a.CreatedAt <= actualEndDate);
 
             // Отримати загальну кількість завдань
             var totalTasks = await _context.Assignments
                 .CountAsync(a => a.StudentId == userId &&
                                 a.CreatedAt >= periodStartDate &&
-                                a.CreatedAt <= periodEndDate);
+                                a.CreatedAt <= actualEndDate);
 
             // Розрахунок коефіцієнту продуктивності
             return CalculateProductivityCoefficient(
@@ -203,40 +207,6 @@ namespace FocusLearn.Repositories.Implementation
                 completedTasks,
                 totalTasks
             );
-        }
-
-        /// <summary>
-        /// Розрахунок коефіцієнта продуктивності
-        /// </summary>
-        private double CalculateProductivityCoefficient(
-            int totalConcentrationTime,
-            int breakCount,
-            int missedBreaks,
-            int completedTasks,
-            int totalTasks)
-        {
-            // Коефіцієнт концентрації (час концентрації в годинах)
-            double concentrationCoefficient = totalConcentrationTime / 60.0;
-
-            // Коефіцієнт балансу перерв (чим менше пропущених перерв, тим краще)
-            double breakBalanceCoefficient = breakCount > 0
-                ? 1.0 - (missedBreaks / (double)(breakCount + missedBreaks))
-                : 0;
-
-            // Коефіцієнт виконання завдань
-            double taskCompletionCoefficient = totalTasks > 0
-                ? completedTasks / (double)totalTasks
-                : 0;
-
-            // Загальний коефіцієнт продуктивності (шкала 0-100)
-            double productivityCoefficient = (
-                concentrationCoefficient * 0.4 +
-                breakBalanceCoefficient * 0.3 +
-                taskCompletionCoefficient * 0.3
-            ) * 100;
-
-            // Обмеження результату від 0 до 100
-            return Math.Min(100, Math.Max(0, productivityCoefficient));
         }
 
         /// <summary>
@@ -253,9 +223,9 @@ namespace FocusLearn.Repositories.Implementation
                 periodStartDate,
                 periodType);
 
-            // Знайти найефективнішу методику для користувачів
+            // Знайти найефективнішу методику для інших користувачів
             var optimalMethod = await _context.UserMethodStatistics
-                .Where(s => s.UserId != userId && s.PeriodType == periodType)
+                .Where(s => s.UserId != userId && s.PeriodType.ToLower() == periodType.ToLower())
                 .GroupBy(s => s.MethodId)
                 .Select(g => new {
                     MethodId = g.Key,
@@ -267,8 +237,14 @@ namespace FocusLearn.Repositories.Implementation
                 .FirstOrDefaultAsync();
 
             // Отримати інформацію про виконані завдання
+            var periodEndDate = GetPeriodEndDate(periodStartDate, periodType);
+            var now = DateTime.UtcNow;
+            var actualEndDate = periodEndDate > now ? now : periodEndDate;
+
             var assignments = await _context.Assignments
-                .Where(a => a.StudentId == userId)
+                .Where(a => a.StudentId == userId &&
+                           a.CreatedAt >= periodStartDate &&
+                           a.CreatedAt <= actualEndDate)
                 .ToListAsync();
 
             int completedTasks = assignments.Count(a => a.Status == "Completed");
@@ -296,10 +272,10 @@ namespace FocusLearn.Repositories.Implementation
             // Розрахунок відсотка покращення
             double improvementPercentage = currentProductivity > 0
                 ? ((potentialProductivity - currentProductivity) / currentProductivity) * 100
-                : 0;
+                : 20; // Базове покращення якщо поточна продуктивність 0
 
             // Генерація рекомендацій
-            var recommendations = GenerateRecommendations(userId);
+            var recommendations = await GenerateRecommendationsAsync(userId);
 
             return new ProductivityPredictionDTO
             {
@@ -308,77 +284,6 @@ namespace FocusLearn.Repositories.Implementation
                 ImprovementPercentage = Math.Round(improvementPercentage, 2),
                 Recommendations = recommendations
             };
-        }
-
-        /// <summary>
-        /// Генерація рекомендацій для покращення продуктивності
-        /// </summary>
-        private List<string> GenerateRecommendations(int userId)
-        {
-            var recommendations = new List<string>();
-
-            // Отримати статистику користувача за останні 30 днів
-            var endDate = DateTime.UtcNow;
-            var startDate = endDate.AddDays(-30);
-
-            var userStats = _context.UserMethodStatistics
-                .Where(s => s.UserId == userId && s.PeriodStartDate >= startDate)
-                .Include(s => s.Method)
-                .ToList();
-
-            var iotSessions = _context.IoTSessions
-                .Where(s => s.UserId == userId && s.StartTime >= startDate)
-                .ToList();
-
-            // Аналіз статистики та генерація рекомендацій
-
-            // 1. Пропущені перерви
-            var missedBreaksPercentage = userStats.Sum(s => s.MissedBreaks) /
-                (double)(userStats.Sum(s => s.BreakCount) + userStats.Sum(s => s.MissedBreaks));
-
-            if (missedBreaksPercentage > 0.3) // Якщо пропущено більше 30% перерв
-            {
-                recommendations.Add("Рекомендуємо більш регулярно робити перерви. Це допоможе зберегти концентрацію протягом довшого часу.");
-            }
-
-            // 2. Аналіз найбільш продуктивного часу
-            var productiveSessions = iotSessions
-                .Where(s => s.SessionType == "Concentration" && s.Duration.HasValue)
-                .OrderByDescending(s => s.Duration.Value)
-                .ToList();
-
-            if (productiveSessions.Any())
-            {
-                var productiveHours = productiveSessions
-                    .GroupBy(s => s.StartTime.Hour)
-                    .OrderByDescending(g => g.Sum(s => s.Duration ?? 0))
-                    .Take(2)
-                    .Select(g => g.Key)
-                    .ToList();
-
-                if (productiveHours.Count >= 2)
-                {
-                    recommendations.Add($"Найбільш продуктивний час для вас: {productiveHours[0]}:00-{productiveHours[0] + 1}:00 та {productiveHours[1]}:00-{productiveHours[1] + 1}:00. Плануйте складні завдання на цей час.");
-                }
-            }
-
-            // 3. Рекомендації щодо методик
-            var mostEffectiveMethod = userStats
-                .GroupBy(s => s.MethodId)
-                .OrderByDescending(g => g.Sum(s => s.TotalConcentrationTime) / Math.Max(1, g.Sum(s => s.MissedBreaks)))
-                .FirstOrDefault();
-
-            if (mostEffectiveMethod != null)
-            {
-                var methodName = _context.ConcentrationMethods
-                    .Where(m => m.MethodId == mostEffectiveMethod.Key)
-                    .Select(m => m.Title)
-                    .FirstOrDefault();
-
-                recommendations.Add($"Методика \"{methodName}\" дає найкращі результати для вас. Використовуйте її для важливих завдань.");
-            }
-
-            return recommendations;
         }
 
         /// <summary>
@@ -496,5 +401,158 @@ namespace FocusLearn.Repositories.Implementation
                 DailyData = dailyData
             };
         }
+
+        #region Private Methods
+
+        /// <summary>
+        /// Розрахунок очікуваних перерв
+        /// </summary>
+        private int CalculateExpectedBreaks(IEnumerable<IoTSession> sessions)
+        {
+            return sessions.Count(s => s.SessionType == "Concentration") / 2;
+        }
+
+        /// <summary>
+        /// Розрахунок пропущених перерв
+        /// </summary>
+        private int CalculateMissedBreaks(IEnumerable<IoTSession> sessions, int actualBreakCount)
+        {
+            var expectedBreakCount = CalculateExpectedBreaks(sessions);
+            return Math.Max(0, expectedBreakCount - actualBreakCount);
+        }
+
+        /// <summary>
+        /// Обчислення кінцевої дати періоду
+        /// </summary>
+        private DateTime GetPeriodEndDate(DateTime periodStartDate, string periodType)
+        {
+            return periodType.ToLower() switch
+            {
+                "day" => periodStartDate.AddDays(1),
+                "week" => periodStartDate.AddDays(7),
+                "month" => periodStartDate.AddMonths(1),
+                _ => throw new ArgumentException("Невірний тип періоду. Допустимі значення: 'Day', 'Week', 'Month'.")
+            };
+        }
+
+        /// <summary>
+        /// Розрахунок коефіцієнта продуктивності
+        /// </summary>
+        private double CalculateProductivityCoefficient(
+            int totalConcentrationTime,
+            int breakCount,
+            int missedBreaks,
+            int completedTasks,
+            int totalTasks)
+        {
+            // Коефіцієнт концентрації (час концентрації в годинах)
+            double concentrationCoefficient = totalConcentrationTime / 60.0;
+
+            // Коефіцієнт балансу перерв (чим менше пропущених перерв, тим краще)
+            double breakBalanceCoefficient = breakCount > 0
+                ? 1.0 - (missedBreaks / (double)(breakCount + missedBreaks))
+                : 0;
+
+            // Коефіцієнт виконання завдань
+            double taskCompletionCoefficient = totalTasks > 0
+                ? completedTasks / (double)totalTasks
+                : 0;
+
+            // Загальний коефіцієнт продуктивності (шкала 0-100)
+            double productivityCoefficient = (
+                concentrationCoefficient * 0.4 +
+                breakBalanceCoefficient * 0.3 +
+                taskCompletionCoefficient * 0.3
+            ) * 100;
+
+            // Обмеження результату від 0 до 100
+            return Math.Min(100, Math.Max(0, productivityCoefficient));
+        }
+
+        /// <summary>
+        /// Генерація рекомендацій для покращення продуктивності
+        /// </summary>
+        private async Task<List<string>> GenerateRecommendationsAsync(int userId)
+        {
+            var recommendations = new List<string>();
+
+            // Отримати статистику користувача за останні 30 днів
+            var endDate = DateTime.UtcNow;
+            var startDate = endDate.AddDays(-30);
+
+            var userStats = await _context.UserMethodStatistics
+                .Where(s => s.UserId == userId && s.PeriodStartDate >= startDate)
+                .Include(s => s.Method)
+                .ToListAsync();
+
+            var iotSessions = await _context.IoTSessions
+                .Where(s => s.UserId == userId && s.StartTime >= startDate)
+                .ToListAsync();
+
+            // Аналіз статистики та генерація рекомендацій
+
+            // 1. Пропущені перерви
+            if (userStats.Any())
+            {
+                var totalBreaks = userStats.Sum(s => s.BreakCount) + userStats.Sum(s => s.MissedBreaks);
+                var missedBreaksPercentage = totalBreaks > 0 ? userStats.Sum(s => s.MissedBreaks) / (double)totalBreaks : 0;
+
+                if (missedBreaksPercentage > 0.3) // Якщо пропущено більше 30% перерв
+                {
+                    recommendations.Add("Рекомендуємо більш регулярно робити перерви. Це допоможе зберегти концентрацію протягом довшого часу.");
+                }
+            }
+
+            // 2. Аналіз найбільш продуктивного часу
+            var productiveSessions = iotSessions
+                .Where(s => s.SessionType == "Concentration" && s.Duration.HasValue)
+                .OrderByDescending(s => s.Duration.Value)
+                .ToList();
+
+            if (productiveSessions.Any())
+            {
+                var productiveHours = productiveSessions
+                    .GroupBy(s => s.StartTime.Hour)
+                    .OrderByDescending(g => g.Sum(s => s.Duration ?? 0))
+                    .Take(2)
+                    .Select(g => g.Key)
+                    .ToList();
+
+                if (productiveHours.Count >= 2)
+                {
+                    recommendations.Add($"Найбільш продуктивний час для вас: {productiveHours[0]}:00-{productiveHours[0] + 1}:00 та {productiveHours[1]}:00-{productiveHours[1] + 1}:00. Плануйте складні завдання на цей час.");
+                }
+            }
+
+            // 3. Рекомендації щодо методик
+            var mostEffectiveMethod = userStats
+                .GroupBy(s => s.MethodId)
+                .OrderByDescending(g => g.Sum(s => s.TotalConcentrationTime) / Math.Max(1, g.Sum(s => s.MissedBreaks)))
+                .FirstOrDefault();
+
+            if (mostEffectiveMethod != null)
+            {
+                var method = await _context.ConcentrationMethods
+                    .Where(m => m.MethodId == mostEffectiveMethod.Key)
+                    .FirstOrDefaultAsync();
+
+                if (method != null)
+                {
+                    recommendations.Add($"Методика \"{method.Title}\" дає найкращі результати для вас. Використовуйте її для важливих завдань.");
+                }
+            }
+
+            // Базові рекомендації, якщо немає достатньо даних
+            if (!recommendations.Any())
+            {
+                recommendations.Add("Почніть використовувати методики концентрації регулярно для отримання персоналізованих рекомендацій.");
+                recommendations.Add("Робіть регулярні перерви під час роботи - це покращує загальну продуктивність.");
+                recommendations.Add("Експериментуйте з різними методами концентрації, щоб знайти найефективніший для себе.");
+            }
+
+            return recommendations;
+        }
+
+        #endregion
     }
 }

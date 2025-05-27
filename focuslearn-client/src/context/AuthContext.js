@@ -45,7 +45,7 @@ const loadUser = async () => {
       
       const userInfo = userData || null;
       
-      console.log('Processed user:', userInfo);
+      //console.log('Processed user:', userInfo);
       
       setUser(userInfo);
       setIsAuth(!!userInfo);

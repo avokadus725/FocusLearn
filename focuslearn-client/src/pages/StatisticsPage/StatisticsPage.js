@@ -24,27 +24,36 @@ const StatisticsPage = () => {
   const [productivityPrediction, setProductivityPrediction] = useState({});
   const [methods, setMethods] = useState([]);
 
-  // Отримати дату початку періоду
+  // ВИПРАВЛЕНО: Правильний розрахунок дат з урахуванням локалізації
   const getPeriodStartDate = (period) => {
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
     switch (period) {
       case 'day':
+        // Початок поточного дня
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         return today.toISOString().split('T')[0];
+        
       case 'week':
-        const weekStart = new Date(today);
-        weekStart.setDate(today.getDate() - today.getDay());
+        // Початок поточного тижня (понеділок)
+        const currentDay = now.getDay(); // 0 - неділя, 1 - понеділок, ..., 6 - субота
+        const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; // Якщо неділя, то -6, інакше 1 - поточний день
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() + mondayOffset);
+        weekStart.setHours(0, 0, 0, 0);
         return weekStart.toISOString().split('T')[0];
+        
       case 'month':
-        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        // Початок поточного місяця
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
         return monthStart.toISOString().split('T')[0];
+        
       default:
-        return today.toISOString().split('T')[0];
+        return new Date().toISOString().split('T')[0];
     }
   };
 
-  // Завантаження даних
+  // Завантаження даних (ВИПРАВЛЕНО: Зменшено логіку фронтенду)
   const loadStatistics = async (period = selectedPeriod) => {
     try {
       setLoading(true);
@@ -52,13 +61,9 @@ const StatisticsPage = () => {
       
       const periodStartDate = getPeriodStartDate(period);
       
-      console.log('Loading statistics for period:', period, 'date:', periodStartDate);
-      
-      // Завантажуємо дані послідовно, щоб легше відслідковувати помилки
       const results = {};
       
       try {
-        console.log('Loading user statistics...');
         results.userStats = await statisticsService.getUserStatistics(periodStartDate, period);
       } catch (err) {
         console.error('Error loading user statistics:', err);
@@ -66,7 +71,6 @@ const StatisticsPage = () => {
       }
       
       try {
-        console.log('Loading method statistics...');
         results.methodStats = await statisticsService.getUserMethodStatistics();
       } catch (err) {
         console.error('Error loading method statistics:', err);
@@ -74,7 +78,6 @@ const StatisticsPage = () => {
       }
       
       try {
-        console.log('Loading effective method...');
         results.effectiveMethod = await statisticsService.getMostEffectiveMethod(periodStartDate, period);
       } catch (err) {
         console.error('Error loading effective method:', err);
@@ -82,15 +85,14 @@ const StatisticsPage = () => {
       }
       
       try {
-        console.log('Loading productivity coefficient...');
         results.prodCoefficient = await statisticsService.getProductivityCoefficient(periodStartDate, period);
       } catch (err) {
         console.error('Error loading productivity coefficient:', err);
         results.prodCoefficient = { productivityCoefficient: 0 };
       }
       
+      // 5. Прогноз продуктивності
       try {
-        console.log('Loading productivity prediction...');
         results.prodPrediction = await statisticsService.getPredictProductivity(periodStartDate, period);
       } catch (err) {
         console.error('Error loading productivity prediction:', err);
@@ -103,7 +105,6 @@ const StatisticsPage = () => {
       }
       
       try {
-        console.log('Loading methods list...');
         results.methodsList = await concentrationService.getAllMethods();
       } catch (err) {
         console.error('Error loading methods list:', err);
@@ -118,10 +119,8 @@ const StatisticsPage = () => {
       setProductivityPrediction(results.prodPrediction);
       setMethods(results.methodsList);
       
-      console.log('Statistics loaded successfully');
       
     } catch (err) {
-      console.error('Critical error loading statistics:', err);
       setError(t('statistics.errors.loadError', 'Помилка завантаження статистики'));
     } finally {
       setLoading(false);

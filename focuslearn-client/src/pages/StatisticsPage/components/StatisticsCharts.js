@@ -1,5 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  Area,
+  AreaChart
+} from 'recharts';
 import './StatisticsCharts.css';
 
 const StatisticsCharts = ({ 
@@ -27,13 +44,15 @@ const StatisticsCharts = ({
           const existing = methodsMap.get(key);
           existing.totalTime += stat.totalConcentrationTime;
           existing.breakCount += stat.breakCount;
+          existing.missedBreaks += stat.missedBreaks;
         } else {
           methodsMap.set(key, {
             methodId: stat.methodId,
             name: getMethodName(stat.methodId),
             totalTime: stat.totalConcentrationTime,
             breakCount: stat.breakCount,
-            missedBreaks: stat.missedBreaks
+            missedBreaks: stat.missedBreaks,
+            efficiency: calculateEfficiency(stat.totalConcentrationTime, stat.missedBreaks)
           });
         }
       });
@@ -47,68 +66,78 @@ const StatisticsCharts = ({
     return method?.title || method?.name || `Методика ${methodId}`;
   };
 
+  // Розрахунок ефективності
+  const calculateEfficiency = (totalTime, missedBreaks) => {
+    if (totalTime === 0) return 0;
+    const baseEfficiency = Math.min(totalTime / 60, 100); // Базова ефективність на основі часу
+    const penaltyForMissedBreaks = missedBreaks * 5; // Штраф за пропущені перерви
+    return Math.max(0, baseEfficiency - penaltyForMissedBreaks);
+  };
+
+  // Підготовка даних для продуктивності
+  const prepareProductivityData = () => {
+    return [
+      {
+        name: 'Поточна',
+        value: productivityPrediction.currentProductivity || 0,
+        color: '#64748b'
+      },
+      {
+        name: 'Потенційна',
+        value: productivityPrediction.potentialProductivity || 0,
+        color: '#10b981'
+      }
+    ];
+  };
+
   const methodsData = prepareMethodsData();
-  const totalTime = methodsData.reduce((sum, item) => sum + item.totalTime, 0);
+  const productivityData = prepareProductivityData();
 
-  // Компонент списку методик з прогрес-барами
-  const MethodsList = ({ data }) => (
-    <div className="methods-list-chart">
-      {data.map((item, index) => {
-        const percentage = totalTime > 0 ? (item.totalTime / totalTime) * 100 : 0;
-        
-        return (
-          <div key={index} className="method-item">
-            <div className="method-info">
-              <div className="method-name">{item.name}</div>
-              <div className="method-stats">
-                {item.totalTime}хв ({percentage.toFixed(1)}%)
-              </div>
-            </div>
-            <div className="method-bar">
-              <div 
-                className="method-bar-fill"
-                style={{ 
-                  width: `${percentage}%`,
-                  backgroundColor: colors[index % colors.length]
-                }}
-              />
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-
-  // Компонент списку активності
-  const ActivityList = ({ data }) => (
-    <div className="activity-list-chart">
-      {data.map((item, index) => (
-        <div key={index} className="activity-item">
-          <div className="activity-header">
-            <span className="activity-name">{item.name}</span>
-            <span className="activity-time">{item.totalTime}хв</span>
-          </div>
-          <div className="activity-details">
-            <div className="activity-detail">
-              <i className="fas fa-coffee"></i>
-              <span>{item.breakCount} перерв</span>
-            </div>
-            {item.missedBreaks > 0 && (
-              <div className="activity-detail missed">
-                <i className="fas fa-exclamation-triangle"></i>
-                <span>{item.missedBreaks} пропущено</span>
-              </div>
-            )}
-          </div>
+  // Кастомний tooltip для графіків
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="recharts-custom-tooltip">
+          <p className="tooltip-label">{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} style={{ color: entry.color }}>
+              {`${entry.name}: ${entry.value}${entry.name.includes('час') ? 'хв' : entry.name.includes('Продуктивність') ? '%' : ''}`}
+            </p>
+          ))}
         </div>
-      ))}
-    </div>
-  );
+      );
+    }
+    return null;
+  };
+
+  // Кастомна легенда
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+    if (percent < 0.05) return null; // Не показуємо лейбли для дуже маленьких сегментів
+    
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="white" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        fontSize="12"
+        fontWeight="600"
+      >
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
 
   return (
     <div className="statistics-charts">
       
-      {/* Розподіл часу по методиках */}
+      {/* Кругова діаграма розподілу часу */}
       <div className="chart-container">
         <div className="chart-header">
           <h3 className="chart-title">
@@ -118,7 +147,34 @@ const StatisticsCharts = ({
         </div>
         <div className="chart-content">
           {methodsData.length > 0 ? (
-            <MethodsList data={methodsData} />
+            <ResponsiveContainer width="100%" height={350}>
+              <PieChart>
+                <Pie
+                  data={methodsData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="totalTime"
+                >
+                  {methodsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+                <Legend 
+                  verticalAlign="bottom" 
+                  height={36}
+                  formatter={(value, entry) => (
+                    <span style={{ color: entry.color, fontWeight: 500 }}>
+                      {value} ({entry.payload.totalTime}хв)
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
           ) : (
             <div className="chart-no-data">
               <i className="fas fa-chart-pie"></i>
@@ -128,20 +184,53 @@ const StatisticsCharts = ({
         </div>
       </div>
 
-      {/* Активність по методиках */}
+      {/* Стовпчаста діаграма активності */}
       <div className="chart-container">
         <div className="chart-header">
           <h3 className="chart-title">
-            <i className="fas fa-list"></i>
+            <i className="fas fa-chart-bar"></i>
             {t('statistics.charts.methodsActivity', 'Детальна активність')}
           </h3>
         </div>
         <div className="chart-content">
           {methodsData.length > 0 ? (
-            <ActivityList data={methodsData} />
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={methodsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fontSize: 12 }}
+                  interval={0}
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <Bar 
+                  dataKey="totalTime" 
+                  name="Час концентрації (хв)" 
+                  fill="#10b981"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar 
+                  dataKey="breakCount" 
+                  name="Кількість перерв" 
+                  fill="#059669"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar 
+                  dataKey="missedBreaks" 
+                  name="Пропущені перерви" 
+                  fill="#dc2626"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
           ) : (
             <div className="chart-no-data">
-              <i className="fas fa-list"></i>
+              <i className="fas fa-chart-bar"></i>
               <p>{t('statistics.noData', 'Немає даних для відображення')}</p>
             </div>
           )}
@@ -157,28 +246,85 @@ const StatisticsCharts = ({
           </h3>
         </div>
         <div className="chart-content">
-          <div className="productivity-analysis">
-            <div className="productivity-item">
-              <div className="productivity-label">Поточна продуктивність:</div>
-              <div className="productivity-value current">
-                {productivityPrediction.currentProductivity || 0}%
-              </div>
-            </div>
-            <div className="productivity-item">
-              <div className="productivity-label">Потенційна продуктивність:</div>
-              <div className="productivity-value potential">
-                {productivityPrediction.potentialProductivity || 0}%
-              </div>
-            </div>
-            <div className="productivity-item">
-              <div className="productivity-label">Можливе покращення:</div>
-              <div className="productivity-value improvement">
-                +{productivityPrediction.improvementPercentage || 0}%
-              </div>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={productivityData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="name" tick={{ fontSize: 14, fontWeight: 500 }} />
+              <YAxis 
+                tick={{ fontSize: 12 }} 
+                domain={[0, 100]}
+                label={{ value: 'Продуктивність (%)', angle: -90, position: 'insideLeft' }}
+              />
+              <Tooltip 
+                formatter={(value) => [`${value}%`, 'Продуктивність']}
+                labelStyle={{ fontWeight: 600 }}
+              />
+              <Bar 
+                dataKey="value" 
+                fill="#10b981"
+                radius={[8, 8, 0, 0]}
+              >
+                {productivityData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+          
+          {/* Додаткова інформація */}
+          <div className="productivity-summary">
+            <div className="productivity-improvement">
+              <i className="fas fa-arrow-up"></i>
+              <span>
+                Потенціал покращення: {productivityPrediction.improvementPercentage || 0}%
+              </span>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Ефективність методик */}
+      {methodsData.length > 0 && (
+        <div className="chart-container chart-full-width">
+          <div className="chart-header">
+            <h3 className="chart-title">
+              <i className="fas fa-chart-area"></i>
+              Ефективність методик
+            </h3>
+          </div>
+          <div className="chart-content">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={methodsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="colorEfficiency" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                  </linearGradient>
+                </defs>
+                <XAxis 
+                  dataKey="name" 
+                  tick={{ fontSize: 12 }}
+                  interval={0}
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis tick={{ fontSize: 12 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <Tooltip content={<CustomTooltip />} />
+                <Area 
+                  type="monotone" 
+                  dataKey="efficiency" 
+                  stroke="#10b981" 
+                  fillOpacity={1} 
+                  fill="url(#colorEfficiency)"
+                  name="Ефективність"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       {/* Рекомендації */}
       {productivityPrediction.recommendations?.length > 0 && (
