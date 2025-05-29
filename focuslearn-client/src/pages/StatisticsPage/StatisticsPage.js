@@ -24,27 +24,23 @@ const StatisticsPage = () => {
   const [productivityPrediction, setProductivityPrediction] = useState({});
   const [methods, setMethods] = useState([]);
 
-  // ВИПРАВЛЕНО: Правильний розрахунок дат з урахуванням локалізації
   const getPeriodStartDate = (period) => {
     const now = new Date();
     
     switch (period) {
       case 'day':
-        // Початок поточного дня
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         return today.toISOString().split('T')[0];
         
       case 'week':
-        // Початок поточного тижня (понеділок)
-        const currentDay = now.getDay(); // 0 - неділя, 1 - понеділок, ..., 6 - субота
-        const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; // Якщо неділя, то -6, інакше 1 - поточний день
+        const currentDay = now.getDay(); 
+        const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; 
         const weekStart = new Date(now);
         weekStart.setDate(now.getDate() + mondayOffset);
         weekStart.setHours(0, 0, 0, 0);
         return weekStart.toISOString().split('T')[0];
         
       case 'month':
-        // Початок поточного місяця
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
         return monthStart.toISOString().split('T')[0];
         
@@ -53,7 +49,7 @@ const StatisticsPage = () => {
     }
   };
 
-  // Завантаження даних (ВИПРАВЛЕНО: Зменшено логіку фронтенду)
+  // Завантаження даних
   const loadStatistics = async (period = selectedPeriod) => {
     try {
       setLoading(true);

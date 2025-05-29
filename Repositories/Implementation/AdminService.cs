@@ -39,10 +39,12 @@ namespace FocusLearn.Repositories.Implementation
             try
             {
                 var backupFileName = $"FocusLearnDB_{DateTime.UtcNow:yyyyMMdd_HHmmss}.bak";
-                var backupPath = Path.Combine("C:\\SQLBackups", backupFileName);
+                
+                var backupDir = Path.Combine(Environment.CurrentDirectory, "Backups");
+                if (!Directory.Exists(backupDir))
+                    Directory.CreateDirectory(backupDir);
 
-                if (!Directory.Exists("Backups"))
-                    Directory.CreateDirectory("Backups");
+                var backupPath = Path.Combine(backupDir, backupFileName);
 
                 var sql = $"BACKUP DATABASE FocusLearnDB TO DISK = '{backupPath}'";
 
@@ -58,7 +60,6 @@ namespace FocusLearn.Repositories.Implementation
                 throw new Exception($"Error creating backup: {ex.Message}");
             }
         }
-
         /// <summary>
         /// Відновити базу даних з бекапу
         /// </summary>
@@ -138,6 +139,11 @@ namespace FocusLearn.Repositories.Implementation
                     case "learningmaterials":
                         var materials = await _context.LearningMaterials.ToListAsync();
                         jsonData = JsonSerializer.Serialize(materials);
+                        break;
+                    
+                    case "iotsessions":
+                        var iotSessions = await _context.IoTSessions.ToListAsync();
+                        jsonData = JsonSerializer.Serialize(iotSessions);
                         break;
 
                     default:

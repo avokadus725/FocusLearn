@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/common/Layout';
+import AdminPanel from '../../components/admin/AdminPanel';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -17,6 +18,15 @@ const HomePage = () => {
       </div>
     );
   }
+
+  if (user?.role === 'Admin') {
+    return (
+      <Layout>
+        <AdminPanel />
+      </Layout>
+    );
+  }
+
 
   return (
     <Layout>
