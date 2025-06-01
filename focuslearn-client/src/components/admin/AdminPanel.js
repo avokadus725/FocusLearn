@@ -1,167 +1,59 @@
-import React, { useState, useEffect } from 'react';
+// src/components/admin/AdminPanel.js
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import adminService from '../../api/adminService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAdminPanel } from '../../hooks/useAdminPanel';
 import ConfirmationModal from '../common/ConfirmationModal';
 import { getProxiedImageUrl, generateInitialsAvatar, isValidImageUrl } from '../../utils/imageConverter';
 import './AdminPanel.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AdminPanel = () => {
   const { t } = useTranslation();
   
-  // States
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
-  
-  // Filters
-  const [roleFilter, setRoleFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
-  
-  // Export/Import
-  const [exportTable, setExportTable] = useState('');
-  const [importTable, setImportTable] = useState('');
-  const [importFile, setImportFile] = useState(null);
-  
-  // Modals
-  const [showStatusModal, setShowStatusModal] = useState(false);
-  const [statusModalData, setStatusModalData] = useState(null);
-  const [showBackupModal, setShowBackupModal] = useState(false);
-  const [showRestoreModal, setShowRestoreModal] = useState(false);
-  
-  const availableTables = [
-    { value: 'users', label: t('admin.tables.users') },
-    { value: 'assignments', label: t('admin.tables.assignments') },
-    { value: 'learningmaterials', label: t('admin.tables.learningmaterials') },
-    { value: 'iotsessions', label: t('admin.tables.iotsessions') }
-  ];
-
-  // Load users on component mount
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  // Filter users when filters change
-  useEffect(() => {
-    filterUsers();
-  }, [users, roleFilter, statusFilter]);
-
-  const loadUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await adminService.getAllUsers();
-      setUsers(response.data || response);
-    } catch (error) {
-      showMessage('error', t('admin.messages.usersLoadError'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filterUsers = () => {
-    let filtered = [...users];
+  const {
+    // Стани
+    loading,
+    message,
     
-    if (roleFilter !== 'all') {
-      filtered = filtered.filter(user => user.role !== 'Admin');
-    }
+    // Користувачі
+    filteredUsers,
     
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(user => user.profileStatus === statusFilter);
-    }
+    // Фільтри
+    roleFilter,
+    statusFilter,
+    setRoleFilter,
+    setStatusFilter,
     
-    setFilteredUsers(filtered);
-  };
-
-  const showMessage = (type, text) => {
-    setMessage({ type, text });
-    setTimeout(() => setMessage({ type: '', text: '' }), 5000);
-  };
-
-  const handleStatusChange = (user) => {
-    const newStatus = user.profileStatus === 'Active' ? 'Inactive' : 'Active';
-    setStatusModalData({ user, newStatus });
-    setShowStatusModal(true);
-  };
-
-  const confirmStatusChange = async () => {
-    try {
-      const { user, newStatus } = statusModalData;
-      await adminService.changeUserStatus(user.userId, newStatus);
-      showMessage('success', t('admin.messages.statusChangeSuccess'));
-      loadUsers();
-    } catch (error) {
-      showMessage('error', t('admin.messages.statusChangeError'));
-    } finally {
-      setShowStatusModal(false);
-      setStatusModalData(null);
-    }
-  };
-
-  const handleExport = async () => {
-    if (!exportTable) {
-      showMessage('error', t('admin.messages.selectTableError'));
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const response = await adminService.exportData([exportTable]);
-      showMessage('success', t('admin.messages.exportSuccess'));
-    } catch (error) {
-      showMessage('error', t('admin.messages.exportError'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleImport = async () => {
-    if (!importTable || !importFile) {
-      showMessage('error', t('admin.messages.importValidationError'));
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await adminService.importData(importTable, importFile);
-      showMessage('success', t('admin.messages.importSuccess'));
-      setImportTable('');
-      setImportFile(null);
-      if (importTable === 'users') {
-        loadUsers();
-      }
-    } catch (error) {
-      showMessage('error', t('admin.messages.importError'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleBackup = async () => {
-    try {
-      setLoading(true);
-      await adminService.backupDatabase();
-      showMessage('success', t('admin.messages.backupSuccess'));
-    } catch (error) {
-      showMessage('error', t('admin.messages.backupError'));
-    } finally {
-      setLoading(false);
-      setShowBackupModal(false);
-    }
-  };
-
-  const handleRestore = async () => {
-    try {
-      setLoading(true);
-      await adminService.restoreDatabase();
-      showMessage('success', t('admin.messages.restoreSuccess'));
-    } catch (error) {
-      showMessage('error', t('admin.messages.restoreError'));
-    } finally {
-      setLoading(false);
-      setShowRestoreModal(false);
-    }
-  };
+    // Експорт/Імпорт
+    exportTable,
+    setExportTable,
+    importTable,
+    setImportTable,
+    importFile,
+    setImportFile,
+    availableTables,
+    
+    // Модальні вікна
+    showStatusModal,
+    statusModalData,
+    showBackupModal,
+    showRestoreModal,
+    
+    // Дії
+    handleStatusChange,
+    confirmStatusChange,
+    handleExport,
+    handleImport,
+    handleBackup,
+    handleRestore,
+    
+    // Модальні дії
+    closeStatusModal,
+    openBackupModal,
+    closeBackupModal,
+    openRestoreModal,
+    closeRestoreModal
+  } = useAdminPanel();
 
   return (
     <div className="admin-panel">
@@ -175,7 +67,7 @@ const AdminPanel = () => {
       {/* Messages */}
       {message.text && (
         <div className={`admin-alert admin-alert-${message.type}`}>
-          <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
+          <FontAwesomeIcon icon={message.type === 'success' ? 'check-circle' : 'exclamation-triangle'} />
           {message.text}
         </div>
       )}
@@ -279,6 +171,7 @@ const AdminPanel = () => {
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">
+              <FontAwesomeIcon icon="database" />
               {t('admin.sections.dataManagement')}
             </h2>
             <p className="admin-section-subtitle">{t('admin.sections.dataManagementDesc')}</p>
@@ -290,7 +183,7 @@ const AdminPanel = () => {
               {/* Export Data */}
               <div className="data-card">
                 <div className="data-card-header">
-                  <FontAwesomeIcon icon="download"/>
+                  <FontAwesomeIcon icon="download" />
                   <h3>{t('admin.dataManagement.exportData')}</h3>
                 </div>
                 <div className="data-card-content">
@@ -314,7 +207,7 @@ const AdminPanel = () => {
                     onClick={handleExport}
                     disabled={loading || !exportTable}
                   >
-                    <FontAwesomeIcon icon="download"/>
+                    <FontAwesomeIcon icon="download" />
                     {t('admin.actions.export')}
                   </button>
                 </div>
@@ -323,7 +216,7 @@ const AdminPanel = () => {
               {/* Import Data */}
               <div className="data-card">
                 <div className="data-card-header">
-                  <FontAwesomeIcon icon="upload"/>
+                  <FontAwesomeIcon icon="upload" />
                   <h3>{t('admin.dataManagement.importData')}</h3>
                 </div>
                 <div className="data-card-content">
@@ -354,7 +247,7 @@ const AdminPanel = () => {
                     onClick={handleImport}
                     disabled={loading || !importTable || !importFile}
                   >
-                    <FontAwesomeIcon icon="upload"/>
+                    <FontAwesomeIcon icon="upload" />
                     {t('admin.actions.import')}
                   </button>
                 </div>
@@ -367,6 +260,7 @@ const AdminPanel = () => {
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">
+              <FontAwesomeIcon icon="server" />
               {t('admin.sections.databaseManagement')}
             </h2>
             <p className="admin-section-subtitle">{t('admin.sections.databaseManagementDesc')}</p>
@@ -376,16 +270,17 @@ const AdminPanel = () => {
             <div className="database-actions">
               <div className="database-card">
                 <div className="database-card-header">
-                  <FontAwesomeIcon icon="save"/>
+                  <FontAwesomeIcon icon="save" />
                   <h3>{t('admin.database.backup')}</h3>
                 </div>
                 <div className="database-card-content">
                   <p>{t('admin.database.backupDesc')}</p>
                   <button
                     className="admin-btn admin-btn-success"
-                    onClick={() => setShowBackupModal(true)}
+                    onClick={openBackupModal}
                     disabled={loading}
                   >
+                    <FontAwesomeIcon icon="save" />
                     {t('admin.actions.createBackup')}
                   </button>
                 </div>
@@ -393,16 +288,17 @@ const AdminPanel = () => {
 
               <div className="database-card">
                 <div className="database-card-header">
-                  <FontAwesomeIcon icon="undo"/>
+                  <FontAwesomeIcon icon="undo" />
                   <h3>{t('admin.database.restore')}</h3>
                 </div>
                 <div className="database-card-content">
                   <p>{t('admin.database.restoreDesc')}</p>
                   <button
                     className="admin-btn admin-btn-warning"
-                    onClick={() => setShowRestoreModal(true)}
+                    onClick={openRestoreModal}
                     disabled={loading}
                   >
+                    <FontAwesomeIcon icon="undo" />
                     {t('admin.actions.restoreDatabase')}
                   </button>
                 </div>
@@ -415,7 +311,7 @@ const AdminPanel = () => {
       {/* Modals */}
       <ConfirmationModal
         isOpen={showStatusModal}
-        onClose={() => setShowStatusModal(false)}
+        onClose={closeStatusModal}
         onConfirm={confirmStatusChange}
         title={t('admin.modals.changeStatus.title')}
         message={t('admin.modals.changeStatus.message', { 
@@ -424,31 +320,31 @@ const AdminPanel = () => {
         })}
         confirmText={t('admin.actions.confirm')}
         confirmVariant="warning"
-        icon="fas fa-user-edit"
+        icon="user-edit"
         isLoading={loading}
       />
 
       <ConfirmationModal
         isOpen={showBackupModal}
-        onClose={() => setShowBackupModal(false)}
+        onClose={closeBackupModal}
         onConfirm={handleBackup}
         title={t('admin.modals.backup.title')}
         message={t('admin.modals.backup.message')}
         confirmText={t('admin.actions.createBackup')}
         confirmVariant="success"
-        icon="fas fa-save"
+        icon="save"
         isLoading={loading}
       />
 
       <ConfirmationModal
         isOpen={showRestoreModal}
-        onClose={() => setShowRestoreModal(false)}
+        onClose={closeRestoreModal}
         onConfirm={handleRestore}
         title={t('admin.modals.restore.title')}
         message={t('admin.modals.restore.message')}
         confirmText={t('admin.actions.restoreDatabase')}
         confirmVariant="danger"
-        icon="fas fa-exclamation-triangle"
+        icon="exclamation-triangle"
         isLoading={loading}
       />
     </div>
