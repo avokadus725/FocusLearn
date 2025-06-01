@@ -223,7 +223,7 @@ const MyAssignmentsTabs = ({
       {/* Заголовок */}
       <div className="my-assignments-header">
         <h2 className="list-title">
-          <i className="fas fa-tasks"></i>
+          <FontAwesomeIcon icon="tasks" />
           {t('assignments.tabs.myAssignments')}
         </h2>
         <p className="list-description">
@@ -360,12 +360,12 @@ const MyAssignmentsTabs = ({
                     <h3 className="assignment-title">{assignment.title}</h3>
                     <div className="assignment-status">
                       <span className={`status-badge status-${assignment.status.toLowerCase()}`}>
-                        <i className={getStatusIcon(assignment.status)}></i>
+                        <FontAwesomeIcon icon={getStatusIcon(assignment.status)} />
                         {t(`assignments.statuses.${assignment.status}`)}
                       </span>
                       {isOverdue(assignment) && (
                         <span className="overdue-badge">
-                          <i className="fas fa-exclamation-triangle"></i>
+                          <FontAwesomeIcon icon="exclamation-triangle" />
                           {t('assignments.overdue')}
                         </span>
                       )}
@@ -383,27 +383,27 @@ const MyAssignmentsTabs = ({
                   <div className="assignment-info">
                     {assignment.dueDate && (
                       <div className="info-item">
-                        <i className="fas fa-calendar"></i>
+                        <FontAwesomeIcon icon="calendar" />
                         <span>{t('assignments.fields.dueDate')}: {formatDate(assignment.dueDate)}</span>
                       </div>
                     )}
                     
                     {assignment.rating && (
                       <div className="info-item">
-                        <i className="fas fa-star"></i>
+                        <FontAwesomeIcon icon="star" />
                         <span>{t('assignments.fields.rating')}: {assignment.rating}/5</span>
                       </div>
                     )}
                     
                     {assignment.fileLink && (
                       <div className="info-item">
-                        <i className="fas fa-paperclip"></i>
+                        <FontAwesomeIcon icon="paperclip" />
                         <span>{t('assignments.fileAttached')}</span>
                       </div>
                     )}
 
                     <div className="info-item">
-                      <i className="fas fa-calendar-plus"></i>
+                      <FontAwesomeIcon icon="calendar-plus" />
                       <span>{t('common.createdAt')}: {formatDate(assignment.createdAt)}</span>
                     </div>
                   </div>

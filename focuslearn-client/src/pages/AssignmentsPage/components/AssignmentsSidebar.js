@@ -1,7 +1,8 @@
+// src/pages/AssignmentsPage/components/AssignmentsSidebar.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import './AssignmentsSidebar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './AssignmentsSidebar.css';
 
 const AssignmentsSidebar = ({ 
   tabs, 
@@ -11,6 +12,7 @@ const AssignmentsSidebar = ({
   onCreateAssignment 
 }) => {
   const { t } = useTranslation();
+  
   const handleCreateClick = () => {
     console.log('Create button clicked, userRole:', userRole);
     
@@ -26,7 +28,6 @@ const AssignmentsSidebar = ({
       {/* Заголовок бічної панелі */}
       <div className="sidebar-header">
         <h3 className="sidebar-title">
-          <i className="fas fa-list"></i>
           {t('assignments.sidebar.title')}
         </h3>
         <div className="sidebar-role">
@@ -45,63 +46,53 @@ const AssignmentsSidebar = ({
             onClick={() => onTabChange(tab.id)}
           >
             <div className="tab-icon">
-              <FontAwesomeIcon icon={tab.icon}/>
+              <FontAwesomeIcon icon={tab.icon} />
             </div>
             <div className="tab-content">
               <span className="tab-label">{tab.label}</span>
             </div>
             <div className="tab-arrow">
-              <FontAwesomeIcon icon="chevron-right"/>
+              <FontAwesomeIcon icon="chevron-right" />
             </div>
           </button>
         ))}
       </nav>
 
-      {/* Додatkова інформація */}
+      { /* Додаткова інформація */ }        
       <div className="sidebar-info">
-        <div className="info-card">
-          <div className="info-icon">
-            <FontAwesomeIcon icon="info"/>
+          <div className="info-card">
+            <div className="info-icon">
+          <FontAwesomeIcon icon="info" />
+            </div>
+            <div className="info-content">
+          <h4 className="info-title">
+            {t('assignments.sidebar.help.title')}
+          </h4>
+          <p className="info-text">
+            {userRole === 'Student'
+              ? t('assignments.sidebar.help.studentText')
+              : userRole === 'Admin'
+            ? t('assignments.sidebar.help.adminText')
+            : t('assignments.sidebar.help.tutorText')
+            }
+          </p>
+            </div>
           </div>
-          <div className="info-content">
-            <h4 className="info-title">
-              {t('assignments.sidebar.help.title')}
-            </h4>
-            <p className="info-text">
-              {userRole === 'Student' 
-                ? t('assignments.sidebar.help.studentText')
-                : t('assignments.sidebar.help.tutorText')
-              }
-            </p>
-          </div>
-        </div>
 
-        {/* Швидкі дії */}
+          {/* Швидкі дії */}
         {userRole === 'Tutor' && (
-        <div className="assignments-create-section">          
-          <button 
-            className="assignments-create-btn"
-            onClick={handleCreateClick}
-            type="button"
-          >
-            <i className="fas fa-plus"></i>
-            {t('assignments.createNew.button')}
-          </button>
-        </div>
-      )}
+          <div className="assignments-create-section">          
+            <button 
+              className="assignments-create-btn"
+              onClick={handleCreateClick}
+              type="button"
+            >
+              <FontAwesomeIcon icon="plus" />
+              {t('assignments.createNew.button')}
+            </button>
+          </div>
+        )}
       </div>
-
-      {/* Статистика (можна додати пізніше) */}
-      {/* <div className="sidebar-stats">
-        <div className="stat-item">
-          <span className="stat-value">12</span>
-          <span className="stat-label">{t('assignments.stats.total')}</span>
-        </div>
-        <div className="stat-item">
-          <span className="stat-value">3</span>
-          <span className="stat-label">{t('assignments.stats.pending')}</span>
-        </div>
-      </div> */}
     </div>
   );
 };

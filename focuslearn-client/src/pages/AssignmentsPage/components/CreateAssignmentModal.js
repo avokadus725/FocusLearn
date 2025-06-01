@@ -253,7 +253,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
               <div className="create-form-group">                
                 {materialsLoading ? (
                   <div className="materials-loading">
-                    <i className="fas fa-spinner fa-spin"></i>
+                    <FontAwesomeIcon icon="spinner"/>
                     {t('common.loading')}
                   </div>
                 ) : (
@@ -313,7 +313,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
               >
                 {loading ? (
                   <>
-                    <i className="fas fa-spinner create-loading-spinner"></i>
+                    <FontAwesomeIcon icon="spinner create-loading-spinner"/>
                     {t('common.creating')}
                   </>
                 ) : (

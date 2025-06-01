@@ -278,7 +278,7 @@ const AssignmentDetailsModal = ({
                   <label className="form-label">{t('assignments.fields.learningMaterial')}:</label>
                   {materialsLoading ? (
                     <div className="materials-loading">
-                      <i className="fas fa-spinner fa-spin"></i>
+                      <FontAwesomeIcon icon="spinner"/>
                       {t('common.loading')}
                     </div>
                   ) : (
@@ -409,7 +409,7 @@ const AssignmentDetailsModal = ({
               {assignment.fileLink && (
                 <div className="assignment-details-section">
                   <h3 className="section-title">
-                    <i className="fas fa-paperclip"></i>
+                    <FontAwesomeIcon icon="paperclip"/>
                     {t('assignments.details.submittedFile')}
                   </h3>
                   <div className="file-download">
@@ -419,7 +419,7 @@ const AssignmentDetailsModal = ({
                       rel="noopener noreferrer"
                       className="file-download-btn"
                     >
-                      <i className="fas fa-download"></i>
+                      <FontAwesomeIcon icon="download"/>
                       {t('assignments.downloadFile')}
                     </a>
                   </div>
@@ -433,7 +433,7 @@ const AssignmentDetailsModal = ({
                !assignment.fileLink && (
                 <div className="assignment-details-section">
                   <h3 className="section-title">
-                    <i className="fas fa-upload"></i>
+                    <FontAwesomeIcon icon="upload"/>
                     {t('assignments.details.submitFile')}
                   </h3>
                   <div className="file-upload-form">
@@ -457,12 +457,12 @@ const AssignmentDetailsModal = ({
                     >
                       {isSubmitting ? (
                         <>
-                          <i className="fas fa-spinner fa-spin"></i>
+                          <FontAwesomeIcon icon="spinner"/>
                           {t('common.submitting')}
                         </>
                       ) : (
                         <>
-                          <i className="fas fa-upload"></i>
+                          <FontAwesomeIcon icon="upload"/>
                           {t('assignments.actions.submitFile')}
                         </>
                       )}
@@ -484,7 +484,7 @@ const AssignmentDetailsModal = ({
                 onClick={handleCancelEdit}
                 disabled={isSubmitting}
               >
-                <i className="fas fa-times"></i>
+                <FontAwesomeIcon icon="times"/>
                 {t('common.cancel')}
               </button>
               <button
@@ -494,12 +494,12 @@ const AssignmentDetailsModal = ({
               >
                 {isSubmitting ? (
                   <>
-                    <i className="fas fa-spinner fa-spin"></i>
+                    <FontAwesomeIcon icon="spinner"/>
                     {t('common.saving')}
                   </>
                 ) : (
                   <>
-                    <i className="fas fa-save"></i>
+                    <FontAwesomeIcon icon="save"/>
                     {t('common.save')}
                   </>
                 )}
@@ -515,7 +515,7 @@ const AssignmentDetailsModal = ({
                   onClick={() => setIsEditing(true)}
                   disabled={isSubmitting}
                 >
-                  <i className="fas fa-edit"></i>
+                  <FontAwesomeIcon icon="edit"/>
                   {t('assignments.actions.edit')}
                 </button>
               )}
@@ -527,7 +527,7 @@ const AssignmentDetailsModal = ({
                   onClick={handleGrade}
                   disabled={isSubmitting}
                 >
-                  <i className="fas fa-star"></i>
+                  <FontAwesomeIcon icon="star"/>
                   {t('assignments.actions.grade')}
                 </button>
               )}
@@ -541,7 +541,7 @@ const AssignmentDetailsModal = ({
                   onClick={handleComplete}
                   disabled={isSubmitting}
                 >
-                  <i className="fas fa-check"></i>
+                  <FontAwesomeIcon icon="check"/>
                   {assignment.status === 'Completed' 
                     ? t('assignments.actions.markAsComplete')
                     : t('assignments.actions.abandon')
@@ -550,7 +550,7 @@ const AssignmentDetailsModal = ({
               )}
               
               <button className="btn-close-modal" onClick={onClose}>
-                <i className="fas fa-times"></i>
+                <FontAwesomeIcon icon="times"/>
                 {t('common.close')}
               </button>
             </>

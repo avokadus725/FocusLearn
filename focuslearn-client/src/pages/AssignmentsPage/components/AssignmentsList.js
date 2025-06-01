@@ -1,7 +1,8 @@
+// src/pages/AssignmentsPage/components/AssignmentsList.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import './AssignmentsList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './AssignmentsList.css';
 
 const AssignmentsList = ({ 
   assignments, 
@@ -45,6 +46,7 @@ const AssignmentsList = ({
           icon: 'search',
           actionButton: { 
             label: t('assignments.actions.take'), 
+            icon: 'play',
             action: 'take',
             className: 'btn-take-assignment'
           }
@@ -100,7 +102,7 @@ const AssignmentsList = ({
       {/* Заголовок */}
       <div className="available-assignments-header">
         <h2 className="list-title">
-          <FontAwesomeIcon icon={config.icon}/>
+          <FontAwesomeIcon icon={config.icon} />
           {config.title}
         </h2>
         <p className="list-description">
@@ -115,17 +117,17 @@ const AssignmentsList = ({
       <div className="available-assignments-content">
         {assignments.length === 0 ? (
           userRole === 'Student' && (
-          <div className="assignments-empty-state">
-            <div className="empty-state-icon">
-              <FontAwesomeIcon icon="search"/>
+            <div className="assignments-empty-state">
+              <div className="empty-state-icon">
+                <FontAwesomeIcon icon="search" />
+              </div>
+              <h3 className="empty-state-title">
+                {t('assignments.empty.availableAssignments.title')}
+              </h3>
+              <p className="empty-state-description">
+                {t('assignments.empty.availableAssignments.description')}
+              </p>
             </div>
-            <h3 className="empty-state-title">
-              {t('assignments.empty.availableAssignments.title')}
-            </h3>
-            <p className="empty-state-description">
-              {t('assignments.empty.availableAssignments.description')}
-            </p>
-          </div>
           )
         ) : (
           <div className="assignments-rows">
@@ -146,7 +148,7 @@ const AssignmentsList = ({
                         </span>
                         {assignment.studentId && (
                           <span className="assignment-student">
-                            {t('profile.roles.Tutor')} {assignment.studentName || `ID: ${assignment.studentId}`}
+                            {t('profile.roles.Student')}: {assignment.studentName || `ID: ${assignment.studentId}`}
                           </span>
                         )}
                         {assignment.rating && (
@@ -160,16 +162,16 @@ const AssignmentsList = ({
                   
                   <div className="assignment-row-meta">
                     <div className="meta-item">
-                      <FontAwesomeIcon icon="user"/>
+                      <FontAwesomeIcon icon="user" />
                       <span>
                         {userRole === 'Student' 
-                          ? `Викладач: ${assignment.tutorName || `ID: ${assignment.tutorId}`}`
-                          : `Студент: ${assignment.studentName || `ID: ${assignment.studentId || 'Не призначено'}`}`
+                          ? `${t('assignments.fields.tutor')}: ${assignment.tutorName || `ID: ${assignment.tutorId}`}`
+                          : `${t('assignments.fields.student')}: ${assignment.studentName || `ID: ${assignment.studentId || t('assignments.notAssigned')}`}`
                         }
                       </span>
                     </div>
                     <div className="meta-item">
-                      <i className="fas fa-calendar-plus"></i>
+                      <FontAwesomeIcon icon="calendar-plus" />
                       <span>{t('common.createdAt')}: {formatDate(assignment.createdAt)}</span>
                     </div>
                   </div>
@@ -182,7 +184,7 @@ const AssignmentsList = ({
                     onClick={() => handleActionButton(assignment.assignmentId)}
                     disabled={loading}
                   >
-                    <FontAwesomeIcon icon={config.actionButton.icon}/>
+                    <FontAwesomeIcon icon={config.actionButton.icon} />
                     {config.actionButton.label}
                   </button>
                 </div>
