@@ -1,31 +1,40 @@
 /* src/styles/tokens.css */
-/* ===== DESIGN TOKENS - ОСНОВНІ ЗМІННІ ===== */
+/* ===== DESIGN TOKENS - ПРАВИЛЬНІ КОЛЬОРИ (як на старому фото) ===== */
 
 :root {
   /* ===== КОЛЬОРИ ===== */
-  /* Primary - Sage Green */
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #548c54; /* main */
-  --color-primary-600: #059669;
-  --color-primary-700: #047857;
-  --color-primary-800: #2a633a;
-  --color-primary-900: #064e3b;
+  /* Primary - М'який зелений */
+  --color-primary-50: #e6f4ea;
+  --color-primary-100: #cce9d5;
+  --color-primary-200: #b3dfc0;
+  --color-primary-300: #99d4ab;
+  --color-primary-400: #80c996; /* Основний зелений */
+  --color-primary-500: #66bf81;
+  --color-primary-600: #4cb46c; /* Для hover */
+  --color-primary-700: #339957;
+  --color-primary-800: #1a7e42;
+  --color-primary-900: #00642d;
 
-  /* Secondary - Mint */
-  --color-secondary-50: #f0fdf4;
-  --color-secondary-100: #E8F5E9;
-  --color-secondary-200: #C8E6C9;
-  --color-secondary-300: #A5D6A7;
-  --color-secondary-400: #81C784;
-  --color-secondary-500: #66BB6A;
-  --color-secondary-600: #4CAF50;
-  --color-secondary-700: #43A047;
-  --color-secondary-800: #388E3C;
-  --color-secondary-900: #2E7D32;
+  /* Secondary - Світлий м'ятний */
+  --color-secondary-50: #f0f9f4;
+  --color-secondary-100: #e0f3e8;
+  --color-secondary-200: #d1eddd;
+  --color-secondary-300: #c1e7d1;
+  --color-secondary-400: #b2e1c6;
+  --color-secondary-500: #a2dbba;
+  --color-secondary-600: #93d5af;
+  --color-secondary-700: #83cfa3;
+  --color-secondary-800: #74c998;
+  --color-secondary-900: #64c38c;
+
+  --color-navbar-bg: #80c996; /* Зелений для navbar */
+  --color-navbar-hover: #4cb46c; /* Темніший зелений для hover */
+
+  --color-hero-from: #a2dbba; /* Світлий зелений початок */
+  --color-hero-to: #80c996; /* Темніший зелений кінець */
+
+  --color-icon-bg: #80c996; /* Зелений для іконок */
+  --color-icon-hover: #4cb46c; /* Темніший для hover */
 
   /* Grayscale */
   --color-gray-50: #f9fafb;

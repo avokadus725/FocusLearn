@@ -1,84 +1,57 @@
-/* ========================= ОСНОВНИЙ КОНТЕЙНЕР ========================= */
+/* src/pages/ProfilePage/ProfilePage.css */
+
+/* ===== PROFILE GRID LAYOUT (2:1 пропорції) ===== */
 .profile-container {
-  min-height: 100vh;
-  background-color: var(--secondary-light);
-}
-
-.profile-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
-}
-
-/* ========================= НАВІГАЦІЙНІ ЕЛЕМЕНТИ ========================= */
-/* Хлібні крошки */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  font-size: 0.875rem;
-}
-
-.breadcrumb-link {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.breadcrumb-link:hover { color: var(--primary-dark); }
-.breadcrumb-separator { color: var(--gray-400); }
-.breadcrumb-current { color: var(--gray-600); font-weight: 500; }
-
-/* Заголовок сторінки */
-.page-header { margin-bottom: var(--spacing-xl); }
-.page-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin: 0;
-  letter-spacing: -0.025em;
-}
-
-/* ========================= СІТКА ПРОФІЛЮ ========================= */
-.profile-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--spacing-xl);
+  grid-template-columns: 2fr 1fr; /* 2:1 замість 1:1 */
+  gap: var(--space-8);
+  width: 100%;
 }
 
-/* ========================= ОСНОВНА КАРТКА ПРОФІЛЮ ========================= */
-.profile-card {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  border: 1px solid var(--gray-200);
+.profile-main-column {
+  width: 100%;
 }
 
-/* Секція аватару */
-.profile-avatar-section {
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-  padding: var(--spacing-xl);
+.profile-sidebar-column {
+  width: 100%;
+  max-width: 400px; /* Обмежуємо максимальну ширину sidebar */
+}
+
+/* ===== PROFILE HEADER WITH CENTERED AVATAR ===== */
+.profile-header-centered {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  color: white;
+  padding: var(--space-8) var(--space-6);
 }
 
+.profile-avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+/* ===== PROFILE AVATAR ===== */
 .profile-avatar-large {
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   overflow: hidden;
-  margin: 0 auto var(--spacing-md);
   border: 3px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  margin: 0 auto;
 }
 
 .profile-avatar-large img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .profile-avatar-placeholder {
@@ -87,363 +60,199 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: var(--text-3xl);
+  font-weight: var(--font-semibold);
   color: white;
   background: rgba(255, 255, 255, 0.3);
 }
 
-.profile-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 var(--spacing-xs) 0;
-}
-
-.profile-email {
-  font-size: 1rem;
-  opacity: 0.9;
-  margin: 0;
-}
-
-/* ========================= ІНФОРМАЦІЯ ТА ФОРМИ ========================= */
-/* Загальні стилі для секцій */
-.profile-info-section,
-.profile-edit-form {
-  padding: var(--spacing-xl);
-}
-
-.profile-section-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--gray-800);
-  margin-bottom: var(--spacing-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.profile-section-title i { color: var(--primary); }
-
-/* Поля інформації */
+/* ===== PROFILE FIELDS ===== */
 .profile-field {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-md) 0;
-  border-bottom: 1px solid var(--gray-200);
+  align-items: flex-start;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-gray-200);
+  gap: var(--space-4);
 }
 
-.profile-field:last-child { border-bottom: none; }
+.profile-field:last-child {
+  border-bottom: none;
+}
 
 .profile-field-label {
-  font-weight: 600;
-  color: var(--gray-700);
-  font-size: 0.9rem;
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-700);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+  min-width: 120px;
 }
 
 .profile-field-value {
-  color: var(--gray-600);
-  font-weight: 500;
+  color: var(--color-gray-600);
+  font-weight: var(--font-medium);
   text-align: right;
+  font-size: var(--text-sm);
+  flex: 1;
+  word-break: break-word;
 }
 
-/* Форма редагування */
-.profile-form-group { margin-bottom: var(--spacing-lg); }
-
-.profile-form-label {
-  display: block;
-  font-weight: 600;
-  color: var(--gray-700);
-  margin-bottom: var(--spacing-sm);
-  font-size: 0.9rem;
-}
-
-.profile-form-input,
-.profile-form-select {
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--gray-300);
-  border-radius: var(--border-radius-md);
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-  background: white;
-}
-
-.profile-form-input:focus,
-.profile-form-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(122, 155, 122, 0.1);
-}
-
-/* ========================= КНОПКИ ТА ДІЇ ========================= */
-.profile-actions {
-  padding: var(--spacing-lg) var(--spacing-xl);
-  background: var(--gray-50);
-  display: flex;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-}
-
-.profile-btn {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 0.9rem;
-}
-
-/* Варіанти кнопок */
-.profile-btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
-.profile-btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-.profile-btn-secondary {
-  background: var(--gray-200);
-  color: var(--gray-700);
-}
-
-.profile-btn-secondary:hover { background: var(--gray-300); }
-
-.profile-btn-danger {
-  background: var(--danger);
-  color: white;
-}
-
-.profile-btn-danger:hover {
-  background: #B91C1C;
-  transform: translateY(-1px);
-}
-
-/* ========================= БІЧНА ПАНЕЛЬ ========================= */
-.profile-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.sidebar-card {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-lg);
-  border: 1px solid var(--gray-200);
-}
-
-.sidebar-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--gray-800);
-  margin: 0 0 var(--spacing-md) 0;
-}
-
-/* Посилання у боковій панелі */
+/* ===== SIDEBAR LINKS ===== */
 .sidebar-links {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--space-1);
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--gray-600);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-gray-600);
   text-decoration: none;
-  border-radius: var(--border-radius-md);
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--duration-200) var(--ease-in-out);
 }
 
 .sidebar-link:hover {
-  background: var(--gray-100);
-  color: var(--gray-800);
+  background: var(--color-gray-100);
+  color: var(--color-gray-800);
+  text-decoration: none;
 }
 
 .sidebar-link i {
   width: 16px;
   text-align: center;
-  color: var(--primary);
+  color: var(--color-primary-500);
+  font-size: var(--text-sm);
 }
 
-/* Небезпечна зона */
-.danger-zone {
-  border-color: #FED7D7;
-  background: #FFFAF0;
+/* ===== DANGER ZONE ===== */
+/* Замініть секцію DANGER ZONE в ProfilePage.css на це: */
+
+/* ===== DANGER ZONE CARD (рожевий блок як картка) ===== */
+.danger-zone-card {
+  background: var(--color-danger-50) !important;
+  border: 1px solid var(--color-danger-200) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-sm) !important;
+  overflow: hidden !important;
 }
 
-.danger-title {
-  color: var(--danger);
+.danger-zone-content {
+  padding: var(--space-6);
+}
+
+.danger-zone-header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
-.danger-title i { color: var(--danger); }
+.danger-zone-header h3 {
+  color: var(--color-danger-600);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  margin: 0;
+}
 
-.danger-text {
-  color: var(--gray-600);
-  font-size: 0.875rem;
-  margin: 0 0 var(--spacing-md) 0;
+.danger-zone-header .text-danger-500 {
+  color: var(--color-danger-500);
+  font-size: var(--text-lg);
+}
+
+.danger-zone-text {
+  color: var(--color-gray-600);
+  font-size: var(--text-sm);
   line-height: 1.5;
+  margin-bottom: var(--space-4);
 }
 
-/* ========================= ПОВІДОМЛЕННЯ ТА МОДАЛЬНІ ВІКНА ========================= */
-/* Сповіщення */
-.profile-alert {
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  margin-bottom: var(--spacing-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-weight: 500;
+.danger-zone-card .btn-danger {
+  background: var(--color-danger-500) !important;
+  color: white !important;
+  border: none !important;
+  padding: var(--space-3) var(--space-4) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: var(--font-medium) !important;
+  font-size: var(--text-sm) !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--space-2) !important;
+  transition: all var(--duration-200) var(--ease-in-out) !important;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2) !important;
 }
 
-.profile-alert-success {
-  background: #DCFCE7;
-  color: #166534;
-  border: 1px solid #BBF7D0;
+.danger-zone-card .btn-danger:hover {
+  background: var(--color-danger-600) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3) !important;
 }
 
-.profile-alert-error {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
+.danger-zone-card .btn-danger:active {
+  transform: translateY(0) !important;
 }
 
-/* Модальне вікно */
-.profile-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: var(--spacing-md);
+
+/* ===== SPACE UTILITIES ===== */
+.space-y-4 > * + * {
+  margin-top: var(--space-4);
 }
 
-.profile-modal {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-xl);
-  max-width: 400px;
-  width: 100%;
-  box-shadow: var(--shadow-xl);
+.space-y-6 > * + * {
+  margin-top: var(--space-6);
 }
 
-.profile-modal-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--danger);
-  margin-bottom: var(--spacing-md);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
-.profile-modal-text {
-  color: var(--gray-600);
-  margin-bottom: var(--spacing-lg);
-  line-height: 1.5;
-}
-
-.profile-modal-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
-}
-
-/* ========================= СТАНИ ЗАВАНТАЖЕННЯ ========================= */
-.profile-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-2xl);
-  color: var(--gray-600);
-}
-
-.profile-loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--gray-200);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: var(--spacing-md);
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 1024px) {
-  .profile-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-lg);
+  .profile-container {
+    grid-template-columns: 1fr; /* 1 колонка на планшетах */
+    gap: var(--space-6);
   }
   
-  .profile-sidebar { order: -1; }
-  .sidebar-card { padding: var(--spacing-md); }
+  .profile-sidebar-column {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
-  .profile-content { padding: var(--spacing-md); }
-  .page-title { font-size: 1.75rem; }
+  .profile-avatar-large {
+    width: 80px;
+    height: 80px;
+  }
   
-  .profile-avatar-section { padding: var(--spacing-lg); }
-  .profile-avatar-large { width: 80px; height: 80px; }
-  .profile-avatar-placeholder { font-size: 2rem; }
-  
-  .profile-info-section,
-  .profile-edit-form { padding: var(--spacing-lg); }
-  
-  .profile-actions {
-    padding: var(--spacing-md) var(--spacing-lg);
-    flex-direction: column;
+  .profile-avatar-placeholder {
+    font-size: var(--text-2xl);
   }
   
   .profile-field {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--spacing-xs);
+    gap: var(--space-2);
   }
   
-  .profile-field-value { text-align: left; }
-  
-  .profile-modal {
-    margin: var(--spacing-md);
-    padding: var(--spacing-lg);
+  .profile-field-label {
+    min-width: auto;
   }
   
-  .profile-modal-actions { flex-direction: column; }
+  .profile-field-value {
+    text-align: left;
+  }
 }
 
 @media (max-width: 480px) {
-  .breadcrumb { flex-wrap: wrap; }
+  .profile-avatar-large {
+    width: 70px;
+    height: 70px;
+  }
   
-  .profile-btn {
-    justify-content: center;
-    width: 100%;
+  .profile-avatar-placeholder {
+    font-size: var(--text-xl);
   }
 }

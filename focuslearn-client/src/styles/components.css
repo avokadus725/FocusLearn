@@ -191,12 +191,16 @@
 
 .card-interactive {
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .card-interactive:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
   border-color: var(--color-primary-300);
+  text-decoration: none;
+  color: inherit;
 }
 
 .card-header {
@@ -230,6 +234,47 @@
   border-color: var(--color-primary-200);
 }
 
+/* Card градієнтний заголовок */
+.card-gradient-header {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%);
+  color: white;
+}
+
+/* ===== ІКОНКИ В КАРТКАХ ===== */
+.card-icon {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4) auto;
+  font-size: var(--text-xl);
+  flex-shrink: 0;
+}
+
+.card-icon-primary {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%);
+  color: white;
+}
+
+.card-icon-secondary {
+  background: var(--color-secondary-100);
+  color: var(--color-primary-600);
+}
+
+.card-icon-lg {
+  width: var(--space-16);
+  height: var(--space-16);
+  font-size: var(--text-2xl);
+}
+
+.card-icon-sm {
+  width: var(--space-10);
+  height: var(--space-10);
+  font-size: var(--text-lg);
+}
+
 /* ===== АЛЕРТИ ===== */
 .alert {
   display: flex;
@@ -241,6 +286,7 @@
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
   line-height: var(--leading-normal);
+  margin-bottom: var(--space-4);
 }
 
 .alert-icon {
@@ -473,6 +519,37 @@
   font-weight: var(--font-medium);
 }
 
+/* ===== WELCOME HERO ===== */
+.welcome-hero {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%);
+  color: white;
+  padding: var(--space-16);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.welcome-greeting {
+  background: rgba(255, 255, 255, 0.15);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-6);
+}
+
+/* ===== СЕКЦІЇ ===== */
+.section {
+  margin-bottom: var(--space-16);
+}
+
+.section-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-gray-800);
+  text-align: center;
+  margin-bottom: var(--space-8);
+  letter-spacing: var(--tracking-tight);
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes spin {
   to {
@@ -511,4 +588,52 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .welcome-hero {
+    padding: var(--space-8);
+  }
+  
+  .section-title {
+    font-size: var(--text-2xl);
+  }
+  
+  .card-icon-lg {
+    width: var(--space-12);
+    height: var(--space-12);
+    font-size: var(--text-xl);
+  }
+  
+  .modal-body {
+    padding: var(--space-4);
+  }
+  
+  .modal-header,
+  .modal-footer {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-hero {
+    padding: var(--space-6);
+  }
+  
+  .section-title {
+    font-size: var(--text-xl);
+  }
+  
+  .card-body {
+    padding: var(--space-4);
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
 }

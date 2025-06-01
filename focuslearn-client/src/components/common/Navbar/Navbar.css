@@ -1,5 +1,7 @@
+/* Додайте це до src/components/common/Navbar/Navbar.css або оновіть існуючий файл */
+
 .navbar {
-  background: var(--primary-light);
+  background: var(--color-navbar-bg, #4ade80); /* Яскравий зелений як на першому фото */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
@@ -114,7 +116,7 @@
 }
 
 .language-select option {
-  background: var(--gray-800);
+  background: var(--color-gray-800);
   color: white;
   padding: 0.5rem;
 }
@@ -190,7 +192,7 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   min-width: 200px;
   z-index: 1000;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--color-gray-200);
   overflow: hidden;
 }
 
@@ -199,7 +201,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  color: var(--gray-700);
+  color: var(--color-gray-700);
   cursor: pointer;
   transition: background-color 0.2s ease;
   border: none;
@@ -212,33 +214,33 @@
 }
 
 .dropdown-item:hover {
-  background-color: var(--gray-100);
-  color: var(--gray-800);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-800);
 }
 
 .dropdown-item i {
   width: 16px;
   text-align: center;
-  color: var(--gray-500);
+  color: var(--color-gray-500);
 }
 
 .logout-item {
-  color: var(--danger);
-  border-top: 1px solid var(--gray-200);
+  color: var(--color-danger-500);
+  border-top: 1px solid var(--color-gray-200);
 }
 
 .logout-item:hover {
   background-color: #fff5f5;
-  color: var(--danger);
+  color: var(--color-danger-500);
 }
 
 .logout-item i {
-  color: var(--danger);
+  color: var(--color-danger-500);
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: var(--gray-200);
+  background-color: var(--color-gray-200);
   margin: 0;
 }
 
