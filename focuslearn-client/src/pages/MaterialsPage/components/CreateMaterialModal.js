@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
 import './CreateMaterialModal.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
   const { t } = useTranslation();
@@ -119,7 +120,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {t('materials.createNew.title')}
           </h2>
           <button className="create-modal-close" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <FontAwesomeIcon icon="times"/>
           </button>
         </div>
         
@@ -129,7 +130,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {/* Основна інформація */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-info-circle"></i>
+                <FontAwesomeIcon icon="info-circle"/>
                 {t('materials.form.sections.basicInfo')}
               </h3>
               
@@ -180,7 +181,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {/* Посилання на матеріал */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-link"></i>
+                <FontAwesomeIcon icon="link"/>
                 {t('materials.form.sections.fileLink')}
               </h3>
               
@@ -214,7 +215,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
                 onClick={handleCancelClick}
                 disabled={loading}
               >
-                <i className="fas fa-times"></i>
+                <FontAwesomeIcon icon="times"/>
                 {t('common.cancel')}
               </button>
               <button
@@ -230,7 +231,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
                   </>
                 ) : (
                   <>
-                    <i className="fas fa-plus"></i>
+                    <FontAwesomeIcon icon="plus"/>
                     {t('materials.createNew.submit')}
                   </>
                 )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
@@ -7,6 +7,8 @@ import materialService from '../../../../api/materialService';
 import EditMaterialModal from '../EditMaterialModal';
 import ConfirmationModal from '../../../../components/common/ConfirmationModal';
 import './MaterialDetailsPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const MaterialDetailsPage = () => {
   const { t } = useTranslation();
@@ -197,7 +199,7 @@ const MaterialDetailsPage = () => {
       <Layout>
         <div className="material-details-error">
           <div className="error-icon">
-            <i className="fas fa-exclamation-triangle"></i>
+            <FontAwesomeIcon icon="fa-exclamation-triangle"/>
           </div>
           <h2 className="error-title">
             {error || t('materials.errors.notFound')}
@@ -307,7 +309,7 @@ const MaterialDetailsPage = () => {
                     >
                       <div className="link-info">
                         <div className="link-icon">
-                          <i className="fas fa-external-link-alt"></i>
+                          <FontAwesomeIcon icon="fa-external-link-alt"/>
                         </div>
                         <div className="link-details">
                           <span className="link-url">{material.fileLink}</span>

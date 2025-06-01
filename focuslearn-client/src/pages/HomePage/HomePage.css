@@ -53,8 +53,10 @@
   font-weight: 700;
   color: var(--gray-800);
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin: 0 auto var(--spacing-xl) auto;
   letter-spacing: -0.025em;
+  display: block;
+  width: 100%;
 }
 
 /* ========================= ШВИДКІ ДІЇ ========================= */

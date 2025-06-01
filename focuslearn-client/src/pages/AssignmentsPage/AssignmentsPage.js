@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import Layout from '../../components/common/Layout';
@@ -9,14 +9,15 @@ import MyAssignmentsTabs from './components/MyAssignmentsTabs';
 import AssignmentDetailsModal from './components/AssignmentDetailsModal';
 import CreateAssignmentModal from './components/CreateAssignmentModal';
 import './AssignmentsPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AssignmentsPage = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
 
   // Стани
-  const [allAssignments, setAllAssignments] = useState([]); // ВСІ завдання
-  const [myAssignments, setMyAssignments] = useState([]); // МОЇ завдання
+  const [allAssignments, setAllAssignments] = useState([]); 
+  const [myAssignments, setMyAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('available');
@@ -32,17 +33,24 @@ const AssignmentsPage = () => {
       setLoading(true);
       setError(null);
       
-      // Завантажуємо всі завдання (для доступних) та мої завдання
-      const [allData, myData] = await Promise.all([
-        assignmentService.getAllAssignments(),
-        assignmentService.getMyAssignments()
-      ]);
-      
-      console.log('All assignments loaded:', allData);
-      console.log('My assignments loaded:', myData);
-      
-      setAllAssignments(allData);
-      setMyAssignments(myData);
+      if (user?.role === 'Admin') {
+        const [adminData, myData] = await Promise.all([
+          assignmentService.getAllAssignmentsForAdmin(),
+          assignmentService.getMyAssignments()
+        ]);
+        
+        setAllAssignments(adminData);
+        setMyAssignments(adminData); 
+        
+      } else {
+        const [allData, myData] = await Promise.all([
+          assignmentService.getAllAssignments(),
+          assignmentService.getMyAssignments()
+        ]);
+        
+        setAllAssignments(allData);
+        setMyAssignments(myData);
+      }
       
     } catch (err) {
       console.error('Error loading assignments:', err);
@@ -55,14 +63,15 @@ const AssignmentsPage = () => {
   // Ініціалізація
   useEffect(() => {
     loadAssignments();
-  }, []);
+  }, [user?.role]);
 
-  // Встановлення активної вкладки по замовчуванню
   useEffect(() => {
     if (user?.role === 'Student') {
       setActiveTab('available');
     } else if (user?.role === 'Tutor') {
       setActiveTab('my');
+    } else if (user?.role === 'Admin') {
+      setActiveTab('all');
     }
   }, [user]);
 
@@ -70,14 +79,12 @@ const AssignmentsPage = () => {
   const getFilteredAssignments = () => {
     switch (activeTab) {
       case 'available':
-        // Для доступних завдань використовуємо ВСІ завдання
         const availableAssignments = assignmentService.filterAssignments.availableAssignments(allAssignments);
         console.log('Available assignments:', availableAssignments);
         return availableAssignments;
       
       case 'my':
         if (user?.role === 'Student') {
-          // Для студентів використовуємо під-вкладки з МОЇ завдання
           switch (activeSubTab) {
             case 'inProgress':
               return assignmentService.filterAssignments.myInProgress(myAssignments, user.userId);
@@ -89,12 +96,14 @@ const AssignmentsPage = () => {
               return [];
           }
         } else {
-          // Для викладачів показуємо всі їхні завдання з ВСІ завдань
-          return assignmentService.filterAssignments.tutorAssignments(allAssignments, user.userId);
+          if (user?.role === 'Admin') {
+            return myAssignments;
+          } else {
+            return assignmentService.filterAssignments.tutorAssignments(allAssignments, user.userId);
+          }
         }
       
       case 'pending':
-        // Для викладачів - завдання на перевірці з ВСІ завдань
         return assignmentService.filterAssignments.tutorPendingAssignments(myAssignments, user.userId);
       
       default:
@@ -139,12 +148,11 @@ const AssignmentsPage = () => {
           break;
           
         case 'details':
-          // Шукаємо завдання в обох масивах
           let assignment = allAssignments.find(a => a.assignmentId === assignmentId) ||
                           myAssignments.find(a => a.assignmentId === assignmentId);
           setSelectedAssignment(assignment);
           setShowDetailsModal(true);
-          return; // Не перезавантажуємо дані для деталей
+          return; 
           
         default:
           throw new Error('Unknown action');
@@ -180,7 +188,7 @@ const AssignmentsPage = () => {
   };
 
   const handleCreateAssignment = () => {
-    if (user?.role !== 'Tutor') {
+    if (user?.role !== 'Tutor' && user?.role !== 'Admin') {
       setMessage({ 
         type: 'error', 
         text: t('assignments.errors.onlyTutorsCanCreate') 
@@ -241,6 +249,10 @@ const AssignmentsPage = () => {
         { id: 'my', label: t('assignments.tabs.myAssignments'), icon: 'fas fa-tasks' },
         { id: 'pending', label: t('assignments.tabs.pendingReview'), icon: 'fas fa-clock' }
       ];
+    } else if (user?.role === 'Admin') {
+      return [
+        { id: 'my', label: t('assignments.tabs.allAssignments', 'Усі завдання'), icon: 'list' }
+      ];
     }
     return [];
   };
@@ -271,7 +283,7 @@ const AssignmentsPage = () => {
           {/* Повідомлення */}
           {message.text && (
             <div className={`assignments-alert assignments-alert-${message.type}`}>
-              <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+              <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
               {message.text}
             </div>
           )}
@@ -279,7 +291,7 @@ const AssignmentsPage = () => {
           {/* Помилка завантаження */}
           {error && (
             <div className="assignments-alert assignments-alert-error">
-              <i className="fas fa-exclamation-triangle"></i>
+              <FontAwesomeIcon icon="exclamation-triangle"/>
               {error}
               <button 
                 className="assignments-retry-btn"
@@ -314,7 +326,7 @@ const AssignmentsPage = () => {
                 />
               )}
               
-              {/* Мої завдання - для студентів (з під-вкладками) */}
+              {/* Мої завдання - для студентів */}
               {activeTab === 'my' && user?.role === 'Student' && (
                 <MyAssignmentsTabs
                   assignments={myAssignments}
@@ -338,6 +350,19 @@ const AssignmentsPage = () => {
                   loading={loading}
                   userRole="Tutor"
                 />
+              )}
+
+              {/* Мої завдання - для адміністраторів */}
+              {activeTab === 'my' && user?.role === 'Admin' && (
+                <div className="admin-all-assignments">
+                  <AssignmentsList
+                    assignments={myAssignments}
+                    onAssignmentAction={handleAssignmentAction}
+                    loading={loading}
+                    listType="admin"
+                    userRole="Admin"
+                  />
+                </div>
               )}
               
               {/* На перевірці - для викладачів */}

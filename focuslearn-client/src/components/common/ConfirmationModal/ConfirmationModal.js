@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './ConfirmationModal.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ConfirmationModal = ({
   isOpen,
@@ -11,7 +12,7 @@ const ConfirmationModal = ({
   confirmText,
   cancelText,
   confirmVariant = 'danger',
-  icon = 'fas fa-exclamation-triangle',
+  icon,
   isLoading = false
 }) => {
   const { t } = useTranslation();
@@ -57,9 +58,6 @@ const ConfirmationModal = ({
         
         {/* Іконка та заголовок */}
         <div className="confirmation-modal-header">
-          <div className={`confirmation-icon confirmation-icon-${confirmVariant}`}>
-            <i className={icon}></i>
-          </div>
           <h3 className="confirmation-title">
             {title || t('common.confirmation.title')}
           </h3>
@@ -90,12 +88,10 @@ const ConfirmationModal = ({
           >
             {isLoading ? (
               <>
-                <i className="fas fa-spinner fa-spin"></i>
                 {t('common.processing')}
               </>
             ) : (
               <>
-                <i className={icon}></i>
                 {confirmText || t('common.confirm')}
               </>
             )}

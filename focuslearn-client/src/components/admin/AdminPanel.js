@@ -4,6 +4,7 @@ import adminService from '../../api/adminService';
 import ConfirmationModal from '../common/ConfirmationModal';
 import { getProxiedImageUrl, generateInitialsAvatar, isValidImageUrl } from '../../utils/imageConverter';
 import './AdminPanel.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AdminPanel = () => {
   const { t } = useTranslation();
@@ -166,7 +167,6 @@ const AdminPanel = () => {
     <div className="admin-panel">
       <div className="admin-header">
         <h1 className="admin-title">
-          <i className="fas fa-cog"></i>
           {t('admin.title')}
         </h1>
         <p className="admin-subtitle">{t('admin.subtitle')}</p>
@@ -175,7 +175,7 @@ const AdminPanel = () => {
       {/* Messages */}
       {message.text && (
         <div className={`admin-alert admin-alert-${message.type}`}>
-          <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+          <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
           {message.text}
         </div>
       )}
@@ -186,7 +186,6 @@ const AdminPanel = () => {
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">
-              <i className="fas fa-users"></i>
               {t('admin.sections.userManagement')}
             </h2>
             <p className="admin-section-subtitle">{t('admin.sections.userManagementDesc')}</p>
@@ -265,7 +264,6 @@ const AdminPanel = () => {
                           onClick={() => handleStatusChange(user)}
                           title={t('admin.actions.changeStatus')}
                         >
-                          <i className={`fas fa-${user.profileStatus === 'Active' ? 'ban' : 'check'}`}></i>
                           {user.profileStatus === 'Active' ? t('admin.actions.deactivate') : t('admin.actions.activate')}
                         </button>
                       </div>
@@ -281,7 +279,6 @@ const AdminPanel = () => {
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">
-              <i className="fas fa-database"></i>
               {t('admin.sections.dataManagement')}
             </h2>
             <p className="admin-section-subtitle">{t('admin.sections.dataManagementDesc')}</p>
@@ -293,7 +290,7 @@ const AdminPanel = () => {
               {/* Export Data */}
               <div className="data-card">
                 <div className="data-card-header">
-                  <i className="fas fa-download"></i>
+                  <FontAwesomeIcon icon="download"/>
                   <h3>{t('admin.dataManagement.exportData')}</h3>
                 </div>
                 <div className="data-card-content">
@@ -317,7 +314,7 @@ const AdminPanel = () => {
                     onClick={handleExport}
                     disabled={loading || !exportTable}
                   >
-                    <i className="fas fa-download"></i>
+                    <FontAwesomeIcon icon="download"/>
                     {t('admin.actions.export')}
                   </button>
                 </div>
@@ -326,7 +323,7 @@ const AdminPanel = () => {
               {/* Import Data */}
               <div className="data-card">
                 <div className="data-card-header">
-                  <i className="fas fa-upload"></i>
+                  <FontAwesomeIcon icon="upload"/>
                   <h3>{t('admin.dataManagement.importData')}</h3>
                 </div>
                 <div className="data-card-content">
@@ -357,7 +354,7 @@ const AdminPanel = () => {
                     onClick={handleImport}
                     disabled={loading || !importTable || !importFile}
                   >
-                    <i className="fas fa-upload"></i>
+                    <FontAwesomeIcon icon="upload"/>
                     {t('admin.actions.import')}
                   </button>
                 </div>
@@ -370,7 +367,6 @@ const AdminPanel = () => {
         <section className="admin-section">
           <div className="admin-section-header">
             <h2 className="admin-section-title">
-              <i className="fas fa-server"></i>
               {t('admin.sections.databaseManagement')}
             </h2>
             <p className="admin-section-subtitle">{t('admin.sections.databaseManagementDesc')}</p>
@@ -380,7 +376,7 @@ const AdminPanel = () => {
             <div className="database-actions">
               <div className="database-card">
                 <div className="database-card-header">
-                  <i className="fas fa-save"></i>
+                  <FontAwesomeIcon icon="save"/>
                   <h3>{t('admin.database.backup')}</h3>
                 </div>
                 <div className="database-card-content">
@@ -390,7 +386,6 @@ const AdminPanel = () => {
                     onClick={() => setShowBackupModal(true)}
                     disabled={loading}
                   >
-                    <i className="fas fa-save"></i>
                     {t('admin.actions.createBackup')}
                   </button>
                 </div>
@@ -398,7 +393,7 @@ const AdminPanel = () => {
 
               <div className="database-card">
                 <div className="database-card-header">
-                  <i className="fas fa-undo"></i>
+                  <FontAwesomeIcon icon="undo"/>
                   <h3>{t('admin.database.restore')}</h3>
                 </div>
                 <div className="database-card-content">
@@ -408,7 +403,6 @@ const AdminPanel = () => {
                     onClick={() => setShowRestoreModal(true)}
                     disabled={loading}
                   >
-                    <i className="fas fa-undo"></i>
                     {t('admin.actions.restoreDatabase')}
                   </button>
                 </div>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import assignmentService from '../../../api/assignmentService';
 import ConfirmationModal from '../../../components/common/ConfirmationModal';
 import './MyAssignmentsTabs.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MyAssignmentsTabs = ({ 
   assignments = [], // Додано значення за замовчуванням
@@ -38,19 +39,19 @@ const MyAssignmentsTabs = ({
           {
             id: 'inProgress',
             label: t('assignments.subTabs.inProgress'),
-            icon: 'fas fa-play-circle',
+            icon: 'play-circle',
             filter: assignmentService.filterAssignments.myInProgress
           },
           {
             id: 'pending',
             label: t('assignments.subTabs.pending'),
-            icon: 'fas fa-clock',
+            icon: 'clock',
             filter: assignmentService.filterAssignments.myPending
           },
           {
             id: 'completed',
             label: t('assignments.subTabs.completed'),
-            icon: 'fas fa-check-circle',
+            icon: 'check-circle',
             filter: assignmentService.filterAssignments.myCompleted
           }
         ];
@@ -60,13 +61,13 @@ const MyAssignmentsTabs = ({
           {
             id: 'all',
             label: t('assignments.subTabs.allMy'),
-            icon: 'fas fa-tasks',
+            icon: 'tasks',
             filter: assignmentService.filterAssignments.tutorAssignments
           },
           {
             id: 'active',
             label: t('assignments.subTabs.active'),
-            icon: 'fas fa-play-circle',
+            icon: 'play-circle',
             filter: (assignments, userId) => assignments.filter(a => 
               a.tutorId === userId && 
               a.status === 'InProgress'
@@ -75,7 +76,7 @@ const MyAssignmentsTabs = ({
           {
             id: 'graded',
             label: t('assignments.subTabs.graded'),
-            icon: 'fas fa-star',
+            icon: 'star',
             filter: (assignments, userId) => assignments.filter(a => 
               a.tutorId === userId && 
               a.status === 'Completed'
@@ -208,7 +209,7 @@ const MyAssignmentsTabs = ({
       <div className="my-assignments-tabs">
         <div className="assignments-empty-state">
           <div className="empty-state-icon">
-            <i className="fas fa-exclamation-triangle"></i>
+            <FontAwesomeIcon icon="exclamation-triangle"/>
           </div>
           <h3 className="empty-state-title">Configuration Error</h3>
           <p className="empty-state-description">Unable to load tab configuration</p>
@@ -249,7 +250,7 @@ const MyAssignmentsTabs = ({
               className={`sub-tab ${activeSubTab === tab.id ? 'sub-tab-active' : ''}`}
               onClick={() => onSubTabChange(tab.id)}
             >
-              <i className={tab.icon}></i>
+              <FontAwesomeIcon icon={tab.icon}/>
               <span className="sub-tab-label">{tab.label}</span>
               <span className="sub-tab-count">({tabAssignments.length})</span>
             </button>
@@ -286,13 +287,13 @@ const MyAssignmentsTabs = ({
                     { 
                       action: 'details', 
                       label: t('assignments.actions.details'), 
-                      icon: 'fas fa-info-circle', 
+                      icon: 'info-circle', 
                       className: 'btn-secondary' 
                     },
                     { 
                       action: 'complete', 
                       label: t('assignments.actions.abandon'), 
-                      icon: 'fas fa-times', 
+                      icon: 'times', 
                       className: 'btn-danger' 
                     }
                   ];
@@ -301,7 +302,7 @@ const MyAssignmentsTabs = ({
                     { 
                       action: 'details', 
                       label: t('assignments.actions.details'), 
-                      icon: 'fas fa-info-circle', 
+                      icon: 'info-circle', 
                       className: 'btn-secondary' 
                     }
                   ];
@@ -310,13 +311,13 @@ const MyAssignmentsTabs = ({
                     { 
                       action: 'details', 
                       label: t('assignments.actions.details'), 
-                      icon: 'fas fa-info-circle', 
+                      icon: 'info-circle', 
                       className: 'btn-secondary' 
                     },
                     { 
                       action: 'complete', 
                       label: t('assignments.actions.complete'), 
-                      icon: 'fas fa-check', 
+                      icon: 'check', 
                       className: 'btn-primary' 
                     }
                   ];
@@ -327,27 +328,25 @@ const MyAssignmentsTabs = ({
                   { 
                     action: 'details', 
                     label: t('assignments.actions.details'), 
-                    icon: 'fas fa-info-circle', 
+                    icon: 'info-circle', 
                     className: 'btn-secondary' 
                   }
                 ];
 
-                // Додаємо кнопку оцінювання для завдань на перевірці
                 if (assignment.status === 'Pending' && assignment.studentId) {
                   buttons.unshift({
                     action: 'grade', 
                     label: t('assignments.actions.grade'), 
-                    icon: 'fas fa-star', 
+                    icon: 'star', 
                     className: 'btn-warning' 
                   });
                 }
 
-                // Додаємо кнопку видалення для завдань без студентів (InProgress без studentId)
                 if (assignment.status === 'InProgress' && !assignment.studentId) {
                   buttons.push({
                     action: 'delete', 
                     label: t('assignments.actions.delete'), 
-                    icon: 'fas fa-trash', 
+                    icon: 'trash', 
                     className: 'btn-danger' 
                   });
                 }
@@ -418,7 +417,7 @@ const MyAssignmentsTabs = ({
                         onClick={() => handleAction(button.action, assignment.assignmentId)}
                         title={button.label}
                       >
-                        <i className={button.icon}></i>
+                        <FontAwesomeIcon icob={button.icon}/>
                         <span>{button.label}</span>
                       </button>
                     ))}
@@ -448,11 +447,11 @@ const MyAssignmentsTabs = ({
 // Helper функція для іконок статусів
 const getStatusIcon = (status) => {
   const icons = {
-    'InProgress': 'fas fa-play-circle',
-    'Pending': 'fas fa-clock',
-    'Completed': 'fas fa-check-circle'
+    'InProgress': 'play-circle',
+    'Pending': 'clock',
+    'Completed': 'check-circle'
   };
-  return icons[status] || 'fas fa-question-circle';
+  return icons[status] || 'question-circle';
 };
 
 export default MyAssignmentsTabs;

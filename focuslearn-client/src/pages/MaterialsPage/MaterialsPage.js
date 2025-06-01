@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,8 @@ import CreateMaterialModal from './components/CreateMaterialModal';
 import EditMaterialModal from './components/EditMaterialModal';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
 import './MaterialsPage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const MaterialsPage = () => {
   const { t } = useTranslation();
@@ -156,12 +158,10 @@ const MaterialsPage = () => {
   const handleConfirmAction = async () => {
     if (confirmModal.action === 'delete' && confirmModal.materialId) {
       try {
-        // Встановлюємо стан завантаження
         setConfirmModal(prev => ({ ...prev, isLoading: true }));
         
         await materialService.deleteMaterial(confirmModal.materialId);
         
-        // Закриваємо модальне вікно
         setConfirmModal({
           isOpen: false,
           title: '',
@@ -188,7 +188,6 @@ const MaterialsPage = () => {
       } catch (err) {
         console.error('Error deleting material:', err);
         
-        // Закриваємо модальне вікно та показуємо помилку
         setConfirmModal({
           isOpen: false,
           title: '',
@@ -319,7 +318,7 @@ const MaterialsPage = () => {
             {sortedMaterials.length === 0 ? (
               <div className="materials-empty-state">
                 <div className="empty-state-icon">
-                  <i className="fas fa-book"></i>
+                  <FontAwesomeIcon icon="book"/>
                 </div>
                 <h3 className="empty-state-title">
                   {t('materials.empty.title')}

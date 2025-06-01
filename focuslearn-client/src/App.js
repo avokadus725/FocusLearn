@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider } from './context/LanguageContext';
@@ -17,6 +17,7 @@ import StatisticsPage from './pages/StatisticsPage/StatisticsPage';
 
 // Імпорт стилів
 import './styles/global.css';
+import './icons/fontawesome';
 
 // Компонент завантаження для Suspense
 const LoadingFallback = () => (

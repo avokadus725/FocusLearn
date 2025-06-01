@@ -1,6 +1,6 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './PeriodSelector.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PeriodSelector = ({ selectedPeriod, onPeriodChange, loading }) => {
   const { t } = useTranslation();
@@ -9,17 +9,17 @@ const PeriodSelector = ({ selectedPeriod, onPeriodChange, loading }) => {
     {
       key: 'day',
       label: t('statistics.periods.day', 'День'),
-      icon: 'fas fa-calendar-day'
+      icon: 'calendar-day'
     },
     {
       key: 'week', 
       label: t('statistics.periods.week', 'Тиждень'),
-      icon: 'fas fa-calendar-week'
+      icon: 'calendar-week'
     },
     {
       key: 'month',
       label: t('statistics.periods.month', 'Місяць'),
-      icon: 'fas fa-calendar-alt'
+      icon: 'calendar-alt'
     }
   ];
 
@@ -39,7 +39,7 @@ const PeriodSelector = ({ selectedPeriod, onPeriodChange, loading }) => {
             onClick={() => onPeriodChange(period.key)}
             disabled={loading}
           >
-            <i className={period.icon}></i>
+            <FontAwesomeIcon icon={period.icon}/>
             <span>{period.label}</span>
             {loading && selectedPeriod === period.key && (
               <i className="fas fa-spinner fa-spin"></i>

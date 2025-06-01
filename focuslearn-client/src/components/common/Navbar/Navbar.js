@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -25,20 +26,11 @@ const Navbar = () => {
     setShowUserMenu(!showUserMenu);
   };
 
-  const handleImageError = () => {
-    setImageError(true);
-  };
+  const handleImageError = () => setImageError(true);
+  const handleImageLoad = () => setImageError(false);
+  const handleMenuItemClick = () => setShowUserMenu(false);
 
-  const handleImageLoad = () => {
-    setImageError(false);
-  };
-
-  const handleMenuItemClick = () => {
-    setShowUserMenu(false);
-  };
-
-  // Закриваємо меню при кліку поза ним
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.user-menu-container')) {
         setShowUserMenu(false);
@@ -52,63 +44,40 @@ const Navbar = () => {
   const profileImageUrl = getProxiedImageUrl(user?.profilePhoto);
   const shouldShowImage = profileImageUrl && !imageError && isValidImageUrl(user?.profilePhoto);
   const userInitials = generateInitialsAvatar(user?.userName, user?.email);
-
-  // Визначаємо активну сторінку
   const isActive = (path) => location.pathname === path;
 
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        {/* Logo та назва */}
         <Link to="/" className="navbar-brand">
-          <i className="fas fa-brain navbar-icon"></i>
           <span className="navbar-title">FocusLearn</span>
         </Link>
 
-        {/* Навігаційні посилання */}
         <div className="navbar-nav">
-          <Link 
-            to="/" 
-            className={`nav-link ${isActive('/') ? 'nav-link-active' : ''}`}
-          >
-            <i className="fas fa-home"></i>
+          <Link to="/" className={`nav-link ${isActive('/') ? 'nav-link-active' : ''}`}>
+            <FontAwesomeIcon icon="home" />
             <span>{t('navigation.home')}</span>
           </Link>
-          
-          <Link 
-            to="/methods" 
-            className={`nav-link ${isActive('/methods') ? 'nav-link-active' : ''}`}
-          >
-            <i className="fas fa-clock"></i>
+
+          <Link to="/methods" className={`nav-link ${isActive('/methods') ? 'nav-link-active' : ''}`}>
+            <FontAwesomeIcon icon="clock" />
             <span>{t('navigation.methods')}</span>
           </Link>
-          
-          <Link 
-            to="/assignments" 
-            className={`nav-link ${isActive('/assignments') ? 'nav-link-active' : ''}`}
-          >
-            <i className="fas fa-tasks"></i>
+
+          <Link to="/assignments" className={`nav-link ${isActive('/assignments') ? 'nav-link-active' : ''}`}>
+            <FontAwesomeIcon icon="tasks" />
             <span>{t('navigation.assignments')}</span>
           </Link>
-          
-          <Link 
-            to="/materials" 
-            className={`nav-link ${isActive('/materials') ? 'nav-link-active' : ''}`}
-          >
-            <i className="fas fa-book"></i>
+
+          <Link to="/materials" className={`nav-link ${isActive('/materials') ? 'nav-link-active' : ''}`}>
+            <FontAwesomeIcon icon="book" />
             <span>{t('navigation.materials')}</span>
           </Link>
         </div>
 
-        {/* Права частина */}
         <div className="navbar-right">
-          {/* Селектор мови */}
           <div className="language-selector">
-            <select 
-              value={currentLanguage} 
-              onChange={(e) => changeLanguage(e.target.value)}
-              className="language-select"
-            >
+            <select value={currentLanguage} onChange={(e) => changeLanguage(e.target.value)} className="language-select">
               {availableLanguages.map((lang) => (
                 <option key={lang.code} value={lang.code}>
                   {lang.flag} {lang.name}
@@ -116,60 +85,36 @@ const Navbar = () => {
               ))}
             </select>
           </div>
-          
-          {/* Меню користувача */}
+
           <div className="user-menu-container">
-            <button 
-              className="user-menu-trigger"
-              onClick={toggleUserMenu}
-            >
+            <button className="user-menu-trigger" onClick={toggleUserMenu}>
               <div className="user-avatar">
                 {shouldShowImage ? (
-                  <img 
-                    src={profileImageUrl} 
-                    alt={t('navigation.profile')} 
-                    onError={handleImageError}
-                    onLoad={handleImageLoad}
-                  />
+                  <img src={profileImageUrl} alt={t('navigation.profile')} onError={handleImageError} onLoad={handleImageLoad} />
                 ) : (
-                  <div className="avatar-placeholder">
-                    {userInitials}
-                  </div>
+                  <div className="avatar-placeholder">{userInitials}</div>
                 )}
               </div>
-              <span className="user-name">
-                {user?.userName || user?.email || t('common.user')}
-              </span>
-              <i className={`fas fa-chevron-${showUserMenu ? 'up' : 'down'}`}></i>
+              <span className="user-name">{user?.userName || user?.email || t('common.user')}</span>
+              <FontAwesomeIcon icon={showUserMenu ? 'chevron-up' : 'chevron-down'} />
             </button>
-            
+
             {showUserMenu && (
               <div className="user-dropdown">
-                <Link 
-                  to="/profile" 
-                  className="dropdown-item"
-                  onClick={handleMenuItemClick}
-                >
-                  <i className="fas fa-user"></i>
+                <Link to="/profile" className="dropdown-item" onClick={handleMenuItemClick}>
+                  <FontAwesomeIcon icon="user" />
                   {t('navigation.profile')}
                 </Link>
-                
-                <Link 
-                  to="/statistics" 
-                  className="dropdown-item"
-                  onClick={handleMenuItemClick}
-                >
-                  <i className="fas fa-chart-bar"></i>
+
+                <Link to="/statistics" className="dropdown-item" onClick={handleMenuItemClick}>
+                  <FontAwesomeIcon icon="chart-bar" />
                   {t('navigation.statistics')}
                 </Link>
-                
+
                 <div className="dropdown-divider"></div>
-                
-                <button 
-                  className="dropdown-item logout-item"
-                  onClick={handleLogout}
-                >
-                  <i className="fas fa-sign-out-alt"></i>
+
+                <button className="dropdown-item logout-item" onClick={handleLogout}>
+                  <FontAwesomeIcon icon="sign-out-alt" />
                   {t('navigation.logout')}
                 </button>
               </div>

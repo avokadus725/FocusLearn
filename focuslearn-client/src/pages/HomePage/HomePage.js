@@ -1,4 +1,4 @@
-import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -51,7 +51,7 @@ const HomePage = () => {
           <div className="quick-actions-grid">
             <Link to="/methods" className="action-card">
               <div className="action-icon">
-                <i className="fas fa-clock"></i>
+                {/* <FontAwesomeIcon icon="clock"/> */}
               </div>
               <h3>{t('features.focus.title')}</h3>
               <p>{t('features.focus.description')}</p>
@@ -59,7 +59,7 @@ const HomePage = () => {
             
             <Link to="/assignments" className="action-card">
               <div className="action-icon">
-                <i className="fas fa-tasks"></i>
+                {/* <FontAwesomeIcon icon="tasks"/> */}
               </div>
               <h3>{t('features.tasks.title')}</h3>
               <p>{t('features.tasks.description')}</p>
@@ -67,15 +67,15 @@ const HomePage = () => {
             
             <Link to="/materials" className="action-card">
               <div className="action-icon">
-                <i className="fas fa-book"></i>
+                {/* <FontAwesomeIcon icon="book"/> */}
               </div>
-              <h3>{t('features.notes.title')}</h3>
-              <p>{t('features.notes.description')}</p>
+              <h3>{t('features.materials.title')}</h3>
+              <p>{t('features.materials.description')}</p>
             </Link>
             
             <Link to="/statistics" className="action-card">
               <div className="action-icon">
-                <i className="fas fa-chart-line"></i>
+                {/* <FontAwesomeIcon icon="chart-line"/> */}
               </div>
               <h3>{t('features.analytics.title')}</h3>
               <p>{t('features.analytics.description')}</p>

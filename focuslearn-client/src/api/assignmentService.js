@@ -13,6 +13,16 @@ const assignmentService = {
     }
   },
 
+   getAllAssignmentsForAdmin: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/Assignments`);
+      return response.data?.data || response.data || [];
+    } catch (error) {
+      console.error('Error fetching admin assignments:', error);
+      throw error;
+    }
+  }, 
+
   // Отримати всі завдання поточного користувача
   getMyAssignments: async () => {
     try {

@@ -3,6 +3,7 @@ import  { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import materialService from '../../../api/materialService';
 import './AssignmentDetailsModal.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AssignmentDetailsModal = ({ 
   assignment, 
@@ -208,11 +209,11 @@ const AssignmentDetailsModal = ({
         {/* Заголовок модального вікна */}
         <div className="modal-header">
           <h2 className="modal-title">
-            <i className="fas fa-tasks"></i>
+            <FontAwesomeIcon icon="tasks"/>
             {isEditing ? t('assignments.edit.title') : assignment.title}
           </h2>
           <button className="modal-close-btn" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <FontAwesomeIcon icon="times"/>
           </button>
         </div>
 
@@ -220,12 +221,12 @@ const AssignmentDetailsModal = ({
         {!isEditing && (
           <div className="modal-status">
             <span className={`status-badge status-${assignment.status.toLowerCase()}`}>
-              <i className={getStatusIcon(assignment.status)}></i>
+              <FontAwesomeIcon icon={getStatusIcon(assignment.status)}/>
               {t(`assignments.statuses.${assignment.status}`)}
             </span>
             {isOverdue() && (
               <span className="overdue-badge">
-                <i className="fas fa-exclamation-triangle"></i>
+                <FontAwesomeIcon icon="exclamation-triangle"/>
                 {t('assignments.overdue')}
               </span>
             )}
@@ -239,7 +240,7 @@ const AssignmentDetailsModal = ({
             // Форма редагування
             <div className="assignment-edit-form">
               <h3 className="section-title">
-                <i className="fas fa-edit"></i>
+                <FontAwesomeIcon icon="edit"/>
                 {t('assignments.edit.editingAssignment')}
               </h3>
 
@@ -337,7 +338,7 @@ const AssignmentDetailsModal = ({
             // Перегляд деталей
             <div className="assignment-details-section">
               <h3 className="section-title">
-                <i className="fas fa-info-circle"></i>
+                <FontAwesomeIcon icon="info-circle"/>
                 {t('assignments.details.information')}
               </h3>
               
@@ -377,17 +378,11 @@ const AssignmentDetailsModal = ({
                       rel="noopener noreferrer"
                     >
                       <div className="material-link-content">
-                        <div className="material-link-icon">
-                          <i className="fas fa-book"></i>
-                        </div>
                         <div className="material-link-text">
                           <span className="material-link-title">
                             {t('assignments.viewLearningMaterial')}
                           </span>
                         </div>
-                      </div>
-                      <div className="material-link-arrow">
-                        <i className="fas fa-external-link-alt"></i>
                       </div>
                     </Link>
                   </div>
@@ -569,11 +564,11 @@ const AssignmentDetailsModal = ({
 // Helper функція для іконок статусів
 const getStatusIcon = (status) => {
   const icons = {
-    'InProgress': 'fas fa-play-circle',
-    'Pending': 'fas fa-clock',
-    'Completed': 'fas fa-check-circle'
+    'InProgress': 'play-circle',
+    'Pending': 'clock',
+    'Completed': 'check-circle'
   };
-  return icons[status] || 'fas fa-question-circle';
+  return icons[status] || 'question-circle';
 };
 
 export default AssignmentDetailsModal;

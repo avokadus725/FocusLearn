@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
 import materialService from '../../../api/materialService';
 import './CreateAssignmentModal.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
   const { t } = useTranslation();
@@ -152,7 +153,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
     return (
       <div className="selected-material-info">
         <div className="material-preview">
-          <i className="fas fa-file-alt"></i>
+          <FontAwesomeIcon icon="file-alt"/>
           <div className="material-details">
             <strong>{selectedMaterial.title}</strong>
             {selectedMaterial.description && (
@@ -165,7 +166,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
                 rel="noopener noreferrer"
                 className="material-link"
               >
-                <i className="fas fa-external-link-alt"></i>
+                <FontAwesomeIcon icon="external-link-alt"/>
                 {t('assignments.form.viewMaterial')}
               </a>
             )}
@@ -183,7 +184,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
             {t('assignments.createNew.title')}
           </h2>
           <button className="create-modal-close" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <FontAwesomeIcon icon="times"/>
           </button>
         </div>
         
@@ -193,7 +194,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
             {/* Основна інформація */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-info-circle"></i>
+                <FontAwesomeIcon icon="info-circle"/>
                 {t('assignments.form.sections.basicInfo')}
               </h3>
               
@@ -245,15 +246,11 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
             {/* Навчальний матеріал */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-book"></i>
+                <FontAwesomeIcon icon="book"/>
                 {t('assignments.form.sections.material')}
               </h3>
               
-              <div className="create-form-group">
-                <label htmlFor="taskId" className="create-form-label">
-                  {t('assignments.form.learningMaterial')}
-                </label>
-                
+              <div className="create-form-group">                
                 {materialsLoading ? (
                   <div className="materials-loading">
                     <i className="fas fa-spinner fa-spin"></i>
@@ -284,7 +281,6 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
                 
                 {learningMaterials.length === 0 && !materialsLoading && (
                   <div className="no-materials-message">
-                    <i className="fas fa-info-circle"></i>
                     {t('assignments.form.noMaterials')}
                   </div>
                 )}
@@ -298,7 +294,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
             </div>
 
 
-            {/* Кнопки дій - ПЕРЕМІЩЕНО ВСЕРЕДИНУ ФОРМИ */}
+            {/* Кнопки дій */}
             <div className="create-modal-actions">
               <button
                 type="button"
@@ -306,7 +302,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
                 onClick={handleCancelClick}
                 disabled={loading}
               >
-                <i className="fas fa-times"></i>
+                <FontAwesomeIcon icon="times"/>
                 {t('common.cancel')}
               </button>
               <button
@@ -322,7 +318,7 @@ const CreateAssignmentModal = ({ onSubmit, onClose, userRole }) => {
                   </>
                 ) : (
                   <>
-                    <i className="fas fa-plus"></i>
+                    <FontAwesomeIcon icon="plus"/>
                     {t('assignments.createNew.submit')}
                   </>
                 )}

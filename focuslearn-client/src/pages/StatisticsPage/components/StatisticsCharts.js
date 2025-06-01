@@ -18,6 +18,7 @@ import {
   AreaChart
 } from 'recharts';
 import './StatisticsCharts.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatisticsCharts = ({ 
   methodStatistics, 
@@ -331,7 +332,7 @@ const StatisticsCharts = ({
         <div className="recommendations-section">
           <div className="recommendations-header">
             <h3 className="recommendations-title">
-              <i className="fas fa-lightbulb"></i>
+              <FontAwesomeIcon icon="lightbulb"/>
               {t('statistics.recommendations.title', 'Рекомендації для покращення')}
             </h3>
           </div>
@@ -339,7 +340,7 @@ const StatisticsCharts = ({
             {productivityPrediction.recommendations.map((recommendation, index) => (
               <div key={index} className="recommendation-card">
                 <div className="recommendation-icon">
-                  <i className="fas fa-arrow-right"></i>
+                  <FontAwesomeIcon icon="arrow-right"/>
                 </div>
                 <div className="recommendation-text">
                   {recommendation}

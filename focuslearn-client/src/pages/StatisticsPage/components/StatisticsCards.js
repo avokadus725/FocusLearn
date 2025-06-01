@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './StatisticsCards.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatisticsCards = ({ 
   userStatistics, 
@@ -37,7 +38,7 @@ const StatisticsCards = ({
       id: 'total-time',
       title: t('statistics.cards.totalTime', 'Загальний час концентрації'),
       value: formatTime(userStatistics.totalConcentrationTime),
-      icon: 'fas fa-clock',
+      icon: 'clock',
       color: 'primary',
       description: t('statistics.cards.totalTimeDesc', 'Час активної роботи')
     },
@@ -45,7 +46,7 @@ const StatisticsCards = ({
       id: 'productivity',
       title: t('statistics.cards.productivity', 'Коефіцієнт продуктивності'),
       value: `${productivityCoefficient.productivityCoefficient || 0}%`,
-      icon: 'fas fa-chart-line',
+      icon: 'chart-line',
       color: 'success',
       description: t('statistics.cards.productivityDesc', 'Ефективність роботи')
     },
@@ -53,7 +54,7 @@ const StatisticsCards = ({
       id: 'effective-method',
       title: t('statistics.cards.effectiveMethod', 'Найефективніша методика'),
       value: getMethodName(mostEffectiveMethod.message),
-      icon: 'fas fa-trophy',
+      icon: 'trophy',
       color: 'warning',
       description: t('statistics.cards.effectiveMethodDesc', 'Рекомендована методика')
     },
@@ -61,7 +62,7 @@ const StatisticsCards = ({
       id: 'improvement',
       title: t('statistics.cards.improvement', 'Потенціал покращення'),
       value: `+${productivityPrediction.improvementPercentage || 0}%`,
-      icon: 'fas fa-arrow-up',
+      icon: 'arrow-up',
       color: 'info',
       description: t('statistics.cards.improvementDesc', 'Можливе зростання')
     }
@@ -84,7 +85,7 @@ const StatisticsCards = ({
           <div key={card.id} className={`stats-card ${getCardColorClass(card.color)}`}>
             <div className="stats-card-header">
               <div className="stats-card-icon">
-                <i className={card.icon}></i>
+                <FontAwesomeIcon icon={card.icon}/>
               </div>
               <div className="stats-card-info">
                 <h3 className="stats-card-title">{card.title}</h3>

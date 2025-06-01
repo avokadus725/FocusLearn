@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './AssignmentsSidebar.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AssignmentsSidebar = ({ 
   tabs, 
@@ -44,13 +45,13 @@ const AssignmentsSidebar = ({
             onClick={() => onTabChange(tab.id)}
           >
             <div className="tab-icon">
-              <i className={tab.icon}></i>
+              <FontAwesomeIcon icon={tab.icon}/>
             </div>
             <div className="tab-content">
               <span className="tab-label">{tab.label}</span>
             </div>
             <div className="tab-arrow">
-              <i className="fas fa-chevron-right"></i>
+              <FontAwesomeIcon icon="chevron-right"/>
             </div>
           </button>
         ))}
@@ -60,7 +61,7 @@ const AssignmentsSidebar = ({
       <div className="sidebar-info">
         <div className="info-card">
           <div className="info-icon">
-            <i className="fas fa-info-circle"></i>
+            <FontAwesomeIcon icon="info"/>
           </div>
           <div className="info-content">
             <h4 className="info-title">

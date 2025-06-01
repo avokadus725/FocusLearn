@@ -449,7 +449,14 @@
   }
   
   .section-title {
-    font-size: 1.125rem;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    text-align: center;
+    margin: 0 auto var(--spacing-xl) auto;
+    letter-spacing: -0.025em;
+    display: block;
+    width: 100%;
   }
   
   .material-header-actions {

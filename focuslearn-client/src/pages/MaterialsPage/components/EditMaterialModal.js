@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../context/AuthContext';
 import './CreateMaterialModal.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
   const { t } = useTranslation();
@@ -131,7 +133,7 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
             {t('materials.edit.title')}
           </h2>
           <button className="create-modal-close" onClick={onClose}>
-            <i className="fas fa-times"></i>
+            <FontAwesomeIcon icon="times"/>
           </button>
         </div>
         
@@ -141,7 +143,7 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
             {/* Основна інформація */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-info-circle"></i>
+                <FontAwesomeIcon icon="info-circle"/>
                 {t('materials.form.sections.basicInfo')}
               </h3>
               
@@ -192,7 +194,7 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
             {/* Посилання на матеріал */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <i className="fas fa-link"></i>
+                <FontAwesomeIcon icon="link"/>
                 {t('materials.form.sections.fileLink')}
               </h3>
               
@@ -226,7 +228,6 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
                 onClick={handleCancelClick}
                 disabled={loading}
               >
-                <i className="fas fa-times"></i>
                 {t('common.cancel')}
               </button>
               <button
@@ -242,7 +243,7 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
                   </>
                 ) : (
                   <>
-                    <i className="fas fa-save"></i>
+                    <FontAwesomeIcon icon="save"/>
                     {t('materials.edit.submit')}
                   </>
                 )}

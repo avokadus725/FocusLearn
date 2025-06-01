@@ -1,20 +1,9 @@
 /* ========================= КОНТЕЙНЕР ТАЙМЕРА ========================= */
 .timer-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 600px; /* Зменшено для кращого фокусу */
   margin: 0 auto;
   animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 /* ========================= ЗАГОЛОВОК ТАЙМЕРА ========================= */
@@ -28,11 +17,15 @@
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--gray-200);
+  position: relative;
 }
 
+/* Додати кнопку назад в лівий кут */
 .timer-back-btn {
-  background: var(--gray-200);
-  color: var(--gray-700);
+  position: absolute;
+  left: var(--spacing-lg);
+  background: var(--gray-100);
+  color: var(--gray-600);
   border: none;
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-md);
@@ -46,7 +39,7 @@
 }
 
 .timer-back-btn:hover {
-  background: var(--gray-300);
+  background: var(--gray-200);
   transform: translateY(-1px);
 }
 
@@ -58,7 +51,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--gray-800);
-  margin: 0;
+  margin: 0 0 var(--spacing-xs) 0;
 }
 
 .timer-cycle-info {
@@ -69,7 +62,6 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-md);
   display: inline-block;
-  margin-top: var(--spacing-xs);
 }
 
 /* ========================= ОСНОВНИЙ ТАЙМЕР ========================= */
@@ -80,6 +72,32 @@
   padding: var(--spacing-2xl);
   text-align: center;
   border: 1px solid var(--gray-200);
+  position: relative;
+}
+
+/* Додавання індикатора стану в правий верхній кут */
+.timer-status-indicator {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timer-status-work {
+  background: rgba(84, 140, 84, 0.1);
+  color: #2a633a;
+  border: 1px solid rgba(84, 140, 84, 0.3);
+}
+
+.timer-status-break {
+  background: rgba(76, 175, 80, 0.1);
+  color: #388E3C;
+  border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
 /* ========================= КРУГОВИЙ ПРОГРЕС ========================= */
@@ -93,15 +111,15 @@
 .timer-circle {
   position: relative;
   display: inline-block;
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.12)); /* Краща тінь */
 }
 
 .timer-progress-ring {
   transform: rotate(-90deg);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .timer-progress-circle {
-  transition: stroke-dashoffset 0.3s ease-in-out;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Плавніша анімація */
 }
 
 .timer-center-content {
@@ -112,28 +130,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .timer-phase-indicator {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   color: var(--primary);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .timer-phase-indicator i {
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 .timer-time-display {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 3.5rem; /* Збільшено */
+  font-weight: 800; /* Жирніше */
   color: var(--gray-800);
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: var(--spacing-sm) 0;
 }
 
 .timer-paused-indicator {
@@ -142,42 +166,59 @@
   gap: var(--spacing-xs);
   color: var(--warning);
   font-weight: 600;
-  font-size: 0.9rem;
-  background: rgba(255, 193, 7, 0.1);
+  font-size: 0.8rem;
+  background: rgba(255, 193, 7, 0.15);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-md);
-  animation: pulse 2s infinite;
+  animation: pulseGlow 2s infinite;
+  border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+@keyframes pulseGlow {
+  0%, 100% { 
+    opacity: 1; 
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+  }
+  50% { 
+    opacity: 0.8;
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
 }
 
-/* ========================= ІНФОРМАЦІЯ ПРО СЕСІЮ ========================= */
+/* ========================= ІНФОРМАЦІЯ ПРО СЕСІЮ (компактніше) ========================= */
 .timer-session-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-lg);
+  display: flex;
+  justify-content: space-around;
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-lg);
-  background: var(--gray-50);
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, var(--gray-50) 0%, rgba(247, 250, 252, 0.8) 100%);
   border-radius: var(--border-radius-lg);
+  border: 1px solid var(--gray-100);
 }
 
 .timer-info-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   color: var(--gray-700);
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  text-align: center;
+  flex: 1;
 }
 
 .timer-info-item i {
   color: var(--primary);
-  width: 16px;
-  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.timer-info-value {
+  font-weight: 700;
+  color: var(--gray-800);
+  font-size: 1rem;
 }
 
 /* ========================= КНОПКИ КЕРУВАННЯ ========================= */
@@ -194,45 +235,57 @@
   padding: var(--spacing-md) var(--spacing-xl);
   border: none;
   border-radius: var(--border-radius-lg);
-  font-weight: 600;
+  font-weight: 700; /* Жирніше */
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   min-width: 140px;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.timer-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.timer-btn:hover::before {
+  left: 100%;
 }
 
 .timer-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.timer-btn:active {
+  transform: translateY(-1px);
 }
 
 .timer-btn-success {
-  background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
 }
 
 .timer-btn-warning {
-  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
   color: white;
 }
 
 .timer-btn-danger {
-  background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
   color: white;
-}
-
-.timer-btn-secondary {
-  background: var(--gray-200);
-  color: var(--gray-700);
-}
-
-.timer-btn-secondary:hover {
-  background: var(--gray-300);
 }
 
 .timer-break-indicator {
@@ -242,19 +295,20 @@
   color: var(--success);
   font-weight: 600;
   font-size: 1.1rem;
-  background: rgba(76, 175, 80, 0.1);
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.05) 100%);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--border-radius-lg);
-  border: 2px solid rgba(76, 175, 80, 0.3);
-}
-
-.timer-break-indicator i {
-  font-size: 1.25rem;
+  border: 2px solid rgba(76, 175, 80, 0.2);
+  backdrop-filter: blur(10px);
 }
 
 /* ========================= ПРОГРЕС-БАР ========================= */
 .timer-progress-bar {
   margin-top: var(--spacing-lg);
+  background: rgba(247, 250, 252, 0.8);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--gray-100);
 }
 
 .timer-progress-bar-label {
@@ -262,78 +316,76 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-sm);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--gray-700);
 }
 
 .timer-progress-bar-track {
-  height: 8px;
+  height: 10px; /* Трохи вище */
   background: var(--gray-200);
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .timer-progress-bar-fill {
   height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 6px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 50%, var(--primary) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  box-shadow: 0 0 15px rgba(84, 140, 84, 0.4);
 }
 
-/* ========================= ПОМИЛКИ ========================= */
-.timer-error {
-  text-align: center;
-  padding: var(--spacing-2xl);
-  color: var(--gray-600);
-}
-
-.timer-error i {
-  font-size: 3rem;
-  color: var(--danger);
-  margin-bottom: var(--spacing-lg);
-}
-
-.timer-error p {
-  font-size: 1.1rem;
-  margin-bottom: var(--spacing-lg);
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 /* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
 @media (max-width: 768px) {
   .timer-container {
-    padding: 0;
+    padding: 0 var(--spacing-md);
   }
   
   .timer-header {
     flex-direction: column;
     gap: var(--spacing-md);
     text-align: center;
+    padding: var(--spacing-md);
   }
   
   .timer-back-btn {
+    position: static;
     align-self: flex-start;
   }
   
   .timer-main {
     padding: var(--spacing-lg);
-    border-radius: var(--border-radius-lg);
   }
   
   .timer-circle-container svg {
-    width: 250px;
-    height: 250px;
+    width: 260px;
+    height: 260px;
   }
   
   .timer-time-display {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
   
   .timer-session-info {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+  }
+  
+  .timer-info-item {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
   }
   
   .timer-controls {
@@ -349,15 +401,19 @@
 
 @media (max-width: 480px) {
   .timer-circle-container svg {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
   }
   
   .timer-time-display {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
   
   .timer-method-title {
     font-size: 1.25rem;
+  }
+  
+  .timer-main {
+    padding: var(--spacing-md);
   }
 }

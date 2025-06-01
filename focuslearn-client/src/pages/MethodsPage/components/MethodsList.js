@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './MethodsList.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const MethodsList = ({ methods, onStartSession, loading }) => {
   const { t } = useTranslation();
@@ -18,7 +20,7 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
     return (
       <div className="methods-empty-state">
         <div className="empty-state-icon">
-          <i className="fas fa-brain"></i>
+          <FontAwesomeIcon icon="clock"/>
         </div>
         <h3 className="empty-state-title">
           {t('methods.empty.title')}
@@ -65,7 +67,7 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
               {/* Заголовок картки */}
               <div className="method-card-header">
                 <div className="method-icon">
-                  <i className="fas fa-brain"></i>
+                  <FontAwesomeIcon icon="clock"/>
                 </div>
                 <h3 className="method-title">{method.title || method.Title}</h3>
               </div>
@@ -81,7 +83,7 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
               <div className="method-params">
                 <div className="method-param">
                   <div className="param-icon work-icon">
-                    <i className="fas fa-play"></i>
+                    <FontAwesomeIcon icon="play"/>
                   </div>
                   <div className="param-info">
                     <span className="param-label">{t('methods.workDuration')}</span>
@@ -93,7 +95,7 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
                 
                 <div className="method-param">
                   <div className="param-icon break-icon">
-                    <i className="fas fa-coffee"></i>
+                    <FontAwesomeIcon icon="coffee"/>
                   </div>
                   <div className="param-info">
                     <span className="param-label">{t('methods.breakDuration')}</span>
@@ -143,7 +145,7 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
       <div className="methods-info-section">
         <div className="methods-info-card">
           <div className="info-icon">
-            <i className="fas fa-info-circle"></i>
+            <FontAwesomeIcon icon="info"/>
           </div>
           <div className="info-content">
             <h4 className="info-title">{t('methods.howItWorks.title')}</h4>

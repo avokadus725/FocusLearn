@@ -7,6 +7,7 @@ import Layout from '../../components/common/Layout';
 import profileService from '../../api/profileService';
 import { getProxiedImageUrl, generateInitialsAvatar, isValidImageUrl } from '../../utils/imageConverter';
 import './ProfilePage.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -188,7 +189,7 @@ const ProfilePage = () => {
         {/* Alert Messages */}
         {message.text && (
           <div className={`profile-alert profile-alert-${message.type}`}>
-            <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+            <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
             {message.text}
           </div>
         )}
@@ -220,7 +221,6 @@ const ProfilePage = () => {
               <>
                 <div className="profile-info-section">
                   <h3 className="profile-section-title">
-                    <i className="fas fa-user"></i>
                     {t('profile.personalInfo')}
                   </h3>
                   
@@ -261,7 +261,6 @@ const ProfilePage = () => {
                     className="profile-btn profile-btn-primary"
                     onClick={() => setIsEditing(true)}
                   >
-                    <i className="fas fa-edit"></i>
                     {t('profile.editProfile')}
                   </button>
                 </div>
@@ -270,7 +269,6 @@ const ProfilePage = () => {
               <>
                 <div className="profile-edit-form">
                   <h3 className="profile-section-title">
-                    <i className="fas fa-edit"></i>
                     {t('profile.editProfile')}
                   </h3>
                   
@@ -326,7 +324,7 @@ const ProfilePage = () => {
                     className="profile-btn profile-btn-primary"
                     onClick={handleSaveProfile}
                   >
-                    <i className="fas fa-save"></i>
+                    <FontAwesomeIcon icon="save"/>
                     {t('profile.actions.updateProfile')}
                   </button>
                   
@@ -334,7 +332,7 @@ const ProfilePage = () => {
                     className="profile-btn profile-btn-secondary"
                     onClick={handleCancelEdit}
                   >
-                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon="times"/>
                     {t('profile.actions.cancelEdit')}
                   </button>
                 </div>
@@ -345,18 +343,18 @@ const ProfilePage = () => {
           {/* Quick Links */}
           <div className="profile-sidebar">
             <div className="sidebar-card">
-              <h3 className="sidebar-title">{t('profile.quickLinks')}</h3>
+              <h3 className="sidebar-title">
+                <FontAwesomeIcon icon="bolt" size="xs"/>
+                {t('profile.quickLinks')}
+              </h3>
               <div className="sidebar-links">
                 <Link to="/statistics" className="sidebar-link">
-                  <i className="fas fa-chart-line"></i>
                   {t('navigation.statistics')}
                 </Link>
                 <Link to="/methods" className="sidebar-link">
-                  <i className="fas fa-clock"></i>
                   {t('navigation.methods')}
                 </Link>
                 <Link to="/assignments" className="sidebar-link">
-                  <i className="fas fa-tasks"></i>
                   {t('navigation.assignments')}
                 </Link>
               </div>
@@ -364,7 +362,7 @@ const ProfilePage = () => {
 
             <div className="sidebar-card danger-zone">
               <h3 className="sidebar-title danger-title">
-                <i className="fas fa-exclamation-triangle"></i>
+                <FontAwesomeIcon icon="exclamation-triangle"/>
                 {t('profile.dangerZone')}
               </h3>
               <p className="danger-text">{t('profile.dangerZoneText')}</p>
@@ -372,7 +370,6 @@ const ProfilePage = () => {
                 className="profile-btn profile-btn-danger"
                 onClick={() => setShowDeleteModal(true)}
               >
-                <i className="fas fa-trash-alt"></i>
                 {t('profile.deleteAccount')}
               </button>
             </div>
@@ -385,7 +382,7 @@ const ProfilePage = () => {
         <div className="profile-modal-overlay" onClick={() => setShowDeleteModal(false)}>
           <div className="profile-modal" onClick={(e) => e.stopPropagation()}>
             <h3 className="profile-modal-title">
-              <i className="fas fa-exclamation-triangle"></i>
+              <FontAwesomeIcon icon="exclamation-triangle"/>
               {t('profile.deleteAccount')}
             </h3>
             <p className="profile-modal-text">
@@ -402,7 +399,6 @@ const ProfilePage = () => {
                 className="profile-btn profile-btn-danger"
                 onClick={handleDeleteAccount}
               >
-                <i className="fas fa-trash-alt"></i>
                 {t('profile.actions.confirmDelete')}
               </button>
             </div>
