@@ -1,252 +1,49 @@
-import { useState, useEffect } from 'react';
+// src/pages/MaterialsPage/MaterialsPage.js
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/common/Layout';
-import materialService from '../../api/materialService';
 import CreateMaterialModal from './components/CreateMaterialModal';
 import EditMaterialModal from './components/EditMaterialModal';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
+import { useMaterials } from '../../hooks/useMaterials';
 import './MaterialsPage.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 
 const MaterialsPage = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   
-  const [materials, setMaterials] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState({ type: '', text: '' });
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingMaterial, setEditingMaterial] = useState(null);
-  const [sortOrder, setSortOrder] = useState('newest');
-
-  // Стан для модального вікна підтвердження
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    title: '',
-    message: '',
-    confirmText: '',
-    variant: 'danger',
-    action: null,
-    materialId: null,
-    materialTitle: '',
-    isLoading: false
-  });
-
-  // Завантаження матеріалів
-  const loadMaterials = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const data = await materialService.getAllMaterials();
-      console.log('Materials loaded:', data);
-      setMaterials(data);
-      
-    } catch (err) {
-      console.error('Error loading materials:', err);
-      setError(t('materials.errors.loadError'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Ініціалізація
-  useEffect(() => {
-    loadMaterials();
-  }, []);
-
-  // Сортування матеріалів
-  const getSortedMaterials = () => {
-    const sorted = [...materials].sort((a, b) => {
-      const dateA = new Date(a.addedAt || a.createdAt);
-      const dateB = new Date(b.addedAt || b.createdAt);
-      
-      return sortOrder === 'newest' 
-        ? dateB.getTime() - dateA.getTime()
-        : dateA.getTime() - dateB.getTime();
-    });
-    
-    return sorted;
-  };
-
-  // Створення нового матеріалу
-  const handleCreateMaterial = async (materialData) => {
-    try {
-      setMessage({ type: '', text: '' });
-      
-      await materialService.createMaterial(materialData);
-      
-      setMessage({ 
-        type: 'success', 
-        text: t('materials.messages.createSuccess') 
-      });
-      
-      setShowCreateModal(false);
-      await loadMaterials();
-      
-      setTimeout(() => {
-        setMessage({ type: '', text: '' });
-      }, 3000);
-      
-    } catch (err) {
-      console.error('Error creating material:', err);
-      setMessage({ 
-        type: 'error', 
-        text: t('materials.errors.createError') 
-      });
-    }
-  };
-
-  // Редагування матеріалу
-  const handleEditMaterial = (material) => {
-    setEditingMaterial(material);
-    setShowEditModal(true);
-  };
-
-  // Збереження редагування
-  const handleEditMaterialSubmit = async (materialData) => {
-    try {
-      setMessage({ type: '', text: '' });
-      
-      await materialService.updateMaterial(editingMaterial.materialId, materialData);
-      
-      setMessage({ 
-        type: 'success', 
-        text: t('materials.messages.updateSuccess') 
-      });
-      
-      setShowEditModal(false);
-      setEditingMaterial(null);
-      await loadMaterials();
-      
-      setTimeout(() => {
-        setMessage({ type: '', text: '' });
-      }, 3000);
-      
-    } catch (err) {
-      console.error('Error updating material:', err);
-      setMessage({ 
-        type: 'error', 
-        text: t('materials.errors.updateError') 
-      });
-    }
-  };
-
-  // Відкриття модального вікна підтвердження видалення
-  const handleDeleteMaterial = (materialId) => {
-    const material = materials.find(m => m.materialId === materialId);
-    
-    setConfirmModal({
-      isOpen: true,
-      title: t('materials.delete.title'),
-      message: t('materials.delete.message'), 
-      confirmText: t('materials.delete.confirm'),
-      variant: 'danger',
-      action: 'delete',
-      materialId: materialId,
-      materialTitle: material?.title || '',
-      isLoading: false
-    });
-  };
-
-  // Підтвердження дії
-  const handleConfirmAction = async () => {
-    if (confirmModal.action === 'delete' && confirmModal.materialId) {
-      try {
-        setConfirmModal(prev => ({ ...prev, isLoading: true }));
-        
-        await materialService.deleteMaterial(confirmModal.materialId);
-        
-        setConfirmModal({
-          isOpen: false,
-          title: '',
-          message: '',
-          confirmText: '',
-          variant: 'danger',
-          action: null,
-          materialId: null,
-          materialTitle: '',
-          isLoading: false
-        });
-        
-        setMessage({ 
-          type: 'success', 
-          text: t('materials.messages.deleteSuccess') 
-        });
-        
-        await loadMaterials();
-        
-        setTimeout(() => {
-          setMessage({ type: '', text: '' });
-        }, 3000);
-        
-      } catch (err) {
-        console.error('Error deleting material:', err);
-        
-        setConfirmModal({
-          isOpen: false,
-          title: '',
-          message: '',
-          confirmText: '',
-          variant: 'danger',
-          action: null,
-          materialId: null,
-          materialTitle: '',
-          isLoading: false
-        });
-        
-        setMessage({ 
-          type: 'error', 
-          text: t('materials.errors.deleteError') 
-        });
-      }
-    }
-  };
-
-  // Скасування дії
-  const handleCancelAction = () => {
-    setConfirmModal({
-      isOpen: false,
-      title: '',
-      message: '',
-      confirmText: '',
-      variant: 'danger',
-      action: null,
-      materialId: null,
-      materialTitle: '',
-      isLoading: false
-    });
-  };
-
-  // Форматування дати
-  const formatDate = (dateString) => {
-    if (!dateString) return '-';
-    
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('uk-UA', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  const sortedMaterials = getSortedMaterials();
+  const {
+    materials,
+    loading,
+    error,
+    message,
+    sortOrder,
+    showCreateModal,
+    showEditModal,
+    editingMaterial,
+    confirmModal,
+    handleCreateMaterial,
+    handleEditMaterial,
+    handleEditMaterialSubmit,
+    handleDeleteMaterial,
+    handleConfirmAction,
+    handleCancelAction,
+    handleSortChange,
+    openCreateModal,
+    closeCreateModal,
+    closeEditModal,
+    retryLoading,
+    formatDate
+  } = useMaterials();
 
   if (loading) {
     return (
       <Layout>
-        <div className="materials-loading">
-          <div className="materials-loading-spinner"></div>
-          <p>{t('common.loading')}</p>
+        <div className="loading">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">{t('common.loading', 'Завантаження...')}</p>
         </div>
       </Layout>
     );
@@ -255,37 +52,41 @@ const MaterialsPage = () => {
   return (
     <Layout>
       <div className="materials-page">
-        <div className="materials-container">
+        <div className="container container-xl px-4 py-8">
           
           {/* Заголовок сторінки */}
           <div className="materials-header">
             <div className="materials-title-section">
-              <h1 className="materials-title">{t('materials.title')}</h1>
-              <p className="materials-subtitle">{t('materials.subtitle')}</p>
+              <h1 className="heading-1 mb-2">
+                {t('materials.title', 'Навчальні матеріали')}
+              </h1>
+              <p className="body-large text-gray-600">
+                {t('materials.subtitle', 'Корисні ресурси для навчання')}
+              </p>
             </div>
             
             <div className="materials-header-actions">
               {/* Сортування */}
               <div className="materials-sort">
-                <label className="sort-label">{t('materials.sortBy')}:</label>
+                <label className="sort-label">{t('materials.sortBy', 'Сортувати за')}:</label>
                 <select 
                   value={sortOrder} 
-                  onChange={(e) => setSortOrder(e.target.value)}
+                  onChange={(e) => handleSortChange(e.target.value)}
                   className="sort-select"
                 >
-                  <option value="newest">{t('materials.sortOptions.newest')}</option>
-                  <option value="oldest">{t('materials.sortOptions.oldest')}</option>
+                  <option value="newest">{t('materials.sortOptions.newest', 'Найновіші')}</option>
+                  <option value="oldest">{t('materials.sortOptions.oldest', 'Найстаріші')}</option>
                 </select>
               </div>
               
               {/* Кнопка створення для викладачів */}
               {user?.role === 'Tutor' && (
                 <button 
-                  className="materials-create-btn"
-                  onClick={() => setShowCreateModal(true)}
+                  className="btn btn-primary materials-create-btn"
+                  onClick={openCreateModal}
                 >
                   <i className="fas fa-plus"></i>
-                  {t('materials.createNew.button')}
+                  {t('materials.createNew.button', 'Створити матеріал')}
                 </button>
               )}
             </div>
@@ -293,113 +94,125 @@ const MaterialsPage = () => {
 
           {/* Повідомлення */}
           {message.text && (
-            <div className={`materials-alert materials-alert-${message.type}`}>
-              <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
-              {message.text}
+            <div className={`alert alert-${message.type} mb-6`}>
+              <div className="alert-icon">
+                <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+              </div>
+              <div className="alert-content">
+                {message.text}
+              </div>
             </div>
           )}
 
           {/* Помилка завантаження */}
           {error && (
-            <div className="materials-alert materials-alert-error">
-              <i className="fas fa-exclamation-triangle"></i>
-              {error}
+            <div className="alert alert-danger mb-6">
+              <div className="alert-icon">
+                <i className="fas fa-exclamation-triangle"></i>
+              </div>
+              <div className="alert-content">
+                {error}
+              </div>
               <button 
-                className="materials-retry-btn"
-                onClick={loadMaterials}
+                className="btn btn-outline btn-sm ml-auto"
+                onClick={retryLoading}
               >
-                {t('common.retry')}
+                {t('common.retry', 'Спробувати знову')}
               </button>
             </div>
           )}
 
           {/* Список матеріалів */}
           <div className="materials-content">
-            {sortedMaterials.length === 0 ? (
+            {materials.length === 0 ? (
               <div className="materials-empty-state">
                 <div className="empty-state-icon">
-                  <FontAwesomeIcon icon="book"/>
+                  <i className="fas fa-book"></i>
                 </div>
-                <h3 className="empty-state-title">
-                  {t('materials.empty.title')}
+                <h3 className="heading-3 mb-2">
+                  {t('materials.empty.title', 'Матеріали відсутні')}
                 </h3>
-                <p className="empty-state-description">
-                  {t('materials.empty.description')}
+                <p className="body-normal text-gray-500">
+                  {t('materials.empty.description', 'На даний момент матеріали недоступні')}
                 </p>
               </div>
             ) : (
               <div className="materials-list">
-                <div className="materials-list-header">
-                  <span className="materials-count">
-                    {sortedMaterials.length} {t('materials.materialsFound')}
-                  </span>
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <span className="materials-count">
+                      {materials.length} {t('materials.materialsFound', 'матеріалів знайдено')}
+                    </span>
+                  </div>
                 </div>
                 
-                <div className="materials-rows">
-                  {sortedMaterials.map((material) => (
-                    <div key={material.materialId} className="material-row">
-                      
-                      {/* Основна інформація */}
-                      <div className="material-row-main">
-                        <div className="material-info">
-                          <h3 className="material-title">{material.title}</h3>
-                          {material.description && (
-                            <p className="material-description">{material.description}</p>
-                          )}
-                        </div>
+                <div className="card">
+                  <div className="materials-rows">
+                    {materials.map((material) => (
+                      <div key={material.materialId} className="material-row">
                         
-                        <div className="material-meta">
-                          <div className="meta-item">
-                            <i className="fas fa-user"></i>
-                            <span>{t('common.autor')}: {material.tutorName}</span>
+                        {/* Основна інформація */}
+                        <div className="material-row-main">
+                          <div className="material-info">
+                            <h3 className="material-title">{material.title}</h3>
+                            {material.description && (
+                              <p className="material-description">{material.description}</p>
+                            )}
                           </div>
-                          <div className="meta-item">
-                            <i className="fas fa-calendar-plus"></i>
-                            <span>{t('common.createdAt')}: {formatDate(material.addedAt)}</span>
-                          </div>
-                          {material.fileLink && (
+                          
+                          <div className="material-meta">
                             <div className="meta-item">
-                              <i className="fas fa-paperclip"></i>
-                              <span>Є посилання</span>
+                              <i className="fas fa-user"></i>
+                              <span>{t('common.autor', 'Автор')}: {material.tutorName}</span>
                             </div>
+                            <div className="meta-item">
+                              <i className="fas fa-calendar-plus"></i>
+                              <span>{t('common.createdAt', 'Створено')}: {formatDate(material.addedAt)}</span>
+                            </div>
+                            {material.fileLink && (
+                              <div className="meta-item">
+                                <i className="fas fa-paperclip"></i>
+                                <span>Є посилання</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Дії */}
+                        <div className="material-row-actions">
+                          <Link
+                            to={`/materials/${material.materialId}`}
+                            className="btn btn-primary btn-view-material"
+                          >
+                            <i className="fas fa-eye"></i>
+                            {t('materials.actions.view', 'Переглянути')}
+                          </Link>
+                          
+                          {/* Кнопки для власних матеріалів викладача */}
+                          {user?.role === 'Tutor' && material.creatorId === user.userId && (
+                            <>
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => handleEditMaterial(material)}
+                                title={t('materials.actions.edit', 'Редагувати')}
+                              >
+                                <i className="fas fa-edit"></i>
+                                {t('materials.actions.edit', 'Редагувати')}
+                              </button>
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleDeleteMaterial(material.materialId)}
+                                title={t('materials.actions.delete', 'Видалити')}
+                              >
+                                <i className="fas fa-trash"></i>
+                                {t('materials.actions.delete', 'Видалити')}
+                              </button>
+                            </>
                           )}
                         </div>
                       </div>
-
-                      {/* Дії */}
-                      <div className="material-row-actions">
-                        <Link
-                          to={`/materials/${material.materialId}`}
-                          className="btn-view-material"
-                        >
-                          <i className="fas fa-eye"></i>
-                          {t('materials.actions.view')}
-                        </Link>
-                        
-                        {/* Кнопки для власних матеріалів викладача */}
-                        {user?.role === 'Tutor' && material.creatorId === user.userId && (
-                          <>
-                            <button
-                              className="btn-edit-material"
-                              onClick={() => handleEditMaterial(material)}
-                              title={t('materials.actions.edit')}
-                            >
-                              <i className="fas fa-edit"></i>
-                              {t('materials.actions.edit')}
-                            </button>
-                            <button
-                              className="btn-delete-material"
-                              onClick={() => handleDeleteMaterial(material.materialId)}
-                              title={t('materials.actions.delete')}
-                            >
-                              <i className="fas fa-trash"></i>
-                              {t('materials.actions.delete')}
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
@@ -424,7 +237,7 @@ const MaterialsPage = () => {
       {showCreateModal && (
         <CreateMaterialModal
           onSubmit={handleCreateMaterial}
-          onClose={() => setShowCreateModal(false)}
+          onClose={closeCreateModal}
           userRole={user?.role}
         />
       )}
@@ -434,10 +247,7 @@ const MaterialsPage = () => {
         <EditMaterialModal
           material={editingMaterial}
           onSubmit={handleEditMaterialSubmit}
-          onClose={() => {
-            setShowEditModal(false);
-            setEditingMaterial(null);
-          }}
+          onClose={closeEditModal}
           userRole={user?.role}
         />
       )}

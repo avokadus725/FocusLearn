@@ -23,6 +23,7 @@ import {
   faCalendarDay,
   faCalendarWeek,
   faCalendarAlt,
+  faCalendarPlus,
   faChartLine,
   faTrophy,
   faArrowUp,
@@ -46,7 +47,12 @@ import {
   faBolt,
   faLink,
   faPlus,
-  faFileAlt
+  faFileAlt,
+  faSyncAlt,
+  faAlignLeft,
+  faArrowLeft,
+  faStop,
+  faPause
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -72,6 +78,7 @@ library.add(
   faCalendarDay,
   faCalendarWeek,
   faCalendarAlt,
+  faCalendarPlus,
   faChartLine,
   faTrophy,
   faArrowUp,
@@ -95,5 +102,10 @@ library.add(
   faBolt,
   faLink,
   faPlus,
-  faFileAlt
+  faFileAlt,
+  faSyncAlt,
+  faAlignLeft,
+  faArrowLeft,
+  faStop,
+  faPause
 );

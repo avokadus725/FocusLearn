@@ -2,6 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './Timer.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Timer = ({ session, onPause, onStop, onBack }) => {
   const { t } = useTranslation();
@@ -30,10 +31,10 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
     return (
       <div className="timer-container">
         <div className="timer-error">
-          <i className="fas fa-exclamation-triangle"></i>
+          <FontAwesomeIcon icon="exclamation-triangle"/>
           <p>{t('methods.timer.errors.noSession', 'Сесія не знайдена')}</p>
           <button className="btn btn-secondary" onClick={onBack}>
-            <i className="fas fa-arrow-left"></i>
+            <FontAwesomeIcon icon="arrow-left"/>
             {t('methods.timer.backToMethods', 'Назад до методик')}
           </button>
         </div>
@@ -104,7 +105,7 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
               {/* Центральний контент */}
               <div className="timer-center-content">
                 <div className="timer-phase-indicator">
-                  <i className={`fas fa-${session.currentPhase === 'Work' ? 'brain' : 'coffee'}`}></i>
+                  <FontAwesomeIcon icon={`${session.currentPhase === 'Work' ? 'brain' : 'coffee'}`}/>
                   <span className="timer-phase-text">
                     {session.currentPhase ? t(`methods.timer.phases.${session.currentPhase.toLowerCase()}`, session.currentPhase) : ''}
                   </span>
@@ -116,7 +117,7 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
                 
                 {session.isPaused && (
                   <div className="timer-paused-indicator">
-                    <i className="fas fa-pause"></i>
+                    <FontAwesomeIcon icon="pause"/>
                     <span>{t('methods.timer.paused', 'Пауза')}</span>
                   </div>
                 )}
@@ -127,21 +128,21 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
           {/* Компактна інформація про сесію */}
           <div className="timer-session-info">
             <div className="timer-info-item">
-              <i className="fas fa-play"></i>
+              <FontAwesomeIcon icon="play"/>
               <div>
                 <div className="timer-info-value">{session.workDurationMinutes} {t('common.minutes', 'хв')}</div>
                 <div>{t('methods.timer.phases.work', 'Робота')}</div>
               </div>
             </div>
             <div className="timer-info-item">
-              <i className="fas fa-pause"></i>
+              <FontAwesomeIcon icon="pause"/>
               <div>
                 <div className="timer-info-value">{session.breakDurationMinutes} {t('common.minutes', 'хв')}</div>
                 <div>{t('methods.timer.phases.break', 'Перерва')}</div>
               </div>
             </div>
             <div className="timer-info-item">
-              <i className="fas fa-clock"></i>
+              <FontAwesomeIcon icon="clock"/>
               <div>
                 <div className="timer-info-value">{formatTime(session.elapsedSeconds)}</div>
                 <div>{t('methods.timer.elapsed', 'Минуло')}</div>
@@ -158,7 +159,7 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
                 className={`btn timer-btn ${session.isPaused ? 'btn-success' : 'btn-warning'}`}
                 onClick={onPause}
               >
-                <i className={`fas fa-${session.isPaused ? 'play' : 'pause'}`}></i>
+                <FontAwesomeIcon icon={`${session.isPaused ? 'play' : 'pause'}`}/>
                 {t(`methods.timer.${session.isPaused ? 'resume' : 'pause'}`, session.isPaused ? 'Продовжити' : 'Пауза')}
               </button>
             )}
@@ -166,7 +167,7 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
             {/* Індикатор для перерви */}
             {session.currentPhase === 'Break' && (
               <div className="timer-break-indicator">
-                <i className="fas fa-coffee"></i>
+                <FontAwesomeIcon icon="coffee"/>
                 <span>{t('methods.timer.breakInProgress', 'Перерва триває')}</span>
               </div>
             )}
@@ -176,7 +177,7 @@ const Timer = ({ session, onPause, onStop, onBack }) => {
               className="btn btn-danger timer-btn"
               onClick={onStop}
             >
-              <i className="fas fa-stop"></i>
+              <FontAwesomeIcon icon="stop"/>
               {t('methods.timer.stop', 'Завершити')}
             </button>
           </div>

@@ -1,183 +1,89 @@
-/* ========================= ОСНОВНИЙ КОНТЕЙНЕР ========================= */
+/* MaterialsPage.css */
+
+/* Основний контейнер */
 .materials-page {
   min-height: 100vh;
-  background-color: var(--secondary-light);
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-secondary-100) 100%);
 }
 
-.materials-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
-}
-
-/* ========================= ЗАГОЛОВОК СТОРІНКИ ========================= */
+/* Заголовок сторінки */
 .materials-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-xl);
-  gap: var(--spacing-lg);
+  margin-bottom: var(--space-8);
+  gap: var(--space-6);
 }
 
 .materials-title-section {
   flex: 1;
 }
 
-.materials-title {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin: 0 0 var(--spacing-sm) 0;
-  letter-spacing: -0.025em;
-}
-
-.materials-subtitle {
-  font-size: 1.125rem;
-  color: var(--gray-600);
-  margin: 0;
-  font-weight: 400;
-}
-
 .materials-header-actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--space-6);
   flex-shrink: 0;
 }
 
-/* ========================= СОРТУВАННЯ ========================= */
+/* Сортування */
 .materials-sort {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-3);
   background: white;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--gray-200);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: var(--border-width-1) solid var(--color-gray-200);
   box-shadow: var(--shadow-sm);
 }
 
 .sort-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--gray-700);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-700);
   white-space: nowrap;
 }
 
 .sort-select {
   border: none;
   background: none;
-  font-size: 0.875rem;
-  color: var(--gray-600);
+  font-size: var(--text-sm);
+  color: var(--color-gray-600);
   cursor: pointer;
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-sm);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
 }
 
 .sort-select:focus {
   outline: none;
-  background: var(--gray-100);
+  background: var(--color-gray-100);
 }
 
-/* ========================= КНОПКА СТВОРЕННЯ ========================= */
+/* Кнопка створення */
 .materials-create-btn {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-  color: white;
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
   box-shadow: 0 4px 15px rgba(84, 140, 84, 0.3);
   white-space: nowrap;
 }
 
 .materials-create-btn:hover {
-  background: linear-gradient(135deg, var(--primary-dark) 0%, #2a633a 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(84, 140, 84, 0.4);
 }
 
-.materials-create-btn i {
-  font-size: 0.875rem;
-}
-
-/* ========================= ПОВІДОМЛЕННЯ ТА АЛЕРТИ ========================= */
-.materials-alert {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.materials-alert-success {
-  background: #DCFCE7;
-  color: #166534;
-  border: 1px solid #BBF7D0;
-}
-
-.materials-alert-error {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
-}
-
-.materials-retry-btn {
-  background: transparent;
-  border: 1px solid currentColor;
-  color: inherit;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: auto;
-  transition: all 0.2s ease;
-}
-
-.materials-retry-btn:hover {
-  background: currentColor;
-  color: white;
-}
-
-/* ========================= ОСНОВНИЙ КОНТЕНТ ========================= */
-.materials-content {
-  flex: 1;
-}
-
-/* ========================= СПИСОК МАТЕРІАЛІВ ========================= */
-.materials-list-header {
-  background: white;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-  border: 1px solid var(--gray-200);
-  border-bottom: none;
-}
-
+/* Лічильник матеріалів */
 .materials-count {
-  background: var(--secondary);
-  color: var(--primary-dark);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  font-size: 0.875rem;
-  font-weight: 600;
+  background: var(--color-secondary-100);
+  color: var(--color-primary-700);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
   display: inline-block;
 }
 
-/* ========================= РЯДКИ МАТЕРІАЛІВ ========================= */
+/* Рядки матеріалів */
 .materials-rows {
-  background: white;
-  border: 1px solid var(--gray-200);
-  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
   overflow: hidden;
 }
 
@@ -185,9 +91,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--gray-200);
-  transition: all 0.3s ease;
+  padding: var(--space-6);
+  border-bottom: var(--border-width-1) solid var(--color-gray-200);
+  transition: all var(--duration-300) var(--ease-in-out);
 }
 
 .material-row:last-child {
@@ -195,7 +101,7 @@
 }
 
 .material-row:hover {
-  background: var(--gray-50);
+  background: var(--color-gray-50);
 }
 
 /* Основна інформація рядка */
@@ -203,180 +109,102 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--space-3);
 }
 
 .material-info {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--space-2);
 }
 
 .material-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--gray-800);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-800);
   margin: 0;
-  line-height: 1.4;
+  line-height: var(--leading-snug);
 }
 
 .material-description {
-  color: var(--gray-600);
+  color: var(--color-gray-600);
   margin: 0;
-  line-height: 1.5;
-  font-size: 0.9rem;
+  line-height: var(--leading-relaxed);
+  font-size: var(--text-sm);
   max-width: 600px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 /* Мета інформація */
 .material-meta {
   display: flex;
-  gap: var(--spacing-lg);
+  gap: var(--space-6);
   flex-wrap: wrap;
 }
 
 .meta-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--gray-500);
-  font-size: 0.875rem;
+  gap: var(--space-2);
+  color: var(--color-gray-500);
+  font-size: var(--text-sm);
 }
 
 .meta-item i {
-  color: var(--primary);
+  color: var(--color-primary-500);
   width: 14px;
   text-align: center;
 }
 
-/* ========================= ДІЇ РЯДКА ========================= */
+/* Дії рядка */
 .material-row-actions {
-  margin-left: var(--spacing-lg);
+  margin-left: var(--space-6);
   flex-shrink: 0;
   display: flex;
-  gap: var(--spacing-sm);
+  gap: var(--space-3);
 }
 
 .btn-view-material {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius-md);
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  text-decoration: none;
   min-width: 120px;
   justify-content: center;
 }
 
-.btn-view-material:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-  color: white;
-}
-
-.btn-delete-material {
-  background: var(--danger);
-  color: white;
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.btn-delete-material:hover {
-  background: #B91C1C;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn-view-material i,
-.btn-delete-material i {
-  font-size: 0.875rem;
-}
-
-/* ========================= ПУСТИЙ СТАН ========================= */
+/* Пустий стан */
 .materials-empty-state {
   background: white;
-  border: 2px dashed var(--gray-300);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-2xl);
+  border: 2px dashed var(--color-gray-300);
+  border-radius: var(--radius-lg);
+  padding: var(--space-16);
   text-align: center;
-  color: var(--gray-500);
+  color: var(--color-gray-500);
 }
 
 .empty-state-icon {
   width: 64px;
   height: 64px;
-  background: var(--gray-100);
-  border-radius: 50%;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--spacing-lg) auto;
+  margin: 0 auto var(--space-6) auto;
 }
 
 .empty-state-icon i {
-  font-size: 1.5rem;
-  color: var(--gray-400);
+  font-size: var(--text-2xl);
+  color: var(--color-gray-400);
 }
 
-.empty-state-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--gray-700);
-  margin: 0 0 var(--spacing-sm) 0;
-}
-
-.empty-state-description {
-  color: var(--gray-500);
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* ========================= ЗАВАНТАЖЕННЯ ========================= */
-.materials-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-2xl);
-  color: var(--gray-600);
-}
-
-.materials-loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--gray-200);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: var(--spacing-md);
-}
-
-/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+/* Адаптивність */
 @media (max-width: 1024px) {
   .materials-header {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-md);
+    gap: var(--space-4);
   }
   
   .materials-header-actions {
@@ -386,23 +214,11 @@
 }
 
 @media (max-width: 768px) {
-  .materials-container {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .materials-title {
-    font-size: 1.875rem;
-  }
-  
-  .materials-subtitle {
-    font-size: 1rem;
-  }
-  
   .material-row {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
+    gap: var(--space-4);
+    padding: var(--space-4);
   }
   
   .material-row-actions {
@@ -413,20 +229,14 @@
     max-width: 300px;
   }
   
-  .btn-view-material,
-  .btn-delete-material {
-    width: 100%;
-    justify-content: center;
-  }
-  
   .material-meta {
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--space-2);
   }
   
   .materials-header-actions {
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--space-3);
   }
   
   .materials-sort {
@@ -443,20 +253,14 @@
 
 @media (max-width: 480px) {
   .material-title {
-    font-size: 1rem;
+    font-size: var(--text-base);
   }
   
   .material-description {
-    font-size: 0.875rem;
+    font-size: var(--text-xs);
   }
   
   .meta-item {
-    font-size: 0.8rem;
-  }
-  
-  .btn-view-material,
-  .btn-delete-material {
-    font-size: 0.8rem;
-    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--text-xs);
   }
 }

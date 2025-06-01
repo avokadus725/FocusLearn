@@ -33,7 +33,7 @@ const HomePage = () => {
         {/* Привітальна секція */}
         <section className="section">
           <div className="welcome-hero">
-            <h1 className="heading-1 mb-4">
+            <h1 className="heading-1 mb-4" style={{ color: 'white' }}>
               {t('welcome.title')}
             </h1>
             <p className="text-xl mb-6 opacity-90">
@@ -52,7 +52,7 @@ const HomePage = () => {
 
         {/* Швидкі дії */}
         <section className="section">
-          <h2 className="section-title">
+          <h2 className="section-title" style={{ justifyContent: 'center' }}>
             {t('home.quickActions')}
           </h2>
           

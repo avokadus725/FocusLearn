@@ -46,7 +46,7 @@
   color: white;
   padding: var(--space-6);
   text-align: center;
-  min-height: 100px; /* Set a consistent height for headers */
+  min-height: 100px;
 }
 
 .method-icon {

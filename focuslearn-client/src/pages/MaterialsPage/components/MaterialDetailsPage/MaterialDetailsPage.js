@@ -1,194 +1,43 @@
-import { useState, useEffect } from 'react';
+// src/pages/MaterialsPage/components/MaterialDetailsPage/MaterialDetailsPage.js
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import Layout from '../../../../components/common/Layout';
-import materialService from '../../../../api/materialService';
 import EditMaterialModal from '../EditMaterialModal';
 import ConfirmationModal from '../../../../components/common/ConfirmationModal';
+import { useMaterialDetails } from '../../../../hooks/useMaterialDetails';
 import './MaterialDetailsPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 
 const MaterialDetailsPage = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const navigate = useNavigate();
   const { user } = useAuth();
   
-  const [material, setMaterial] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState({ type: '', text: '' });
-  const [showEditModal, setShowEditModal] = useState(false);
-  
-  // Стан для модального вікна підтвердження
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    title: '',
-    message: '',
-    confirmText: '',
-    variant: 'danger',
-    action: null,
-    isLoading: false
-  });
-
-  // Завантаження матеріалу
-  useEffect(() => {
-    loadMaterial();
-  }, [id]);
-
-  const loadMaterial = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const data = await materialService.getMaterialById(parseInt(id));
-      console.log('Material loaded:', data);
-      setMaterial(data);
-      
-    } catch (err) {
-      console.error('Error loading material:', err);
-      setError(t('materials.errors.loadError'));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEditMaterial = async (materialData) => {
-    try {
-      setMessage({ type: '', text: '' });
-      
-      await materialService.updateMaterial(material.materialId, materialData);
-      
-      setMessage({ 
-        type: 'success', 
-        text: t('materials.messages.updateSuccess') 
-      });
-      
-      setShowEditModal(false);
-      await loadMaterial(); // Перезавантажуємо дані
-      
-      setTimeout(() => {
-        setMessage({ type: '', text: '' });
-      }, 3000);
-      
-    } catch (err) {
-      console.error('Error updating material:', err);
-      setMessage({ 
-        type: 'error', 
-        text: t('materials.errors.updateError') 
-      });
-    }
-  };
-
-  // Відкриття модального вікна підтвердження видалення
-  const handleDeleteMaterial = () => {
-    setConfirmModal({
-      isOpen: true,
-      title: t('materials.delete.title'),
-      message: t('materials.delete.message'), 
-      confirmText: t('materials.delete.confirm'),
-      variant: 'danger',
-      action: 'delete',
-      isLoading: false
-    });
-  };
-
-  // Підтвердження дії
-  const handleConfirmAction = async () => {
-    if (confirmModal.action === 'delete') {
-      try {
-        // Встановлюємо стан завантаження
-        setConfirmModal(prev => ({ ...prev, isLoading: true }));
-        
-        await materialService.deleteMaterial(material.materialId);
-        
-        // Закриваємо модальне вікно
-        setConfirmModal({
-          isOpen: false,
-          title: '',
-          message: '',
-          confirmText: '',
-          variant: 'danger',
-          action: null,
-          isLoading: false
-        });
-        
-        setMessage({ 
-          type: 'success', 
-          text: t('materials.messages.deleteSuccess') 
-        });
-        
-        // Перенаправляємо на список матеріалів через 1.5 секунди
-        setTimeout(() => {
-          navigate('/materials');
-        }, 1500);
-        
-      } catch (err) {
-        console.error('Error deleting material:', err);
-        
-        // Закриваємо модальне вікно та показуємо помилку
-        setConfirmModal({
-          isOpen: false,
-          title: '',
-          message: '',
-          confirmText: '',
-          variant: 'danger',
-          action: null,
-          isLoading: false
-        });
-        
-        setMessage({ 
-          type: 'error', 
-          text: t('materials.errors.deleteError') 
-        });
-      }
-    }
-  };
-
-  // Скасування дії
-  const handleCancelAction = () => {
-    setConfirmModal({
-      isOpen: false,
-      title: '',
-      message: '',
-      confirmText: '',
-      variant: 'danger',
-      action: null,
-      isLoading: false
-    });
-  };
-
-  // Форматування дати
-  const formatDate = (dateString) => {
-    if (!dateString) return '-';
-    
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('uk-UA', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  // Перевірка чи користувач може редагувати/видаляти
-  const canEditDelete = () => {
-    return user?.role === 'Tutor' && material?.creatorId === user.userId;
-  };
+  const {
+    material,
+    loading,
+    error,
+    message,
+    showEditModal,
+    confirmModal,
+    handleEditMaterial,
+    handleDeleteMaterial,
+    handleConfirmAction,
+    handleCancelAction,
+    openEditModal,
+    closeEditModal,
+    formatDate,
+    canEditDelete
+  } = useMaterialDetails(id);
 
   if (loading) {
     return (
       <Layout>
-        <div className="material-details-loading">
-          <div className="material-details-loading-spinner"></div>
-          <p>{t('common.loading')}</p>
+        <div className="loading">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">{t('common.loading', 'Завантаження...')}</p>
         </div>
       </Layout>
     );
@@ -199,17 +48,17 @@ const MaterialDetailsPage = () => {
       <Layout>
         <div className="material-details-error">
           <div className="error-icon">
-            <FontAwesomeIcon icon="fa-exclamation-triangle"/>
+            <FontAwesomeIcon icon="exclamation-triangle"/>
           </div>
-          <h2 className="error-title">
-            {error || t('materials.errors.notFound')}
+          <h2 className="heading-2 mb-4">
+            {error || t('materials.errors.notFound', 'Матеріал не знайдено')}
           </h2>
-          <p className="error-description">
-            {t('materials.errors.notFoundDescription')}
+          <p className="body-normal text-gray-600 mb-8">
+            {t('materials.errors.notFoundDescription', 'Запитуваний матеріал не існує або був видалений')}
           </p>
-          <Link to="/materials" className="btn-back-to-list">
-            <i className="fas fa-arrow-left"></i>
-            {t('materials.backToList')}
+          <Link to="/materials" className="btn btn-primary">
+            <FontAwesomeIcon icon="arrow-left"/>
+            {t('materials.backToList', 'Повернутися до списку')}
           </Link>
         </div>
       </Layout>
@@ -219,18 +68,22 @@ const MaterialDetailsPage = () => {
   return (
     <Layout>
       <div className="material-details-page">
-        <div className="material-details-container">
+        <div className="container container-lg px-4 py-8">
 
           {/* Повідомлення */}
           {message.text && (
-            <div className={`material-details-alert material-details-alert-${message.type}`}>
-              <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
-              {message.text}
+            <div className={`alert alert-${message.type} mb-6`}>
+              <div className="alert-icon">
+                <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
+              </div>
+              <div className="alert-content">
+                {message.text}
+              </div>
             </div>
           )}
 
           {/* Основний контент */}
-          <div className="material-details-content">
+          <div className="card material-details-content">
             
             {/* Заголовок та дії */}
             <div className="material-details-header">
@@ -238,57 +91,57 @@ const MaterialDetailsPage = () => {
                 <h1 className="material-details-title">{material.title}</h1>
                 <div className="material-meta-info">
                   <div className="meta-item">
-                    <i className="fas fa-user"></i>
-                    <span>{t('common.autor')}: {material.tutorName}</span>
+                    <FontAwesomeIcon icon="user"/>
+                    <span>{t('common.autor', 'Автор')}: {material.tutorName}</span>
                   </div>
                   <div className="meta-item">
-                    <i className="fas fa-calendar-plus"></i>
-                    <span>{t('common.createdAt')} {formatDate(material.addedAt)}</span>
+                    <FontAwesomeIcon icon="calendar-alt"/>
+                    <span>{t('common.createdAt', 'Створено')} {formatDate(material.addedAt)}</span>
                   </div>
                 </div>
               </div>
               
               <div className="material-header-actions">
-                {canEditDelete() && (
+                {canEditDelete(user) && (
                   <>
                     <button
-                      className="btn-edit-material-details"
-                      onClick={() => setShowEditModal(true)}
-                      title={t('materials.actions.edit')}
+                      className="btn btn-secondary btn-edit-material-details"
+                      onClick={openEditModal}
+                      title={t('materials.actions.edit', 'Редагувати')}
                     >
-                      <i className="fas fa-edit"></i>
-                      {t('materials.actions.edit')}
+                      <FontAwesomeIcon icon="edit"/>
+                      {t('materials.actions.edit', 'Редагувати')}
                     </button>
                     <button
-                      className="btn-delete-material-details"
+                      className="btn btn-danger btn-delete-material-details"
                       onClick={handleDeleteMaterial}
-                      title={t('materials.actions.delete')}
+                      title={t('materials.actions.delete', 'Видалити')}
                     >
-                      <i className="fas fa-trash"></i>
-                      {t('materials.actions.delete')}
+                      <FontAwesomeIcon icon="trash"/>
+                      {t('materials.actions.delete', 'Видалити')}
                     </button>                  
                   </>
                 )}
                 
-                <Link to="/materials" className="btn-back-to-materials">
-                  <i className="fas fa-arrow-left"></i>
-                  {t('materials.backToList')}
+                <Link to="/materials" className="btn btn-outline btn-back-to-materials">
+                  <FontAwesomeIcon icon="arrow-left"/>
+                  {t('materials.backToList', 'Назад до списку')}
                 </Link>
               </div>
             </div>
 
             {/* Контент матеріалу */}
-            <div className="material-details-body">
+            <div className="card-body material-details-body">
               
               {/* Опис матеріалу */}
               {material.description && (
                 <div className="material-description-section">
-                  <h2 className="section-title">
-                    <i className="fas fa-align-left"></i>
-                    {t('materials.fields.description')}
+                  <h2 className="heading-4 section-title mb-4">
+                    <FontAwesomeIcon icon="align-left"/>
+                    {t('materials.fields.description', 'Опис')}
                   </h2>
                   <div className="material-description-content">
-                    <p>{material.description}</p>
+                    <p className="body-normal">{material.description}</p>
                   </div>
                 </div>
               )}
@@ -296,9 +149,9 @@ const MaterialDetailsPage = () => {
               {/* Посилання на матеріал */}
               {material.fileLink && (
                 <div className="material-link-section">
-                  <h2 className="section-title">
-                    <i className="fas fa-external-link-alt"></i>
-                    {t('materials.fields.fileLink')}
+                  <h2 className="heading-4 section-title mb-4">
+                    <FontAwesomeIcon icon="external-link-alt"/>
+                    {t('materials.fields.fileLink', 'Посилання на матеріал')}
                   </h2>
                   <div className="material-link-content">
                     <a 
@@ -309,12 +162,12 @@ const MaterialDetailsPage = () => {
                     >
                       <div className="link-info">
                         <div className="link-icon">
-                          <FontAwesomeIcon icon="fa-external-link-alt"/>
+                          <FontAwesomeIcon icon="external-link-alt"/>
                         </div>
                         <div className="link-details">
                           <span className="link-url">{material.fileLink}</span>
                           <span className="link-description">
-                            {t('materials.clickToOpen')}
+                            {t('materials.clickToOpen', 'Натисніть, щоб відкрити')}
                           </span>
                         </div>
                       </div>
@@ -348,7 +201,7 @@ const MaterialDetailsPage = () => {
         <EditMaterialModal
           material={material}
           onSubmit={handleEditMaterial}
-          onClose={() => setShowEditModal(false)}
+          onClose={closeEditModal}
           userRole={user?.role}
         />
       )}
