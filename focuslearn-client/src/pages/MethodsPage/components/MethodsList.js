@@ -1,17 +1,17 @@
+// src/pages/MethodsPage/components/MethodsList.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import './MethodsList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import './MethodsList.css';
 
 const MethodsList = ({ methods, onStartSession, loading }) => {
   const { t } = useTranslation();
 
   if (loading) {
     return (
-      <div className="methods-list-loading">
-        <div className="methods-loading-spinner"></div>
-        <p>{t('common.loading')}</p>
+      <div className="loading">
+        <div className="loading-spinner"></div>
+        <p className="loading-text">{t('common.loading', 'Завантаження...')}</p>
       </div>
     );
   }
@@ -22,11 +22,11 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
         <div className="empty-state-icon">
           <FontAwesomeIcon icon="clock"/>
         </div>
-        <h3 className="empty-state-title">
-          {t('methods.empty.title')}
+        <h3 className="heading-3 mb-2">
+          {t('methods.empty.title', 'Методики недоступні')}
         </h3>
-        <p className="empty-state-description">
-          {t('methods.empty.description')}
+        <p className="body-normal text-gray-500">
+          {t('methods.empty.description', 'На даний момент методики недоступні')}
         </p>
       </div>
     );
@@ -36,33 +36,28 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
     <div className="methods-list">
       
       {/* Заголовок списку */}
-      <div className="methods-list-header">
-        <h2 className="methods-list-title">
-          <i className="fas fa-list"></i>
-          {t('methods.selectMethod')}
-        </h2>
-        <p className="methods-list-description">
-          {t('methods.selectMethodDescription')}
-        </p>
-        <div className="methods-count">
-          {methods.length} {t('methods.methodsAvailable')}
+      <div className="card mb-8">
+        <div className="card-body text-center">
+          <h2 className="heading-3 mb-3 methods-list-title">
+            {t('methods.selectMethod', 'Оберіть методику')}
+          </h2>
+          <p className="body-normal text-gray-600 mb-4">
+            {t('methods.selectMethodDescription', 'Виберіть підходящу методику для концентрації')}
+          </p>
+          <span className="methods-count">
+            {methods.length} {t('methods.methodsAvailable', 'методик доступно')}
+          </span>
         </div>
       </div>
 
       {/* Сітка методик */}
       <div className="methods-grid">
         {methods.map((method) => {
-          // Детальне логування для діагностики
-          console.log('Method object:', method);
-          console.log('Available keys:', Object.keys(method));
-          
-          // Спробуємо різні варіанти назв полів
+          // Отримуємо methodId з різних можливих полів
           const methodId = method.id || method.methodId || method.MethodId || method.ID;
           
-          console.log('Using methodId:', methodId);
-          
           return (
-            <div key={methodId || method.title} className="method-card">
+            <div key={methodId || method.title} className="card card-hover method-card">
               
               {/* Заголовок картки */}
               <div className="method-card-header">
@@ -74,8 +69,10 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
 
               {/* Опис методики */}
               {(method.description || method.Description) && (
-                <div className="method-description">
-                  <p>{method.description || method.Description}</p>
+                <div className="card-body">
+                  <p className="body-small text-gray-600">
+                    {method.description || method.Description}
+                  </p>
                 </div>
               )}
 
@@ -86,9 +83,9 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
                     <FontAwesomeIcon icon="play"/>
                   </div>
                   <div className="param-info">
-                    <span className="param-label">{t('methods.workDuration')}</span>
+                    <span className="param-label">{t('methods.workDuration', 'Робота')}</span>
                     <span className="param-value">
-                      {method.workDuration || method.WorkDuration || method.WorkDurationMinutes} {t('common.minutes')}
+                      {method.workDuration || method.WorkDuration || method.WorkDurationMinutes} {t('common.minutes', 'хв')}
                     </span>
                   </div>
                 </div>
@@ -98,24 +95,21 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
                     <FontAwesomeIcon icon="coffee"/>
                   </div>
                   <div className="param-info">
-                    <span className="param-label">{t('methods.breakDuration')}</span>
+                    <span className="param-label">{t('methods.breakDuration', 'Перерва')}</span>
                     <span className="param-value">
-                      {method.breakDuration || method.BreakDuration || method.BreakDurationMinutes} {t('common.minutes')}
+                      {method.breakDuration || method.BreakDuration || method.BreakDurationMinutes} {t('common.minutes', 'хв')}
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* Кнопка запуску */}
-              <div className="method-card-actions">
+              <div className="card-body pt-0">
                 <button
-                  className="method-start-btn"
+                  className="btn btn-primary w-full method-start-btn"
                   onClick={() => {
-                    console.log('Full method object before starting:', JSON.stringify(method, null, 2));
-                    console.log('Starting session for methodId:', methodId);
                     
                     if (!methodId) {
-                      console.error('No valid methodId found! Method object:', method);
                       alert('Error: Method ID not found');
                       return;
                     }
@@ -124,16 +118,16 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
                   }}
                   disabled={!methodId}
                 >
-                  <i className="fas fa-play"></i>
-                  {t('methods.startSession')}
+                  <FontAwesomeIcon icon="play"/>
+                  {t('methods.startSession', 'Почати сесію')}
                 </button>
               </div>
 
               {/* Додаткові відомості */}
               <div className="method-card-footer">
                 <div className="method-cycle-info">
-                  <i className="fas fa-sync-alt"></i>
-                  <span>{t('methods.continuousCycles')}</span>
+                  <FontAwesomeIcon icon="sync-alt"/>
+                  <span>{t('methods.continuousCycles', 'Безперервні цикли')}</span>
                 </div>
               </div>
             </div>
@@ -142,18 +136,18 @@ const MethodsList = ({ methods, onStartSession, loading }) => {
       </div>
 
       {/* Додаткова інформація */}
-      <div className="methods-info-section">
-        <div className="methods-info-card">
+      <div className="card mt-8">
+        <div className="card-body methods-info-card">
           <div className="info-icon">
             <FontAwesomeIcon icon="info"/>
           </div>
           <div className="info-content">
-            <h4 className="info-title">{t('methods.howItWorks.title')}</h4>
+            <h4 className="heading-4 mb-4">{t('methods.howItWorks.title', 'Як це працює')}</h4>
             <ul className="info-list">
-              <li>{t('methods.howItWorks.step1')}</li>
-              <li>{t('methods.howItWorks.step2')}</li>
-              <li>{t('methods.howItWorks.step3')}</li>
-              <li>{t('methods.howItWorks.step4')}</li>
+              <li>{t('methods.howItWorks.step1', 'Оберіть методику концентрації')}</li>
+              <li>{t('methods.howItWorks.step2', 'Працюйте протягом робочого періоду')}</li>
+              <li>{t('methods.howItWorks.step3', 'Робіть перерву між циклами')}</li>
+              <li>{t('methods.howItWorks.step4', 'Повторюйте цикли для кращої концентрації')}</li>
             </ul>
           </div>
         </div>

@@ -1,117 +1,76 @@
-/* ========================= КОНТЕЙНЕР ТАЙМЕРА ========================= */
+/* Timer.css - тільки специфічні стилі */
+
+/* Контейнер таймера */
 .timer-container {
   width: 100%;
-  max-width: 600px; /* Зменшено для кращого фокусу */
+  max-width: 600px;
   margin: 0 auto;
   animation: fadeIn 0.5s ease-out;
 }
 
-/* ========================= ЗАГОЛОВОК ТАЙМЕРА ========================= */
-.timer-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--spacing-xl);
-  background: white;
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--gray-200);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Заголовок таймера */
+.timer-header-content {
   position: relative;
-}
-
-/* Додати кнопку назад в лівий кут */
-.timer-back-btn {
-  position: absolute;
-  left: var(--spacing-lg);
-  background: var(--gray-100);
-  color: var(--gray-600);
-  border: none;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-size: 0.9rem;
-}
-
-.timer-back-btn:hover {
-  background: var(--gray-200);
-  transform: translateY(-1px);
-}
-
-.timer-method-info {
-  text-align: center;
-}
-
-.timer-method-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin: 0 0 var(--spacing-xs) 0;
 }
 
 .timer-cycle-info {
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.9rem;
-  background: var(--secondary-light);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
+  color: var(--color-primary-600);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
+  background: var(--color-primary-50);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
   display: inline-block;
 }
 
-/* ========================= ОСНОВНИЙ ТАЙМЕР ========================= */
+/* Основний таймер */
 .timer-main {
-  background: white;
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-lg);
-  padding: var(--spacing-2xl);
   text-align: center;
-  border: 1px solid var(--gray-200);
   position: relative;
 }
 
-/* Додавання індикатора стану в правий верхній кут */
+/* Індикатор стану */
 .timer-status-indicator {
   position: absolute;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  font-size: 0.8rem;
-  font-weight: 600;
+  top: var(--space-6);
+  right: var(--space-6);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wide);
 }
 
 .timer-status-work {
   background: rgba(84, 140, 84, 0.1);
-  color: #2a633a;
-  border: 1px solid rgba(84, 140, 84, 0.3);
+  color: var(--color-primary-700);
+  border: var(--border-width-1) solid rgba(84, 140, 84, 0.3);
 }
 
 .timer-status-break {
   background: rgba(76, 175, 80, 0.1);
-  color: #388E3C;
-  border: 1px solid rgba(76, 175, 80, 0.3);
+  color: var(--color-success-700);
+  border: var(--border-width-1) solid rgba(76, 175, 80, 0.3);
 }
 
-/* ========================= КРУГОВИЙ ПРОГРЕС ========================= */
+/* Круговий прогрес */
 .timer-circle-container {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--space-8);
   position: relative;
 }
 
 .timer-circle {
   position: relative;
   display: inline-block;
-  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.12)); /* Краща тінь */
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.12));
 }
 
 .timer-progress-ring {
@@ -119,7 +78,7 @@
 }
 
 .timer-progress-circle {
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Плавніша анімація */
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timer-center-content {
@@ -130,48 +89,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--space-3);
 }
 
 .timer-phase-indicator {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 0.9rem;
+  gap: var(--space-2);
+  color: var(--color-primary-600);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-sm);
   background: rgba(255, 255, 255, 0.9);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.timer-phase-indicator i {
-  font-size: 1rem;
+  border: var(--border-width-1) solid rgba(255, 255, 255, 0.3);
 }
 
 .timer-time-display {
-  font-size: 3.5rem; /* Збільшено */
-  font-weight: 800; /* Жирніше */
-  color: var(--gray-800);
+  font-size: 3.5rem;
+  font-weight: var(--font-extrabold);
+  color: var(--color-gray-800);
   font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: var(--spacing-sm) 0;
+  margin: var(--space-3) 0;
 }
 
 .timer-paused-indicator {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--warning);
-  font-weight: 600;
-  font-size: 0.8rem;
+  gap: var(--space-2);
+  color: var(--color-warning-600);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-xs);
   background: rgba(255, 193, 7, 0.15);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
   animation: pulseGlow 2s infinite;
-  border: 1px solid rgba(255, 193, 7, 0.3);
+  border: var(--border-width-1) solid rgba(255, 193, 7, 0.3);
 }
 
 @keyframes pulseGlow {
@@ -185,65 +140,54 @@
   }
 }
 
-/* ========================= ІНФОРМАЦІЯ ПРО СЕСІЮ (компактніше) ========================= */
+/* Інформація про сесію */
 .timer-session-info {
   display: flex;
   justify-content: space-around;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-md);
-  background: linear-gradient(135deg, var(--gray-50) 0%, rgba(247, 250, 252, 0.8) 100%);
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--gray-100);
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--color-gray-50) 0%, rgba(247, 250, 252, 0.8) 100%);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-1) solid var(--color-gray-100);
 }
 
 .timer-info-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--gray-700);
-  font-weight: 500;
-  font-size: 0.85rem;
+  gap: var(--space-2);
+  color: var(--color-gray-700);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
   text-align: center;
   flex: 1;
 }
 
 .timer-info-item i {
-  color: var(--primary);
-  font-size: 1.1rem;
-  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary-500);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-1);
 }
 
 .timer-info-value {
-  font-weight: 700;
-  color: var(--gray-800);
-  font-size: 1rem;
+  font-weight: var(--font-bold);
+  color: var(--color-gray-800);
+  font-size: var(--text-base);
 }
 
-/* ========================= КНОПКИ КЕРУВАННЯ ========================= */
+/* Кнопки керування */
 .timer-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
   flex-wrap: wrap;
 }
 
 .timer-btn {
-  padding: var(--spacing-md) var(--spacing-xl);
-  border: none;
-  border-radius: var(--border-radius-lg);
-  font-weight: 700; /* Жирніше */
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
   min-width: 140px;
-  justify-content: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
@@ -269,62 +213,43 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
-.timer-btn:active {
-  transform: translateY(-1px);
-}
-
-.timer-btn-success {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-  color: white;
-}
-
-.timer-btn-warning {
-  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
-  color: white;
-}
-
-.timer-btn-danger {
-  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
-  color: white;
-}
-
 .timer-break-indicator {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  color: var(--success);
-  font-weight: 600;
-  font-size: 1.1rem;
+  gap: var(--space-3);
+  color: var(--color-success-600);
+  font-weight: var(--font-semibold);
+  font-size: var(--text-lg);
   background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(56, 142, 60, 0.05) 100%);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--border-radius-lg);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-lg);
   border: 2px solid rgba(76, 175, 80, 0.2);
   backdrop-filter: blur(10px);
 }
 
-/* ========================= ПРОГРЕС-БАР ========================= */
+/* Прогрес-бар */
 .timer-progress-bar {
-  margin-top: var(--spacing-lg);
+  margin-top: var(--space-6);
   background: rgba(247, 250, 252, 0.8);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--gray-100);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-1) solid var(--color-gray-100);
 }
 
 .timer-progress-bar-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gray-700);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-gray-700);
 }
 
 .timer-progress-bar-track {
-  height: 10px; /* Трохи вище */
-  background: var(--gray-200);
-  border-radius: 6px;
+  height: 10px;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
@@ -332,9 +257,9 @@
 
 .timer-progress-bar-fill {
   height: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 50%, var(--primary) 100%);
+  background: linear-gradient(90deg, var(--color-primary-500) 0%, var(--color-primary-600) 50%, var(--color-primary-500) 100%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite;
   box-shadow: 0 0 15px rgba(84, 140, 84, 0.4);
@@ -345,26 +270,10 @@
   100% { background-position: 200% 0; }
 }
 
-/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
+/* Адаптивність */
 @media (max-width: 768px) {
   .timer-container {
-    padding: 0 var(--spacing-md);
-  }
-  
-  .timer-header {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    text-align: center;
-    padding: var(--spacing-md);
-  }
-  
-  .timer-back-btn {
-    position: static;
-    align-self: flex-start;
-  }
-  
-  .timer-main {
-    padding: var(--spacing-lg);
+    padding: 0 var(--space-4);
   }
   
   .timer-circle-container svg {
@@ -378,8 +287,8 @@
   
   .timer-session-info {
     flex-direction: column;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    gap: var(--space-3);
+    padding: var(--space-3);
   }
   
   .timer-info-item {
@@ -390,7 +299,7 @@
   
   .timer-controls {
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--space-4);
   }
   
   .timer-btn {
@@ -409,11 +318,8 @@
     font-size: 2.4rem;
   }
   
-  .timer-method-title {
-    font-size: 1.25rem;
-  }
-  
-  .timer-main {
-    padding: var(--spacing-md);
+  .timer-status-indicator {
+    position: static;
+    margin-bottom: var(--space-4);
   }
 }

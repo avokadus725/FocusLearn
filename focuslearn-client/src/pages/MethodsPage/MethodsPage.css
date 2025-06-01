@@ -1,133 +1,13 @@
-/* ========================= ОСНОВНИЙ КОНТЕЙНЕР ========================= */
+/* MethodsPage.css */
+
+/* Основний контейнер */
 .methods-page {
   min-height: 100vh;
-  background-color: var(--secondary-light);
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-secondary-100) 100%);
 }
 
-.methods-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
-}
-
-/* ========================= ЗАГОЛОВОК СТОРІНКИ ========================= */
-.methods-header {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-}
-
-.methods-title {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: var(--gray-800);
-  margin: 0 0 var(--spacing-sm) 0;
-  letter-spacing: -0.025em;
-}
-
-.methods-subtitle {
-  font-size: 1.125rem;
-  color: var(--gray-600);
-  margin: 0;
-  font-weight: 400;
-}
-
-/* ========================= ПОВІДОМЛЕННЯ ТА АЛЕРТИ ========================= */
-.methods-alert {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  margin-bottom: var(--spacing-lg);
-  font-weight: 500;
-  font-size: 0.9rem;
-  animation: slideInDown 0.3s ease-out;
-}
-
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.methods-alert-success {
-  background: #DCFCE7;
-  color: #166534;
-  border: 1px solid #BBF7D0;
-}
-
-.methods-alert-error {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
-}
-
-.methods-retry-btn {
-  background: transparent;
-  border: 1px solid currentColor;
-  color: inherit;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-md);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: auto;
-  transition: all 0.2s ease;
-}
-
-.methods-retry-btn:hover {
-  background: currentColor;
-  color: white;
-}
-
-/* ========================= ОСНОВНИЙ КОНТЕНТ ========================= */
+/* Основний контент */
 .methods-content {
   flex: 1;
   min-height: 60vh;
-}
-
-/* ========================= СТАНИ ЗАВАНТАЖЕННЯ ========================= */
-.methods-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-2xl);
-  color: var(--gray-600);
-  min-height: 50vh;
-}
-
-.methods-loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--gray-200);
-  border-top: 3px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: var(--spacing-md);
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ========================= АДАПТИВНИЙ ДИЗАЙН ========================= */
-@media (max-width: 768px) {
-  .methods-container {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .methods-title {
-    font-size: 1.875rem;
-  }
-  
-  .methods-subtitle {
-    font-size: 1rem;
-  }
 }
