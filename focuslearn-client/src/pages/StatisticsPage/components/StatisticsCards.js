@@ -1,7 +1,8 @@
+// src/pages/StatisticsPage/components/StatisticsCards.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import './StatisticsCards.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './StatisticsCards.css';
 
 const StatisticsCards = ({ 
   userStatistics, 
@@ -68,73 +69,65 @@ const StatisticsCards = ({
     }
   ];
 
-  const getCardColorClass = (color) => {
-    switch (color) {
-      case 'primary': return 'stats-card-primary';
-      case 'success': return 'stats-card-success';
-      case 'warning': return 'stats-card-warning';
-      case 'info': return 'stats-card-info';
-      default: return 'stats-card-primary';
-    }
-  };
-
   return (
-    <div className="statistics-cards">
-      <div className="statistics-cards-grid">
+    <div className="mb-8">
+      <div className="grid grid-cols-auto-md gap-6">
         {cards.map((card) => (
-          <div key={card.id} className={`stats-card ${getCardColorClass(card.color)}`}>
-            <div className="stats-card-header">
-              <div className="stats-card-icon">
-                <FontAwesomeIcon icon={card.icon}/>
-              </div>
-              <div className="stats-card-info">
-                <h3 className="stats-card-title">{card.title}</h3>
-                <p className="stats-card-description">{card.description}</p>
-              </div>
-            </div>
-            
-            <div className="stats-card-value">
-              {card.value}
-            </div>
-            
-            {/* Додatkова інформація для деяких карток */}
-            {card.id === 'total-time' && userStatistics.breakCount > 0 && (
-              <div className="stats-card-extra">
-                <div className="stats-extra-item">
-                  <i className="fas fa-coffee"></i>
-                  <span>{userStatistics.breakCount} {t('statistics.breaks', 'перерв')}</span>
+          <div key={card.id} className={`card card-hover stats-card stats-card-${card.color}`}>
+            <div className="card-body">
+              <div className="stats-card-header">
+                <div className={`stats-card-icon stats-card-icon-${card.color}`}>
+                  <FontAwesomeIcon icon={`${card.icon}`}/>
                 </div>
-                {userStatistics.missedBreaks > 0 && (
-                  <div className="stats-extra-item missed">
-                    <i className="fas fa-exclamation-triangle"></i>
-                    <span>{userStatistics.missedBreaks} {t('statistics.missedBreaks', 'пропущено')}</span>
+                <div className="stats-card-info">
+                  <h3 className="stats-card-title">{card.title}</h3>
+                  <p className="stats-card-description">{card.description}</p>
+                </div>
+              </div>
+              
+              <div className="stats-card-value">
+                {card.value}
+              </div>
+              
+              {/* Додаткова інформація для карток */}
+              {card.id === 'total-time' && userStatistics.breakCount > 0 && (
+                <div className="stats-card-extra">
+                  <div className="stats-extra-item">
+                    <FontAwesomeIcon icon="coffee"/>
+                    <span>{userStatistics.breakCount} {t('statistics.breaks', 'перерв')}</span>
                   </div>
-                )}
-              </div>
-            )}
-            
-            {card.id === 'improvement' && productivityPrediction.recommendations?.length > 0 && (
-              <div className="stats-card-recommendations">
-                <button 
-                  className="stats-recommendations-toggle"
-                  onClick={() => {
-                    const content = document.getElementById(`recommendations-${card.id}`);
-                    content.classList.toggle('show');
-                  }}
-                >
-                  <i className="fas fa-lightbulb"></i>
-                  {t('statistics.showRecommendations', 'Рекомендації')}
-                </button>
-                <div id={`recommendations-${card.id}`} className="stats-recommendations-content">
-                  {productivityPrediction.recommendations.slice(0, 2).map((rec, index) => (
-                    <div key={index} className="stats-recommendation-item">
-                      <i className="fas fa-arrow-right"></i>
-                      <span>{rec}</span>
+                  {userStatistics.missedBreaks > 0 && (
+                    <div className="stats-extra-item missed">
+                      <FontAwesomeIcon icon="exclamation-triangle"/>
+                      <span>{userStatistics.missedBreaks} {t('statistics.missedBreaks', 'пропущено')}</span>
                     </div>
-                  ))}
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+              
+              {card.id === 'improvement' && productivityPrediction.recommendations?.length > 0 && (
+                <div className="stats-card-recommendations">
+                  <button 
+                    className="stats-recommendations-toggle"
+                    onClick={() => {
+                      const content = document.getElementById(`recommendations-${card.id}`);
+                      content.classList.toggle('show');
+                    }}
+                  >
+                    <FontAwesomeIcon icon="lightbulb"/>
+                    {t('statistics.showRecommendations', 'Рекомендації')}
+                  </button>
+                  <div id={`recommendations-${card.id}`} className="stats-recommendations-content">
+                    {productivityPrediction.recommendations.slice(0, 2).map((rec, index) => (
+                      <div key={index} className="stats-recommendation-item">
+                        <i className="fas fa-arrow-right"></i>
+                        <span>{rec}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

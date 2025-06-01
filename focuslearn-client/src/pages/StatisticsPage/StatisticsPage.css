@@ -1,97 +1,47 @@
-/* StatisticsPage.css */
+/* StatisticsPage.css - тільки специфічні стилі для сторінки */
 .statistics-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-secondary-100) 100%);
 }
 
-.statistics-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Заголовок */
-.statistics-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.statistics-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.statistics-title i {
-  color: #10b981;
-}
-
-.statistics-subtitle {
-  font-size: 1.125rem;
-  color: #6b7280;
-  margin: 0;
-}
-
-/* Завантаження та помилки */
-.statistics-loading,
+/* Специфічні стилі для помилок статистики */
 .statistics-error {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  padding: var(--space-16) var(--space-8);
   text-align: center;
-}
-
-.statistics-error {
-  color: #dc2626;
+  color: var(--color-danger-600);
 }
 
 .statistics-error i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: var(--text-5xl);
+  margin-bottom: var(--space-6);
+  color: var(--color-danger-500);
 }
 
-.statistics-retry-btn {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 1rem;
+.statistics-error p {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-6);
+  color: var(--color-gray-700);
 }
 
-.statistics-retry-btn:hover {
-  background: #059669;
-  transform: translateY(-1px);
-}
-
-/* Адаптивність */
+/* Адаптивність для сторінки */
 @media (max-width: 768px) {
   .statistics-page {
-    padding: 1rem 0;
+    padding: var(--space-4) 0;
   }
   
-  .statistics-container {
-    padding: 0 0.5rem;
+  .statistics-error {
+    padding: var(--space-12) var(--space-4);
   }
   
-  .statistics-title {
-    font-size: 2rem;
-    flex-direction: column;
-    gap: 0.5rem;
+  .statistics-error i {
+    font-size: var(--text-4xl);
   }
   
-  .statistics-subtitle {
-    font-size: 1rem;
+  .statistics-error p {
+    font-size: var(--text-base);
   }
 }

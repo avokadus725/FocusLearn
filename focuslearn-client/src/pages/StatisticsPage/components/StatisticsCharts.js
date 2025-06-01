@@ -1,3 +1,4 @@
+// src/pages/StatisticsPage/components/StatisticsCharts.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -12,13 +13,10 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
-  Area,
-  AreaChart
+  AreaChart,
+  Area
 } from 'recharts';
 import './StatisticsCharts.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatisticsCharts = ({ 
   methodStatistics, 
@@ -30,7 +28,14 @@ const StatisticsCharts = ({
   const { t } = useTranslation();
 
   // Кольори для графіків у стилі додатка
-  const colors = ['#10b981', '#059669', '#047857', '#065f46', '#064e3b', '#022c22'];
+  const colors = [
+    'var(--color-primary-500)', 
+    'var(--color-primary-600)', 
+    'var(--color-success-500)', 
+    'var(--color-warning-500)', 
+    'var(--color-info-500)', 
+    'var(--color-secondary-500)'
+  ];
   
   // Підготовка даних для методик
   const prepareMethodsData = () => {
@@ -70,8 +75,8 @@ const StatisticsCharts = ({
   // Розрахунок ефективності
   const calculateEfficiency = (totalTime, missedBreaks) => {
     if (totalTime === 0) return 0;
-    const baseEfficiency = Math.min(totalTime / 60, 100); // Базова ефективність на основі часу
-    const penaltyForMissedBreaks = missedBreaks * 5; // Штраф за пропущені перерви
+    const baseEfficiency = Math.min(totalTime / 60, 100);
+    const penaltyForMissedBreaks = missedBreaks * 5;
     return Math.max(0, baseEfficiency - penaltyForMissedBreaks);
   };
 
@@ -81,12 +86,12 @@ const StatisticsCharts = ({
       {
         name: 'Поточна',
         value: productivityPrediction.currentProductivity || 0,
-        color: '#64748b'
+        color: 'var(--color-gray-500)'
       },
       {
         name: 'Потенційна',
         value: productivityPrediction.potentialProductivity || 0,
-        color: '#10b981'
+        color: 'var(--color-primary-500)'
       }
     ];
   };
@@ -98,8 +103,8 @@ const StatisticsCharts = ({
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="recharts-custom-tooltip">
-          <p className="tooltip-label">{label}</p>
+        <div className="chart-tooltip">
+          <p className="chart-tooltip-label">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }}>
               {`${entry.name}: ${entry.value}${entry.name.includes('час') ? 'хв' : entry.name.includes('Продуктивність') ? '%' : ''}`}
@@ -111,9 +116,9 @@ const StatisticsCharts = ({
     return null;
   };
 
-  // Кастомна легенда
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-    if (percent < 0.05) return null; // Не показуємо лейбли для дуже маленьких сегментів
+  // Кастомна легенда для pie chart
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+    if (percent < 0.05) return null;
     
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -135,18 +140,27 @@ const StatisticsCharts = ({
     );
   };
 
+  // Компонент для відсутності даних
+  const NoDataMessage = ({ icon, message }) => (
+    <div className="chart-no-data">
+      <i className={`fas fa-${icon}`}></i>
+      <p>{message || t('statistics.noData', 'Немає даних для відображення')}</p>
+    </div>
+  );
+
   return (
     <div className="statistics-charts">
       
       {/* Кругова діаграма розподілу часу */}
-      <div className="chart-container">
-        <div className="chart-header">
-          <h3 className="chart-title">
+      <div className="card chart-container">
+        <div className="card-body">
+          
+          {/* Заголовок */}
+          <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
             <i className="fas fa-chart-pie"></i>
             {t('statistics.charts.methodsDistribution', 'Розподіл часу по методиках')}
           </h3>
-        </div>
-        <div className="chart-content">
+          
           {methodsData.length > 0 ? (
             <ResponsiveContainer width="100%" height={350}>
               <PieChart>
@@ -177,27 +191,25 @@ const StatisticsCharts = ({
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="chart-no-data">
-              <i className="fas fa-chart-pie"></i>
-              <p>{t('statistics.noData', 'Немає даних для відображення')}</p>
-            </div>
+            <NoDataMessage icon="chart-pie" />
           )}
         </div>
       </div>
 
       {/* Стовпчаста діаграма активності */}
-      <div className="chart-container">
-        <div className="chart-header">
-          <h3 className="chart-title">
+      <div className="card chart-container">
+        <div className="card-body">
+          
+          {/* Заголовок */}
+          <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
             <i className="fas fa-chart-bar"></i>
             {t('statistics.charts.methodsActivity', 'Детальна активність')}
           </h3>
-        </div>
-        <div className="chart-content">
+          
           {methodsData.length > 0 ? (
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={methodsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-200)" />
                 <XAxis 
                   dataKey="name" 
                   tick={{ fontSize: 12 }}
@@ -212,44 +224,42 @@ const StatisticsCharts = ({
                 <Bar 
                   dataKey="totalTime" 
                   name="Час концентрації (хв)" 
-                  fill="#10b981"
+                  fill="var(--color-primary-500)"
                   radius={[4, 4, 0, 0]}
                 />
                 <Bar 
                   dataKey="breakCount" 
                   name="Кількість перерв" 
-                  fill="#059669"
+                  fill="var(--color-success-500)"
                   radius={[4, 4, 0, 0]}
                 />
                 <Bar 
                   dataKey="missedBreaks" 
                   name="Пропущені перерви" 
-                  fill="#dc2626"
+                  fill="var(--color-danger-500)"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="chart-no-data">
-              <i className="fas fa-chart-bar"></i>
-              <p>{t('statistics.noData', 'Немає даних для відображення')}</p>
-            </div>
+            <NoDataMessage icon="chart-bar" />
           )}
         </div>
       </div>
 
       {/* Аналіз продуктивності */}
-      <div className="chart-container chart-full-width">
-        <div className="chart-header">
-          <h3 className="chart-title">
+      <div className="card chart-container chart-full-width">
+        <div className="card-body">
+          
+          {/* Заголовок */}
+          <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
             <i className="fas fa-chart-line"></i>
             {t('statistics.charts.productivityAnalysis', 'Аналіз продуктивності')}
           </h3>
-        </div>
-        <div className="chart-content">
+          
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={productivityData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-200)" />
               <XAxis dataKey="name" tick={{ fontSize: 14, fontWeight: 500 }} />
               <YAxis 
                 tick={{ fontSize: 12 }} 
@@ -262,7 +272,7 @@ const StatisticsCharts = ({
               />
               <Bar 
                 dataKey="value" 
-                fill="#10b981"
+                fill="var(--color-primary-500)"
                 radius={[8, 8, 0, 0]}
               >
                 {productivityData.map((entry, index) => (
@@ -286,20 +296,21 @@ const StatisticsCharts = ({
 
       {/* Ефективність методик */}
       {methodsData.length > 0 && (
-        <div className="chart-container chart-full-width">
-          <div className="chart-header">
-            <h3 className="chart-title">
+        <div className="card chart-container chart-full-width">
+          <div className="card-body">
+            
+            {/* Заголовок */}
+            <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
               <i className="fas fa-chart-area"></i>
               Ефективність методик
             </h3>
-          </div>
-          <div className="chart-content">
+            
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={methodsData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <defs>
                   <linearGradient id="colorEfficiency" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                    <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
                 <XAxis 
@@ -311,12 +322,12 @@ const StatisticsCharts = ({
                   height={80}
                 />
                 <YAxis tick={{ fontSize: 12 }} />
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-gray-200)" />
                 <Tooltip content={<CustomTooltip />} />
                 <Area 
                   type="monotone" 
                   dataKey="efficiency" 
-                  stroke="#10b981" 
+                  stroke="var(--color-primary-500)" 
                   fillOpacity={1} 
                   fill="url(#colorEfficiency)"
                   name="Ефективність"
@@ -329,24 +340,25 @@ const StatisticsCharts = ({
 
       {/* Рекомендації */}
       {productivityPrediction.recommendations?.length > 0 && (
-        <div className="recommendations-section">
-          <div className="recommendations-header">
-            <h3 className="recommendations-title">
-              <FontAwesomeIcon icon="lightbulb"/>
+        <div className="card recommendations-section">
+          <div className="card-body">
+            <h3 className="heading-3 mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)'}}>
+              <i className="fas fa-lightbulb" style={{color: 'var(--color-warning-500)'}}></i>
               {t('statistics.recommendations.title', 'Рекомендації для покращення')}
             </h3>
-          </div>
-          <div className="recommendations-grid">
-            {productivityPrediction.recommendations.map((recommendation, index) => (
-              <div key={index} className="recommendation-card">
-                <div className="recommendation-icon">
-                  <FontAwesomeIcon icon="arrow-right"/>
+            
+            <div className="recommendations-grid">
+              {productivityPrediction.recommendations.map((recommendation, index) => (
+                <div key={index} className="recommendation-card">
+                  <div className="recommendation-icon">
+                    <i className="fas fa-arrow-right"></i>
+                  </div>
+                  <div className="recommendation-text">
+                    {recommendation}
+                  </div>
                 </div>
-                <div className="recommendation-text">
-                  {recommendation}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
