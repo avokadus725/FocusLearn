@@ -5,11 +5,9 @@ const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:7124/api';
 // Утиліта для роботи з токенами
 const setAuthToken = (token) => {
   if (token) {
-    // Set the token for all future requests
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     localStorage.setItem('token', token);
     
-    // Log to verify token is being set correctly
     console.log('Token set:', token.substring(0, 15) + '...');
   } else {
     delete axios.defaults.headers.common['Authorization'];
