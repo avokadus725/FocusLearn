@@ -1,7 +1,7 @@
 // src/pages/MethodsPage/MethodsPage.js
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import Layout from '../../components/common/Layout';
 import Timer from './components/Timer';
