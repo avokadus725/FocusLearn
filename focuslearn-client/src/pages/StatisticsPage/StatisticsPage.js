@@ -6,6 +6,7 @@ import StatisticsCards from './components/StatisticsCards';
 import StatisticsCharts from './components/StatisticsCharts';
 import PeriodSelector from './components/PeriodSelector';
 import { useStatistics } from '../../hooks/useStatistics';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './StatisticsPage.css';
 
 const StatisticsPage = () => {
@@ -39,7 +40,7 @@ const StatisticsPage = () => {
     return (
       <Layout>
         <div className="statistics-error">
-          <i className="fas fa-exclamation-triangle"></i>
+          <FontAwesomeIcon icon="exclamation-triangle" />
           <p>{error}</p>
           <button 
             className="btn btn-primary"
@@ -60,7 +61,7 @@ const StatisticsPage = () => {
           {/* Заголовок */}
           <header className="text-center mb-8">
             <h1 className="heading-1 mb-2 flex items-center justify-center gap-4">
-              <i className="fas fa-chart-line text-primary-500"></i>
+              <FontAwesomeIcon icon="chart-line" className="text-primary-500" />
               {t('statistics.title', 'Статистика продуктивності')}
             </h1>
             <p className="body-large text-gray-600">

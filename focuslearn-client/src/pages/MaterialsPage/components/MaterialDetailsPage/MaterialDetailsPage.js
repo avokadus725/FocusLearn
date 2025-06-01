@@ -172,7 +172,7 @@ const MaterialDetailsPage = () => {
                         </div>
                       </div>
                       <div className="link-arrow">
-                        <i className="fas fa-arrow-right"></i>
+                        <FontAwesomeIcon icon="arrow-right"/>
                       </div>
                     </a>
                   </div>

@@ -9,7 +9,7 @@ import EditMaterialModal from './components/EditMaterialModal';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
 import { useMaterials } from '../../hooks/useMaterials';
 import './MaterialsPage.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const MaterialsPage = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
@@ -79,24 +79,24 @@ const MaterialsPage = () => {
                 </select>
               </div>
               
-              {/* Кнопка створення для викладачів */}
-              {user?.role === 'Tutor' && (
-                <button 
-                  className="btn btn-primary materials-create-btn"
-                  onClick={openCreateModal}
-                >
-                  <i className="fas fa-plus"></i>
-                  {t('materials.createNew.button', 'Створити матеріал')}
-                </button>
-              )}
-            </div>
-          </div>
+                    { /* Кнопка створення для викладачів */ }
+                      {user?.role === 'Tutor' && (
+                      <button 
+                        className="btn btn-primary materials-create-btn"
+                        onClick={openCreateModal}
+                      >
+                        <FontAwesomeIcon icon="plus" />
+                        {t('materials.createNew.button', 'Створити матеріал')}
+                      </button>
+                      )}
+                    </div>
+                    </div>
 
-          {/* Повідомлення */}
+                    {/* Повідомлення */}
           {message.text && (
             <div className={`alert alert-${message.type} mb-6`}>
               <div className="alert-icon">
-                <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+                <FontAwesomeIcon icon={`${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}/>
               </div>
               <div className="alert-content">
                 {message.text}
@@ -108,7 +108,7 @@ const MaterialsPage = () => {
           {error && (
             <div className="alert alert-danger mb-6">
               <div className="alert-icon">
-                <i className="fas fa-exclamation-triangle"></i>
+                <FontAwesomeIcon icon="exclamation-triangle"/>
               </div>
               <div className="alert-content">
                 {error}
@@ -127,7 +127,7 @@ const MaterialsPage = () => {
             {materials.length === 0 ? (
               <div className="materials-empty-state">
                 <div className="empty-state-icon">
-                  <i className="fas fa-book"></i>
+                  <FontAwesomeIcon icon="book"/>
                 </div>
                 <h3 className="heading-3 mb-2">
                   {t('materials.empty.title', 'Матеріали відсутні')}
@@ -162,17 +162,17 @@ const MaterialsPage = () => {
                           
                           <div className="material-meta">
                             <div className="meta-item">
-                              <i className="fas fa-user"></i>
+                              <FontAwesomeIcon icon="user"/>
                               <span>{t('common.autor', 'Автор')}: {material.tutorName}</span>
                             </div>
                             <div className="meta-item">
-                              <i className="fas fa-calendar-plus"></i>
+                              <FontAwesomeIcon icon="calendar-plus"/>
                               <span>{t('common.createdAt', 'Створено')}: {formatDate(material.addedAt)}</span>
                             </div>
                             {material.fileLink && (
                               <div className="meta-item">
-                                <i className="fas fa-paperclip"></i>
-                                <span>Є посилання</span>
+                                <FontAwesomeIcon icon="paperclip"/>
+                                <span>{t('materials.fields.hasFileLink')}</span>
                               </div>
                             )}
                           </div>
@@ -184,7 +184,7 @@ const MaterialsPage = () => {
                             to={`/materials/${material.materialId}`}
                             className="btn btn-primary btn-view-material"
                           >
-                            <i className="fas fa-eye"></i>
+                            <FontAwesomeIcon icon="eye"/>
                             {t('materials.actions.view', 'Переглянути')}
                           </Link>
                           
@@ -196,7 +196,7 @@ const MaterialsPage = () => {
                                 onClick={() => handleEditMaterial(material)}
                                 title={t('materials.actions.edit', 'Редагувати')}
                               >
-                                <i className="fas fa-edit"></i>
+                                <FontAwesomeIcon icon="edit"/>
                                 {t('materials.actions.edit', 'Редагувати')}
                               </button>
                               <button
@@ -204,7 +204,7 @@ const MaterialsPage = () => {
                                 onClick={() => handleDeleteMaterial(material.materialId)}
                                 title={t('materials.actions.delete', 'Видалити')}
                               >
-                                <i className="fas fa-trash"></i>
+                                <FontAwesomeIcon icon="trash"/>
                                 {t('materials.actions.delete', 'Видалити')}
                               </button>
                             </>

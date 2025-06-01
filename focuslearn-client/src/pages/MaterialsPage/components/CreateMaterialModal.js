@@ -120,7 +120,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {t('materials.createNew.title')}
           </h2>
           <button className="create-modal-close" onClick={onClose}>
-            <FontAwesomeIcon icon="times"/>
+            <FontAwesomeIcon icon="times" />
           </button>
         </div>
         
@@ -130,7 +130,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {/* Основна інформація */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <FontAwesomeIcon icon="info-circle"/>
+                <FontAwesomeIcon icon="info-circle" />
                 {t('materials.form.sections.basicInfo')}
               </h3>
               
@@ -181,7 +181,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
             {/* Посилання на матеріал */}
             <div className="create-form-section">
               <h3 className="create-form-section-title">
-                <FontAwesomeIcon icon="link"/>
+                <FontAwesomeIcon icon="link" />
                 {t('materials.form.sections.fileLink')}
               </h3>
               
@@ -215,7 +215,7 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
                 onClick={handleCancelClick}
                 disabled={loading}
               >
-                <FontAwesomeIcon icon="times"/>
+                <FontAwesomeIcon icon="times" />
                 {t('common.cancel')}
               </button>
               <button
@@ -226,12 +226,12 @@ const CreateMaterialModal = ({ onSubmit, onClose, userRole }) => {
               >
                 {loading ? (
                   <>
-                    <i className="fas fa-spinner create-loading-spinner"></i>
+                    <FontAwesomeIcon icon="spinner" spin className="create-loading-spinner" />
                     {t('common.creating')}
                   </>
                 ) : (
                   <>
-                    <FontAwesomeIcon icon="plus"/>
+                    <FontAwesomeIcon icon="plus" />
                     {t('materials.createNew.submit')}
                   </>
                 )}

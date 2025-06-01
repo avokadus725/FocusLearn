@@ -42,7 +42,7 @@ const PeriodSelector = ({ selectedPeriod, onPeriodChange, loading }) => {
             <FontAwesomeIcon icon={period.icon}/>
             <span>{period.label}</span>
             {loading && selectedPeriod === period.key && (
-              <i className="fas fa-spinner fa-spin"></i>
+              <FontAwesomeIcon icon="spinner" spin />
             )}
           </button>
         ))}

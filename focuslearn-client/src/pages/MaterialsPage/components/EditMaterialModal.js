@@ -238,7 +238,7 @@ const EditMaterialModal = ({ material, onSubmit, onClose, userRole }) => {
               >
                 {loading ? (
                   <>
-                    <i className="fas fa-spinner create-loading-spinner"></i>
+                    <FontAwesomeIcon icon="spinner" spin className="create-loading-spinner" />
                     {t('common.updating')}
                   </>
                 ) : (

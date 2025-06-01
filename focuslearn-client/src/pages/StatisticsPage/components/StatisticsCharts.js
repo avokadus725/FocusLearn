@@ -17,6 +17,7 @@ import {
   Area
 } from 'recharts';
 import './StatisticsCharts.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatisticsCharts = ({ 
   methodStatistics, 
@@ -143,7 +144,7 @@ const StatisticsCharts = ({
   // Компонент для відсутності даних
   const NoDataMessage = ({ icon, message }) => (
     <div className="chart-no-data">
-      <i className={`fas fa-${icon}`}></i>
+      <FontAwesomeIcon icon={icon} />
       <p>{message || t('statistics.noData', 'Немає даних для відображення')}</p>
     </div>
   );
@@ -157,7 +158,7 @@ const StatisticsCharts = ({
           
           {/* Заголовок */}
           <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
-            <i className="fas fa-chart-pie"></i>
+            <FontAwesomeIcon icon="chart-pie" />
             {t('statistics.charts.methodsDistribution', 'Розподіл часу по методиках')}
           </h3>
           
@@ -202,7 +203,7 @@ const StatisticsCharts = ({
           
           {/* Заголовок */}
           <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
-            <i className="fas fa-chart-bar"></i>
+            <FontAwesomeIcon icon="chart-bar" />
             {t('statistics.charts.methodsActivity', 'Детальна активність')}
           </h3>
           
@@ -253,7 +254,7 @@ const StatisticsCharts = ({
           
           {/* Заголовок */}
           <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
-            <i className="fas fa-chart-line"></i>
+            <FontAwesomeIcon icon="chart-line" />
             {t('statistics.charts.productivityAnalysis', 'Аналіз продуктивності')}
           </h3>
           
@@ -285,7 +286,7 @@ const StatisticsCharts = ({
           {/* Додаткова інформація */}
           <div className="productivity-summary">
             <div className="productivity-improvement">
-              <i className="fas fa-arrow-up"></i>
+              <FontAwesomeIcon icon="arrow-up" />
               <span>
                 Потенціал покращення: {productivityPrediction.improvementPercentage || 0}%
               </span>
@@ -301,8 +302,8 @@ const StatisticsCharts = ({
             
             {/* Заголовок */}
             <h3 className="heading-4 chart-title mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)'}}>
-              <i className="fas fa-chart-area"></i>
-              Ефективність методик
+              <FontAwesomeIcon icon="chart-area"/>
+              {t('statistics.cards.productivityDesc')}
             </h3>
             
             <ResponsiveContainer width="100%" height={300}>
@@ -343,7 +344,7 @@ const StatisticsCharts = ({
         <div className="card recommendations-section">
           <div className="card-body">
             <h3 className="heading-3 mb-6 pb-4" style={{borderBottom: '1px solid var(--color-gray-200)', display: 'flex', alignItems: 'center', gap: 'var(--space-3)'}}>
-              <i className="fas fa-lightbulb" style={{color: 'var(--color-warning-500)'}}></i>
+              <FontAwesomeIcon icon="lightbulb" style={{color: 'var(--color-warning-500)'}}/>
               {t('statistics.recommendations.title', 'Рекомендації для покращення')}
             </h3>
             
@@ -351,7 +352,7 @@ const StatisticsCharts = ({
               {productivityPrediction.recommendations.map((recommendation, index) => (
                 <div key={index} className="recommendation-card">
                   <div className="recommendation-icon">
-                    <i className="fas fa-arrow-right"></i>
+                    <FontAwesomeIcon icon="arrow-right"/>
                   </div>
                   <div className="recommendation-text">
                     {recommendation}

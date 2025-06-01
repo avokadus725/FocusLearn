@@ -120,7 +120,7 @@ const StatisticsCards = ({
                   <div id={`recommendations-${card.id}`} className="stats-recommendations-content">
                     {productivityPrediction.recommendations.slice(0, 2).map((rec, index) => (
                       <div key={index} className="stats-recommendation-item">
-                        <i className="fas fa-arrow-right"></i>
+                        <FontAwesomeIcon icon="arrow-right"/>
                         <span>{rec}</span>
                       </div>
                     ))}

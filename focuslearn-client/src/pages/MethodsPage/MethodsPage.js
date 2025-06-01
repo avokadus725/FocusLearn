@@ -8,6 +8,7 @@ import Timer from './components/Timer';
 import MethodsList from './components/MethodsList';
 import ConfirmationModal from '../../components/common/ConfirmationModal';
 import { useMethods } from '../../hooks/useMethods';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './MethodsPage.css';
 
 const MethodsPage = () => {
@@ -111,7 +112,7 @@ const MethodsPage = () => {
           {message.text && (
             <div className={`alert alert-${message.type} mb-6`}>
               <div className="alert-icon">
-                <i className={`fas fa-${message.type === 'success' ? 'check-circle' : 'exclamation-triangle'}`}></i>
+                <FontAwesomeIcon icon={message.type === 'success' ? 'check-circle' : 'exclamation-triangle'} />
               </div>
               <div className="alert-content">
                 {message.text}
@@ -123,7 +124,7 @@ const MethodsPage = () => {
           {error && (
             <div className="alert alert-danger mb-6">
               <div className="alert-icon">
-                <i className="fas fa-exclamation-triangle"></i>
+                <FontAwesomeIcon icon="exclamation-triangle" />
               </div>
               <div className="alert-content">
                 {error}
@@ -167,7 +168,7 @@ const MethodsPage = () => {
         confirmText={t('session.modal.leave', 'Покинути')}
         cancelText={t('session.modal.stay', 'Залишитись')}
         confirmVariant="warning"
-        icon="fas fa-exclamation-triangle"
+        icon={<FontAwesomeIcon icon="exclamation-triangle" />}
       />
     </Layout>
   );

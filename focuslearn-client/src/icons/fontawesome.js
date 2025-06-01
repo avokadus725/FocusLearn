@@ -52,7 +52,12 @@ import {
   faAlignLeft,
   faArrowLeft,
   faStop,
-  faPause
+  faPause,
+  faChartArea,
+  faPaperclip,
+  faSpinner,
+  faEye,
+  faChartPie
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -107,5 +112,10 @@ library.add(
   faAlignLeft,
   faArrowLeft,
   faStop,
-  faPause
+  faPause,
+  faChartArea,
+  faPaperclip,
+  faEye,
+  faSpinner,
+  faChartPie
 );

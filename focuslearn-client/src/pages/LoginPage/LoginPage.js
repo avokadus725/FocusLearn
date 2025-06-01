@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -100,9 +101,9 @@ const LoginPage = () => {
               disabled={loading}
             >
               {loading ? (
-                <span><i className="fas fa-spinner fa-spin"></i> Loading...</span>
+                <span><FontAwesomeIcon icon="spinner" spin /> Loading...</span>
               ) : (
-                <span><i className="fab fa-google"></i> {texts.continueWithGoogle}</span>
+                <span>{texts.continueWithGoogle}</span>
               )}
             </button>
            
@@ -112,9 +113,9 @@ const LoginPage = () => {
               disabled={loading}
             >
               {loading ? (
-                <span><i className="fas fa-spinner fa-spin"></i> Loading...</span>
+                <span><FontAwesomeIcon icon="spinner" spin /> Loading...</span>
               ) : (
-                <span><i className="fab fa-facebook"></i> {texts.continueWithFacebook}</span>
+                <span>{texts.continueWithFacebook}</span>
               )}
             </button>
           </div>
