@@ -210,6 +210,18 @@ builder.Services.AddSingleton<IMqttClient>(sp =>
 });
 builder.Services.AddSingleton<MqttClientService>();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMobileAccess", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 if (localizationOptions != null)
@@ -233,7 +245,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AllowMobileAccess");
 app.UseHttpsRedirection();
 
 app.UseSession();

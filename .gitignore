@@ -361,8 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Controllers/WeatherForecastController.cs
-/Exports
+/focuslearn-server/Controllers/WeatherForecastController.cs
+/focuslearn-server/Exports
 *.json
-/Backups/FocusLearnDB_20241227_175654.bak
+/focuslearn-server/Backups/FocusLearnDB_20241227_175654.bak
 /Notes.txt
