@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../../../../context/AuthContext';
+import { useAuth } from '../../../../contexts/AuthContext';
 import Layout from '../../../../components/common/Layout';
 import EditMaterialModal from '../EditMaterialModal';
 import ConfirmationModal from '../../../../components/common/ConfirmationModal';

@@ -1,7 +1,7 @@
 // src/pages/MaterialsPage/MaterialsPage.js
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/common/Layout';
 import CreateMaterialModal from './components/CreateMaterialModal';

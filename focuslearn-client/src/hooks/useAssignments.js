@@ -1,7 +1,7 @@
 // src/hooks/useAssignments.js
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import assignmentService from '../api/assignmentService';
 
 export const useAssignments = () => {

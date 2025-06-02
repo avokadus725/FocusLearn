@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../../context/AuthContext';
+import { useAuth } from '../../../contexts/AuthContext';
 import materialService from '../../../api/materialService';
 import './CreateAssignmentModal.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
