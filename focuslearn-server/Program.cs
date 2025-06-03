@@ -25,6 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", builder =>
     {
         builder
+            .AllowAnyOrigin()
             .WithOrigins(clientUrl)
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -110,12 +111,23 @@ builder.Services.AddAuthentication(options =>
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
     };
 })
-.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+})
 .AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+    googleOptions.CallbackPath = "/signin-google";
     googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
     googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
     googleOptions.Events.OnCreatingTicket = (context) =>
@@ -139,6 +151,16 @@ builder.Services.AddAuthentication(options =>
 
         return Task.CompletedTask;
     };
+    googleOptions.Events.OnRemoteFailure = context =>
+    {
+        var clientUrl = builder.Configuration["ClientUrl"] ?? "https://764b-79-117-90-80.ngrok-free.app";
+        var error = context.Failure?.Message ?? "Authentication failed";
+        context.Response.Redirect($"{clientUrl}/auth-callback.html?error={Uri.EscapeDataString(error)}");
+        context.HandleResponse();
+        return Task.CompletedTask;
+    };
+    googleOptions.CorrelationCookie.SameSite = SameSiteMode.None;
+    googleOptions.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
 })
 .AddFacebook(facebookOptions =>
 {
@@ -233,8 +255,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
-
+//app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 app.UseAuthentication();

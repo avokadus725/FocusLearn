@@ -36,20 +36,35 @@ namespace FocusLearn.Controllers
         [HttpGet("google-response")]
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            if (result?.Principal == null)
-                return Unauthorized("Google authentication failed.");
+            try
+            {
+                var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                if (result?.Principal == null)
+                {
+                    var errorUrl = GetClientUrl();
+                    return Redirect($"{errorUrl}/auth-callback.html?error=Google authentication failed");
+                }
 
-            var token = await _service.AuthenticateGoogleUserAsync(result.Principal);
-            // Отримуємо налаштування клієнтського URL з конфігурації
+                var token = await _service.AuthenticateGoogleUserAsync(result.Principal);
+                var clientUrl = GetClientUrl();
+                
+                return Redirect($"{clientUrl}/auth-callback.html?token={token}");
+            }
+            catch (Exception ex)
+            {
+                var errorUrl = GetClientUrl();
+                return Redirect($"{errorUrl}/auth-callback.html?error={Uri.EscapeDataString(ex.Message)}");
+            }
+        }
+
+        private string GetClientUrl()
+        {
             var clientUrl = _configuration["ClientUrl"];
             if (string.IsNullOrEmpty(clientUrl))
             {
-                clientUrl = "http://localhost:3000"; // Значення за замовчуванням
+                clientUrl = "https://764b-79-117-90-80.ngrok-free.app"; 
             }
-
-            // Перенаправляємо на сторінку обробки авторизації з токеном
-            return Redirect($"{clientUrl}/auth-callback.html?token={token}");
+            return clientUrl;
         }
 
         /// <summary>
