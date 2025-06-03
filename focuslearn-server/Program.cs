@@ -25,7 +25,6 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", builder =>
     {
         builder
-            .AllowAnyOrigin()
             .WithOrigins(clientUrl)
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -113,23 +112,39 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
 {
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Events.OnRedirectToLogin = context =>
+    // Тільки для ngrok (HTTPS) встановлюємо ці налаштування
+    if (builder.Environment.IsDevelopment())
     {
-        context.Response.StatusCode = 401;
-        return Task.CompletedTask;
-    };
+        options.Cookie.SameSite = SameSiteMode.Lax; // ← Для localhost
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // ← HTTP OK
+    }
+    else
+    {
+        options.Cookie.SameSite = SameSiteMode.None; // ← Для ngrok
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ← HTTPS тільки
+    }
 })
 .AddGoogle(googleOptions =>
 {
     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     googleOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
     googleOptions.CallbackPath = "/signin-google";
     googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
     googleOptions.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+    
+    // Умовні налаштування для correlation cookie
+    if (builder.Environment.IsDevelopment())
+    {
+        googleOptions.CorrelationCookie.SameSite = SameSiteMode.Lax;
+        googleOptions.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    }
+    else
+    {
+        googleOptions.CorrelationCookie.SameSite = SameSiteMode.None;
+        googleOptions.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+    }
+    
     googleOptions.Events.OnCreatingTicket = (context) =>
     {
         var pictureClaim = context.User.TryGetProperty("picture", out var pictureJson)
@@ -151,16 +166,15 @@ builder.Services.AddAuthentication(options =>
 
         return Task.CompletedTask;
     };
+    
     googleOptions.Events.OnRemoteFailure = context =>
     {
-        var clientUrl = builder.Configuration["ClientUrl"] ?? "https://764b-79-117-90-80.ngrok-free.app";
+        var clientUrl = builder.Configuration["ClientUrl"] ?? "http://localhost:3000"; 
         var error = context.Failure?.Message ?? "Authentication failed";
         context.Response.Redirect($"{clientUrl}/auth-callback.html?error={Uri.EscapeDataString(error)}");
         context.HandleResponse();
         return Task.CompletedTask;
     };
-    googleOptions.CorrelationCookie.SameSite = SameSiteMode.None;
-    googleOptions.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
 })
 .AddFacebook(facebookOptions =>
 {

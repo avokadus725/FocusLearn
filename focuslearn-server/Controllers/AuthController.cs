@@ -41,30 +41,33 @@ namespace FocusLearn.Controllers
                 var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 if (result?.Principal == null)
                 {
-                    var errorUrl = GetClientUrl();
-                    return Redirect($"{errorUrl}/auth-callback.html?error=Google authentication failed");
+                    return Unauthorized("Google authentication failed.");
                 }
 
                 var token = await _service.AuthenticateGoogleUserAsync(result.Principal);
-                var clientUrl = GetClientUrl();
+                
+                var userAgent = HttpContext.Request.Headers.UserAgent.ToString();
+                var host = HttpContext.Request.Host.Host;
+                
+                // Якщо запит прийшов через ngrok І це Android WebView
+                if (host.Contains("ngrok") && userAgent.Contains("Android") && userAgent.Contains("WebView"))
+                {
+                    return Redirect($"https://{HttpContext.Request.Host}/auth-callback.html?token={token}");
+                }
+                
+                // ВСЕ ІНШЕ - веб-сайт
+                var clientUrl = _configuration["ClientUrl"];
+                if (string.IsNullOrEmpty(clientUrl))
+                {
+                    clientUrl = "http://localhost:3000";
+                }
                 
                 return Redirect($"{clientUrl}/auth-callback.html?token={token}");
             }
             catch (Exception ex)
             {
-                var errorUrl = GetClientUrl();
-                return Redirect($"{errorUrl}/auth-callback.html?error={Uri.EscapeDataString(ex.Message)}");
+                return Unauthorized("Authentication failed.");
             }
-        }
-
-        private string GetClientUrl()
-        {
-            var clientUrl = _configuration["ClientUrl"];
-            if (string.IsNullOrEmpty(clientUrl))
-            {
-                clientUrl = "https://764b-79-117-90-80.ngrok-free.app"; 
-            }
-            return clientUrl;
         }
 
         /// <summary>
